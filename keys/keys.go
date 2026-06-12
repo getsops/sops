@@ -32,6 +32,14 @@ type KeyProvider interface {
 	KeysFromConfig(config any, opts CreationOptions) ([]MasterKey, error)
 }
 
+// BugFixer is an optional interface that a KeyProvider can implement
+// if it needs to apply legacy bug fixes directly to the SOPS tree.
+type BugFixer interface {
+	DetectTreeBugs(version string, keyGroups [][]MasterKey) bool
+	BugExplanation() string
+	RecoverDataKey(keyGroups [][]MasterKey, decryptFn func([][]MasterKey) ([]byte, error)) []byte
+}
+
 var KeyProviders = make(map[string]KeyProvider)
 
 func RegisterProvider(provider KeyProvider) {
@@ -82,4 +90,44 @@ func ParseStringSlice(field interface{}, fieldName string) ([]string, error) {
 			field,
 		)
 	}
+}
+
+// ParseStringMap parses a comma separated key:value string into a map
+func ParseStringMap(ctx string) map[string]*string {
+	contextMap := make(map[string]*string)
+	if ctx == "" {
+		return contextMap
+	}
+
+	contexts := strings.Split(ctx, ",")
+
+	for _, context := range contexts {
+		// Only splitting on the first colon so that the values can contain colons
+		kv := strings.SplitN(context, ":", 2)
+		if len(kv) == 2 {
+			contextMap[kv[0]] = &kv[1]
+		}
+	}
+	return contextMap
+}
+
+// ProviderFlag defines a CLI flag provided by a KeyProvider.
+type ProviderFlag struct {
+	Name            string
+	Usage           string
+	EnvVar          string
+	IsKeyIdentifier bool // If true, this flag identifies keys (used for rotation add/rm and slice flags)
+}
+
+// FlagGetter defines an interface for retrieving flag values, decoupling providers from the specific CLI framework.
+type FlagGetter interface {
+	String(name string) string
+	StringSlice(name string) []string
+}
+
+// CLIProvider is an optional interface that a KeyProvider can implement
+// to dynamically register CLI flags and parse keys from them.
+type CLIProvider interface {
+	CLIConfig() []ProviderFlag
+	MasterKeysFromCLI(c FlagGetter, prefix string) ([]MasterKey, error)
 }

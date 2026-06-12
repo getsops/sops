@@ -21,9 +21,6 @@ import (
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/aes"
-	"github.com/getsops/sops/v3/age"
-	_ "github.com/getsops/sops/v3/audit"
-	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
@@ -33,14 +30,10 @@ import (
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
 	"github.com/getsops/sops/v3/config"
-	"github.com/getsops/sops/v3/gcpkms"
-	"github.com/getsops/sops/v3/hckms"
-	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/logging"
-	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/stores"
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
@@ -77,6 +70,50 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 func main() {
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
+
+	var globalProviderFlags []cli.Flag
+	var nonKeyFlags []cli.Flag
+	var addProviderFlags []cli.Flag
+	var rmProviderFlags []cli.Flag
+	var sliceProviderFlags []cli.Flag
+
+	for _, p := range keys.KeyProviders {
+		if cp, ok := p.(keys.CLIProvider); ok {
+			for _, pf := range cp.CLIConfig() {
+				names := strings.Split(pf.Name, ",")
+				baseName := strings.TrimSpace(names[0])
+				if pf.IsKeyIdentifier {
+					globalProviderFlags = append(globalProviderFlags, cli.StringFlag{
+						Name:   pf.Name,
+						Usage:  pf.Usage,
+						EnvVar: pf.EnvVar,
+					})
+					addProviderFlags = append(addProviderFlags, cli.StringFlag{
+						Name:  "add-" + baseName,
+						Usage: "add the provided " + pf.Usage + " to the list of master keys on the given file",
+					})
+					rmProviderFlags = append(rmProviderFlags, cli.StringFlag{
+						Name:  "rm-" + baseName,
+						Usage: "remove the provided " + pf.Usage + " from the list of master keys on the given file",
+					})
+					sliceProviderFlags = append(sliceProviderFlags, cli.StringSliceFlag{
+						Name:   baseName,
+						Usage:  pf.Usage,
+						EnvVar: pf.EnvVar,
+					})
+				} else {
+					flag := cli.StringFlag{
+						Name:   pf.Name,
+						Usage:  pf.Usage,
+						EnvVar: pf.EnvVar,
+					}
+					globalProviderFlags = append(globalProviderFlags, flag)
+					nonKeyFlags = append(nonKeyFlags, flag)
+					sliceProviderFlags = append(sliceProviderFlags, flag)
+				}
+			}
+		}
+	}
 
 	keyserviceFlags := []cli.Flag{
 		cli.BoolTFlag{
@@ -180,7 +217,8 @@ func main() {
 						fmt.Fprint(c.App.Writer, GenZshCompletion(app.Name))
 						return nil
 					},
-				}},
+				},
+			},
 		},
 		{
 			Name:      "exec-env",
@@ -557,100 +595,39 @@ func main() {
 				{
 					Name:  "add",
 					Usage: "add a new group to a SOPS file",
-					Flags: append([]cli.Flag{
-						cli.StringFlag{
+					Flags: func() []cli.Flag {
+						var f []cli.Flag
+						f = append(f, cli.StringFlag{
 							Name:  "file, f",
 							Usage: "the file to add the group to",
-						},
-						cli.StringSliceFlag{
-							Name:  "pgp",
-							Usage: "the PGP fingerprints the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "kms",
-							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
-						},
-						cli.StringFlag{
-							Name:  "aws-profile",
-							Usage: "The AWS profile to use for requests to AWS",
-						},
-						cli.StringSliceFlag{
-							Name:  "gcp-kms",
-							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "hckms",
-							Usage: "the HuaweiCloud KMS key ID (format: region:key-uuid) the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "azure-kv",
-							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "hc-vault-transit",
-							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encryption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "age",
-							Usage: "the age recipient the new group should contain. Can be specified more than once",
-						},
-						cli.BoolFlag{
+						})
+						f = append(f, sliceProviderFlags...)
+						f = append(f, cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
-						},
-						cli.IntFlag{
+						})
+						f = append(f, cli.IntFlag{
 							Name:  "shamir-secret-sharing-threshold",
 							Usage: "the number of master keys required to retrieve the data key with shamir",
-						},
-						cli.StringFlag{
-							Name:  "encryption-context",
-							Usage: "comma separated list of KMS encryption context key:value pairs",
-						},
-					}, keyserviceFlags...),
+						})
+						f = append(f, keyserviceFlags...)
+						return f
+					}(),
 					Action: func(c *cli.Context) error {
-						pgpFps := c.StringSlice("pgp")
-						kmsArns := c.StringSlice("kms")
-						gcpKmses := c.StringSlice("gcp-kms")
-						vaultURIs := c.StringSlice("hc-vault-transit")
-						azkvs := c.StringSlice("azure-kv")
-						ageRecipients := c.StringSlice("age")
 						if c.NArg() != 0 {
 							return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
 						}
 						var group sops.KeyGroup
-						for _, fp := range pgpFps {
-							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
-						}
-						for _, arn := range kmsArns {
-							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")))
-						}
-						for _, kms := range gcpKmses {
-							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
-						}
-						for _, uri := range vaultURIs {
-							k, err := hcvault.NewMasterKeyFromURI(uri)
-							if err != nil {
-								log.WithError(err).Error("Failed to add key")
-								continue
-							}
-							group = append(group, k)
-						}
-						for _, url := range azkvs {
-							k, err := azkv.NewMasterKeyFromURL(url)
-							if err != nil {
-								log.WithError(err).Error("Failed to add key")
-								continue
-							}
-							group = append(group, k)
-						}
-						for _, recipient := range ageRecipients {
-							keys, err := age.MasterKeysFromRecipients(recipient)
-							if err != nil {
-								log.WithError(err).Error("Failed to add key")
-								continue
-							}
-							for _, key := range keys {
-								group = append(group, key)
+						for _, p := range keys.KeyProviders {
+							if cp, ok := p.(keys.CLIProvider); ok {
+								mks, err := cp.MasterKeysFromCLI(c, "")
+								if err != nil {
+									log.WithError(err).Error("Failed to add key")
+									continue
+								}
+								for _, mk := range mks {
+									group = append(group, mk)
+								}
 							}
 						}
 						inputStore, err := inputStore(c, c.String("file"))
@@ -1068,7 +1045,6 @@ func main() {
 					KeyServices:   svcs,
 					encryptConfig: encConfig,
 				})
-
 				if err != nil {
 					return toExitError(err)
 				}
@@ -1106,93 +1082,39 @@ func main() {
 			Name:      "rotate",
 			Usage:     "generate a new data encryption key and reencrypt all values with the new key",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
+			Flags: func() []cli.Flag {
+				var f []cli.Flag
+				f = append(f, cli.BoolFlag{
 					Name:  "in-place, i",
 					Usage: "write output back to the same file instead of stdout",
-				},
-				cli.StringFlag{
+				})
+				f = append(f, cli.StringFlag{
 					Name:  "output",
 					Usage: "Save the output after decryption to the file specified",
-				},
-				cli.StringFlag{
+				})
+				f = append(f, cli.StringFlag{
 					Name:  "input-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-				cli.StringFlag{
+				})
+				f = append(f, cli.StringFlag{
 					Name:  "output-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.StringFlag{
-					Name:  "encryption-context",
-					Usage: "comma separated list of KMS encryption context key:value pairs",
-				},
-				cli.StringFlag{
-					Name:  "add-gcp-kms",
-					Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-gcp-kms",
-					Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-hckms",
-					Usage: "add the provided comma-separated list of HuaweiCloud KMS key IDs (format: region:key-uuid) to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-hckms",
-					Usage: "remove the provided comma-separated list of HuaweiCloud KMS key IDs (format: region:key-uuid) from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-azure-kv",
-					Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-azure-kv",
-					Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-kms",
-					Usage: "add the provided comma-separated list of KMS ARNs to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-kms",
-					Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-hc-vault-transit",
-					Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-				},
-				cli.StringFlag{
-					Name:  "rm-hc-vault-transit",
-					Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-				},
-				cli.StringFlag{
-					Name:  "add-age",
-					Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-age",
-					Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-pgp",
-					Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-pgp",
-					Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
-				},
-				cli.StringFlag{
+				})
+				f = append(f, nonKeyFlags...)
+				f = append(f, addProviderFlags...)
+				f = append(f, rmProviderFlags...)
+				f = append(f, cli.StringFlag{
 					Name:  "filename-override",
 					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
-				},
-				cli.StringFlag{
+				})
+				f = append(f, cli.StringFlag{
 					Name:   "decryption-order",
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
-				},
-			}, keyserviceFlags...),
+				})
+				f = append(f, keyserviceFlags...)
+				return f
+			}(),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -1209,8 +1131,21 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+					hasAddOrRm := false
+					for _, p := range keys.KeyProviders {
+						if cp, ok := p.(keys.CLIProvider); ok {
+							for _, pf := range cp.CLIConfig() {
+								if pf.IsKeyIdentifier {
+									name := strings.Split(pf.Name, ",")[0]
+									if c.String("add-"+name) != "" || c.String("rm-"+name) != "" {
+										hasAddOrRm = true
+										break
+									}
+								}
+							}
+						}
+					}
+					if hasAddOrRm {
 						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
@@ -1673,214 +1608,121 @@ func main() {
 			},
 		},
 	}
-	app.Flags = append([]cli.Flag{
-		cli.BoolFlag{
+	app.Flags = func() []cli.Flag {
+		var f []cli.Flag
+		f = append(f, cli.BoolFlag{
 			Name:  "decrypt, d",
 			Usage: "decrypt a file and output the result to stdout",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "encrypt, e",
 			Usage: "encrypt a file and output the result to stdout",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "rotate, r",
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:   "disable-version-check",
 			Usage:  "do not check whether the current version is latest during --version",
 			EnvVar: "SOPS_DISABLE_VERSION_CHECK",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "check-for-updates",
 			Usage: "do check whether the current version is latest during --version",
-		},
-		cli.StringFlag{
-			Name:   "kms, k",
-			Usage:  "comma separated list of KMS ARNs",
-			EnvVar: "SOPS_KMS_ARN",
-		},
-		cli.StringFlag{
-			Name:  "aws-profile",
-			Usage: "The AWS profile to use for requests to AWS",
-		},
-		cli.StringFlag{
-			Name:   "gcp-kms",
-			Usage:  "comma separated list of GCP KMS resource IDs",
-			EnvVar: "SOPS_GCP_KMS_IDS",
-		},
-		cli.StringFlag{
-			Name:   "hckms",
-			Usage:  "comma separated list of HuaweiCloud KMS key IDs (format: region:key-uuid)",
-			EnvVar: "SOPS_HUAWEICLOUD_KMS_IDS",
-		},
-		cli.StringFlag{
-			Name:   "azure-kv",
-			Usage:  "comma separated list of Azure Key Vault URLs",
-			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
-		},
-		cli.StringFlag{
-			Name:   "hc-vault-transit",
-			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
-			EnvVar: "SOPS_VAULT_URIS",
-		},
-		cli.StringFlag{
-			Name:   "pgp, p",
-			Usage:  "comma separated list of PGP fingerprints",
-			EnvVar: "SOPS_PGP_FP",
-		},
-		cli.StringFlag{
-			Name:   "age, a",
-			Usage:  "comma separated list of age recipients",
-			EnvVar: "SOPS_AGE_RECIPIENTS",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, globalProviderFlags...)
+		f = append(f, addProviderFlags...)
+		f = append(f, rmProviderFlags...)
+		f = append(f, cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "extract",
 			Usage: "extract a specific key or branch from the input document. Decrypt mode only. Example: --extract '[\"somekey\"][0]'",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "input-type",
 			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "output-type",
 			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "show-master-keys, s",
 			Usage: "display master encryption keys in the file during editing",
-		},
-		cli.StringFlag{
-			Name:  "add-gcp-kms",
-			Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-gcp-kms",
-			Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-hckms",
-			Usage: "add the provided comma-separated list of HuaweiCloud KMS key IDs (format: region:key-uuid) to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-hckms",
-			Usage: "remove the provided comma-separated list of HuaweiCloud KMS key IDs (format: region:key-uuid) from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-azure-kv",
-			Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-azure-kv",
-			Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-kms",
-			Usage: "add the provided comma-separated list of KMS ARNs to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-kms",
-			Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-hc-vault-transit",
-			Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-		},
-		cli.StringFlag{
-			Name:  "rm-hc-vault-transit",
-			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-		},
-		cli.StringFlag{
-			Name:  "add-age",
-			Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-age",
-			Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-pgp",
-			Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-pgp",
-			Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "ignore-mac",
 			Usage: "ignore Message Authentication Code during decryption",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "mac-only-encrypted",
 			Usage: "compute MAC only over values which end up encrypted",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "unencrypted-suffix",
 			Usage: "override the unencrypted key suffix.",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "encrypted-suffix",
 			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "unencrypted-regex",
 			Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "encrypted-regex",
 			Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "unencrypted-comment-regex",
 			Usage: "set the unencrypted comment suffix. When specified, only keys that have comment matching the regex will be left unencrypted.",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "encrypted-comment-regex",
 			Usage: "set the encrypted comment suffix. When specified, only keys that have comment matching the regex will be encrypted.",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:   "config",
 			Usage:  "path to sops' config file. If set, sops will not search for the config file recursively.",
 			EnvVar: "SOPS_CONFIG",
-		},
-		cli.StringFlag{
-			Name:  "encryption-context",
-			Usage: "comma separated list of KMS encryption context key:value pairs",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "set",
 			Usage: `set a specific key or branch in the input document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
-		},
-		cli.IntFlag{
+		})
+		f = append(f, cli.IntFlag{
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
-		},
-		cli.IntFlag{
+		})
+		f = append(f, cli.IntFlag{
 			Name:  "indent",
 			Usage: "the number of spaces to indent YAML or JSON encoded file",
-		},
-		cli.BoolFlag{
+		})
+		f = append(f, cli.BoolFlag{
 			Name:  "verbose",
 			Usage: "Enable verbose logging output",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "output",
 			Usage: "Save the output after encryption or decryption to the file specified",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:  "filename-override",
 			Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
-		},
-		cli.StringFlag{
+		})
+		f = append(f, cli.StringFlag{
 			Name:   "decryption-order",
 			Usage:  "comma separated list of decryption key types",
 			EnvVar: "SOPS_DECRYPTION_ORDER",
-		},
-	}, keyserviceFlags...)
+		})
+		f = append(f, keyserviceFlags...)
+		return f
+	}()
 
 	app.Action = func(c *cli.Context) error {
 		isDecryptMode := c.Bool("decrypt")
@@ -1904,8 +1746,21 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+			hasAddOrRm := false
+			for _, p := range keys.KeyProviders {
+				if cp, ok := p.(keys.CLIProvider); ok {
+					for _, pf := range cp.CLIConfig() {
+						if pf.IsKeyIdentifier {
+							name := strings.Split(pf.Name, ",")[0]
+							if c.String("add-"+name) != "" || c.String("rm-"+name) != "" {
+								hasAddOrRm = true
+								break
+							}
+						}
+					}
+				}
+			}
+			if hasAddOrRm {
 				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
@@ -2235,55 +2090,28 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	}, nil
 }
 
-func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, hckmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+func getMasterKeys(c *cli.Context, prefix string) ([]keys.MasterKey, error) {
 	var masterKeys []keys.MasterKey
-	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
-		masterKeys = append(masterKeys, k)
-	}
-	for _, k := range pgp.MasterKeysFromFingerprintString(c.String(pgpOptionName)) {
-		masterKeys = append(masterKeys, k)
-	}
-	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String(gcpKmsOptionName)) {
-		masterKeys = append(masterKeys, k)
-	}
-	hckmsKeys, err := hckms.NewMasterKeyFromKeyIDString(c.String(hckmsOptionName))
-	if err != nil {
-		return nil, err
-	}
-	for _, k := range hckmsKeys {
-		masterKeys = append(masterKeys, k)
-	}
-	azureKeys, err := azkv.MasterKeysFromURLs(c.String(azureKvOptionName))
-	if err != nil {
-		return nil, err
-	}
-	for _, k := range azureKeys {
-		masterKeys = append(masterKeys, k)
-	}
-	hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String(hcVaultTransitOptionName))
-	if err != nil {
-		return nil, err
-	}
-	for _, k := range hcVaultKeys {
-		masterKeys = append(masterKeys, k)
-	}
-	ageKeys, err := age.MasterKeysFromRecipients(c.String(ageOptionName))
-	if err != nil {
-		return nil, err
-	}
-	for _, k := range ageKeys {
-		masterKeys = append(masterKeys, k)
+	for _, p := range keys.KeyProviders {
+		if cp, ok := p.(keys.CLIProvider); ok {
+			mks, err := cp.MasterKeysFromCLI(c, prefix)
+			if err != nil {
+				return nil, err
+			}
+			for _, mk := range mks {
+				masterKeys = append(masterKeys, mk)
+			}
+		}
 	}
 	return masterKeys, nil
 }
 
 func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
-	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-hckms", "add-azure-kv", "add-hc-vault-transit", "add-age")
+	addMasterKeys, err := getMasterKeys(c, "add-")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-hckms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
+	rmMasterKeys, err := getMasterKeys(c, "rm-")
 	if err != nil {
 		return rotateOpts{}, err
 	}
@@ -2426,72 +2254,16 @@ func parseTreePath(arg string) ([]interface{}, error) {
 }
 
 func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]sops.KeyGroup, error) {
-	var kmsKeys []keys.MasterKey
-	var pgpKeys []keys.MasterKey
-	var cloudKmsKeys []keys.MasterKey
-	var azkvKeys []keys.MasterKey
-	var hcVaultMkKeys []keys.MasterKey
-	var hckmsMkKeys []keys.MasterKey
-	var ageMasterKeys []keys.MasterKey
-	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
-		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
+	group, err := getMasterKeys(c, "")
+	if err != nil {
+		return nil, err
 	}
-	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile")) {
-			kmsKeys = append(kmsKeys, k)
-		}
-	}
-	if c.String("gcp-kms") != "" {
-		for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("gcp-kms")) {
-			cloudKmsKeys = append(cloudKmsKeys, k)
-		}
-	}
-	if c.String("hckms") != "" {
-		hckmsKeys, err := hckms.NewMasterKeyFromKeyIDString(c.String("hckms"))
-		if err != nil {
-			return nil, err
-		}
-		for _, k := range hckmsKeys {
-			hckmsMkKeys = append(hckmsMkKeys, k)
-		}
-	}
-	if c.String("azure-kv") != "" {
-		azureKeys, err := azkv.MasterKeysFromURLs(c.String("azure-kv"))
-		if err != nil {
-			return nil, err
-		}
-		for _, k := range azureKeys {
-			azkvKeys = append(azkvKeys, k)
-		}
-	}
-	if c.String("hc-vault-transit") != "" {
-		hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("hc-vault-transit"))
-		if err != nil {
-			return nil, err
-		}
-		for _, k := range hcVaultKeys {
-			hcVaultMkKeys = append(hcVaultMkKeys, k)
-		}
-	}
-	if c.String("pgp") != "" {
-		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
-			pgpKeys = append(pgpKeys, k)
-		}
-	}
-	if c.String("age") != "" {
-		ageKeys, err := age.MasterKeysFromRecipients(c.String("age"))
-		if err != nil {
-			return nil, err
-		}
-		for _, k := range ageKeys {
-			ageMasterKeys = append(ageMasterKeys, k)
-		}
-	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("hckms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+
+	if len(group) == 0 {
 		conf := optionalConfig
 		var err error
 		if conf == nil {
+			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 			conf, err = loadConfig(c, file, kmsEncryptionContext)
 		}
 		// config file might just not be supplied, without any error
@@ -2504,14 +2276,6 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 		}
 		return conf.KeyGroups, err
 	}
-	var group sops.KeyGroup
-	group = append(group, kmsKeys...)
-	group = append(group, cloudKmsKeys...)
-	group = append(group, hckmsMkKeys...)
-	group = append(group, azkvKeys...)
-	group = append(group, pgpKeys...)
-	group = append(group, hcVaultMkKeys...)
-	group = append(group, ageMasterKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }
