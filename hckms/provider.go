@@ -98,3 +98,48 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 	}
 	return res, nil
 }
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "hckms",
+			Usage:           "comma separated list of HuaweiCloud KMS key IDs (format: region:key-uuid)",
+			EnvVar:          "SOPS_HUAWEICLOUD_KMS_IDS",
+			IsKeyIdentifier: true,
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	flagName := prefix + "hckms"
+	
+	if prefix == "" {
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			ids := strings.Join(slices, ",")
+			hckmsKeys, err := NewMasterKeyFromKeyIDString(ids)
+			if err != nil {
+				return nil, err
+			}
+			for _, k := range hckmsKeys {
+				masterKeys = append(masterKeys, k)
+			}
+			return masterKeys, nil
+		}
+	}
+
+	ids := c.String(flagName)
+	if ids == "" {
+		return masterKeys, nil
+	}
+	hckmsKeys, err := NewMasterKeyFromKeyIDString(ids)
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range hckmsKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}
+

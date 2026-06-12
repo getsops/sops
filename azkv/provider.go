@@ -73,11 +73,19 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 			for _, item := range maps {
 				m := item.(map[string]interface{})
 				var vaultURL, key, version string
-				if v, ok := m["vaultUrl"].(string); ok { vaultURL = v }
-				if v, ok := m["vault_url"].(string); ok { vaultURL = v }
-				if v, ok := m["key"].(string); ok { key = v }
-				if v, ok := m["version"].(string); ok { version = v }
-				
+				if v, ok := m["vaultUrl"].(string); ok {
+					vaultURL = v
+				}
+				if v, ok := m["vault_url"].(string); ok {
+					vaultURL = v
+				}
+				if v, ok := m["key"].(string); ok {
+					key = v
+				}
+				if v, ok := m["version"].(string); ok {
+					version = v
+				}
+
 				azureKey, err := NewMasterKeyWithOptionalVersion(vaultURL, key, version)
 				if err != nil {
 					return nil, err
@@ -106,4 +114,48 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 		res = append(res, k)
 	}
 	return res, nil
+}
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "azure-kv",
+			Usage:           "comma separated list of Azure Key Vault URLs",
+			EnvVar:          "SOPS_AZURE_KEYVAULT_URL",
+			IsKeyIdentifier: true,
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	flagName := prefix + "azure-kv"
+
+	if prefix == "" {
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			urls := strings.Join(slices, ",")
+			azureKeys, err := MasterKeysFromURLs(urls)
+			if err != nil {
+				return nil, err
+			}
+			for _, k := range azureKeys {
+				masterKeys = append(masterKeys, k)
+			}
+			return masterKeys, nil
+		}
+	}
+
+	urls := c.String(flagName)
+	if urls == "" {
+		return masterKeys, nil
+	}
+	azureKeys, err := MasterKeysFromURLs(urls)
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range azureKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
 }

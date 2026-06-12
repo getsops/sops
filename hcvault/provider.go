@@ -86,3 +86,48 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 	}
 	return res, nil
 }
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "hc-vault-transit",
+			Usage:           "comma separated list of Vault's URI keys (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
+			EnvVar:          "SOPS_VAULT_URIS",
+			IsKeyIdentifier: true,
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	flagName := prefix + "hc-vault-transit"
+	
+	if prefix == "" {
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			uris := strings.Join(slices, ",")
+			hcVaultKeys, err := NewMasterKeysFromURIs(uris)
+			if err != nil {
+				return nil, err
+			}
+			for _, k := range hcVaultKeys {
+				masterKeys = append(masterKeys, k)
+			}
+			return masterKeys, nil
+		}
+	}
+
+	uris := c.String(flagName)
+	if uris == "" {
+		return masterKeys, nil
+	}
+	hcVaultKeys, err := NewMasterKeysFromURIs(uris)
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range hcVaultKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}
+

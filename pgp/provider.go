@@ -63,3 +63,39 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 	}
 	return res, nil
 }
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "pgp, p",
+			Usage:           "comma separated list of PGP fingerprints",
+			EnvVar:          "SOPS_PGP_FP",
+			IsKeyIdentifier: true,
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	flagName := prefix + "pgp"
+	
+	if prefix == "" {
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			fps := strings.Join(slices, ",")
+			for _, k := range MasterKeysFromFingerprintString(fps) {
+				masterKeys = append(masterKeys, k)
+			}
+			return masterKeys, nil
+		}
+	}
+
+	fps := c.String(flagName)
+	if fps == "" {
+		return masterKeys, nil
+	}
+	for _, k := range MasterKeysFromFingerprintString(fps) {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}

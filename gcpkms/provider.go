@@ -84,3 +84,40 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 	}
 	return res, nil
 }
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "gcp-kms",
+			Usage:           "comma separated list of GCP KMS resource IDs",
+			EnvVar:          "SOPS_GCP_KMS_IDS",
+			IsKeyIdentifier: true,
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	flagName := prefix + "gcp-kms"
+	
+	if prefix == "" {
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			ids := strings.Join(slices, ",")
+			for _, k := range MasterKeysFromResourceIDString(ids) {
+				masterKeys = append(masterKeys, k)
+			}
+			return masterKeys, nil
+		}
+	}
+
+	ids := c.String(flagName)
+	if ids == "" {
+		return masterKeys, nil
+	}
+	for _, k := range MasterKeysFromResourceIDString(ids) {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}
+

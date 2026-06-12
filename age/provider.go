@@ -62,3 +62,47 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 	}
 	return res, nil
 }
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "age, a",
+			Usage:           "comma separated list of age recipients",
+			EnvVar:          "SOPS_AGE_RECIPIENTS",
+			IsKeyIdentifier: true,
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	flagName := prefix + "age"
+
+	if prefix == "" {
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			recs := strings.Join(slices, ",")
+			ageKeys, err := MasterKeysFromRecipients(recs)
+			if err != nil {
+				return nil, err
+			}
+			for _, k := range ageKeys {
+				masterKeys = append(masterKeys, k)
+			}
+			return masterKeys, nil
+		}
+	}
+
+	recs := c.String(flagName)
+	if recs == "" {
+		return masterKeys, nil
+	}
+	ageKeys, err := MasterKeysFromRecipients(recs)
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range ageKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}

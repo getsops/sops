@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/getsops/sops/v3/keys"
+	"github.com/getsops/sops/v3/version"
 )
 
 func init() {
@@ -15,6 +16,75 @@ type Provider struct{}
 
 func (p *Provider) Type() string {
 	return "kms"
+}
+
+func (p *Provider) DetectTreeBugs(sopsVersion string, keyGroups [][]keys.MasterKey) bool {
+	versionCheck, err := version.AIsNewerThanB("3.3.0", sopsVersion)
+	if err != nil || !versionCheck {
+		return false
+	}
+	_, _, key := p.getBuggyKMSKey(keyGroups)
+	return key != nil
+}
+
+func (p *Provider) BugExplanation() string {
+	return "Up until version 3.3.0 of sops there was a bug surrounding the " +
+		"use of encryption context with AWS KMS." +
+		"\nYou can read the full description of the issue here:" +
+		"\nhttps://github.com/mozilla/sops/pull/435"
+}
+
+func (p *Provider) RecoverDataKey(keyGroups [][]keys.MasterKey, decryptFn func([][]keys.MasterKey) ([]byte, error)) []byte {
+	kgndx, kndx, originalKey := p.getBuggyKMSKey(keyGroups)
+	if originalKey == nil {
+		return nil
+	}
+
+	keyToEdit := *originalKey
+
+	encCtxVals := map[string]interface{}{}
+	for _, v := range keyToEdit.EncryptionContext {
+		encCtxVals[*v] = ""
+	}
+
+	var encCtxVariations []map[string]*string
+	for ctxVal := range encCtxVals {
+		encCtxVariation := map[string]*string{}
+		for key := range keyToEdit.EncryptionContext {
+			val := ctxVal
+			encCtxVariation[key] = &val
+		}
+		encCtxVariations = append(encCtxVariations, encCtxVariation)
+	}
+
+	for _, encCtxVar := range encCtxVariations {
+		keyToEdit.EncryptionContext = encCtxVar
+		keyGroups[kgndx][kndx] = &keyToEdit
+		dataKey, err := decryptFn(keyGroups)
+		if err == nil {
+			keyGroups[kgndx][kndx] = originalKey
+			return dataKey
+		}
+	}
+	return nil
+}
+
+func (p *Provider) getBuggyKMSKey(keyGroups [][]keys.MasterKey) (int, int, *MasterKey) {
+	for i, kg := range keyGroups {
+		for n, k := range kg {
+			kmsKey, ok := k.(*MasterKey)
+			if ok && len(kmsKey.EncryptionContext) >= 2 {
+				duplicateValues := map[string]int{}
+				for _, v := range kmsKey.EncryptionContext {
+					duplicateValues[*v] = duplicateValues[*v] + 1
+				}
+				if len(duplicateValues) > 1 {
+					return i, n, kmsKey
+				}
+			}
+		}
+	}
+	return 0, 0, nil
 }
 
 func (p *Provider) MarshalKey(key keys.MasterKey) (map[string]any, error) {
@@ -120,15 +190,69 @@ func (p *Provider) KeysFromConfig(config any, opts keys.CreationOptions) ([]keys
 	}
 
 	var awsProfile string
+	var kmsCtx map[string]*string
 	if opts.GlobalConfig != nil {
 		if v, ok := opts.GlobalConfig["aws_profile"].(string); ok {
 			awsProfile = v
 		}
+		if v, ok := opts.GlobalConfig["encryption-context"].(string); ok {
+			kmsCtx = keys.ParseStringMap(v)
+		}
+	}
+	if kmsCtx == nil {
+		kmsCtx = opts.KmsEncryptionContext
 	}
 
 	var res []keys.MasterKey
-	for _, k := range MasterKeysFromArnString(strings.Join(arns, ","), opts.KmsEncryptionContext, awsProfile) {
+	for _, k := range MasterKeysFromArnString(strings.Join(arns, ","), kmsCtx, awsProfile) {
 		res = append(res, k)
 	}
 	return res, nil
+}
+
+func (p *Provider) CLIConfig() []keys.ProviderFlag {
+	return []keys.ProviderFlag{
+		{
+			Name:            "kms, k",
+			Usage:           "comma separated list of KMS ARNs",
+			EnvVar:          "SOPS_KMS_ARN",
+			IsKeyIdentifier: true,
+		},
+		{
+			Name:  "aws-profile",
+			Usage: "The AWS profile to use for requests to AWS",
+		},
+		{
+			Name:  "encryption-context",
+			Usage: "comma separated list of KMS encryption context key:value pairs",
+		},
+	}
+}
+
+func (p *Provider) MasterKeysFromCLI(c keys.FlagGetter, prefix string) ([]keys.MasterKey, error) {
+	var keys []keys.MasterKey
+	
+	// 'kms' can be requested as 'kms', 'add-kms', 'rm-kms'
+	flagName := prefix + "kms"
+	if prefix == "" { // for slice or backward compatibility, 'kms' is both the slice and the string global
+		// Wait, 'groups add' uses slice.
+		slices := c.StringSlice(flagName)
+		if len(slices) > 0 {
+			arns := strings.Join(slices, ",")
+			for _, k := range MasterKeysFromArnString(arns, ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")) {
+				keys = append(keys, k)
+			}
+			return keys, nil
+		}
+	}
+	
+	arns := c.String(flagName)
+	if arns == "" {
+		return keys, nil
+	}
+	
+	for _, k := range MasterKeysFromArnString(arns, ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")) {
+		keys = append(keys, k)
+	}
+	return keys, nil
 }
