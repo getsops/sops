@@ -1864,6 +1864,14 @@ func main() {
 			Usage: "the number of spaces to indent YAML or JSON encoded file",
 		},
 		cli.BoolFlag{
+			Name:  "compact-array-indent",
+			Usage: "use compact YAML array indentation where '- ' is considered part of the indentation",
+		},
+		cli.BoolFlag{
+			Name:  "document-start-marker",
+			Usage: "prepend the YAML document start marker '---' to the output",
+		},
+		cli.BoolFlag{
 			Name:  "verbose",
 			Usage: "Enable verbose logging output",
 		},
@@ -2393,6 +2401,12 @@ func outputStore(context *cli.Context, path string) (common.Store, error) {
 		storesConf.YAML.Indent = indent
 		storesConf.JSON.Indent = indent
 		storesConf.JSONBinary.Indent = indent
+	}
+	if context.GlobalBool("compact-array-indent") {
+		storesConf.YAML.CompactArrayIndent = true
+	}
+	if context.GlobalBool("document-start-marker") {
+		storesConf.YAML.DocumentStartMarker = true
 	}
 
 	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type")), nil
