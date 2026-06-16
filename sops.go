@@ -798,7 +798,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			}
 		}
 		for _, key := range group {
-			svcKey := keyservice.KeyFromMasterKey(key)
+			svcKey, err := keyservice.KeyFromMasterKeyOrError(key)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("failed to convert master key %q for key service: %w", key.ToString(), err))
+				continue
+			}
 			var keyErrs []error
 			encrypted := false
 			for _, svc := range svcs {
@@ -924,7 +928,13 @@ func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
 // of the key services, returning as soon as one key service succeeds.
 func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	svcKey := keyservice.KeyFromMasterKey(key)
+	svcKey, err := keyservice.KeyFromMasterKeyOrError(key)
+	if err != nil {
+		return nil, &decryptKeyError{
+			keyName: key.ToString(),
+			errs:    []error{err},
+		}
+	}
 	var part []byte
 	decryptErr := decryptKeyError{
 		keyName: key.ToString(),
