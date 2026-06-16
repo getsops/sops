@@ -1007,4 +1007,35 @@ func TestExtractMetadata(t *testing.T) {
 }
 
 func TestSerializeMetadata(t *testing.T) {
+	// KMS EncryptionContext is map[string]*string; values must serialize as strings, not pointer addresses.
+	tenant := "example-tenant"
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{sops.TreeBranch{}},
+		Metadata: sops.Metadata{
+			LastModified: time.Unix(0, 0).UTC(),
+			Version:      "3.0.0",
+			KeyGroups: []sops.KeyGroup{
+				{
+					&kms.MasterKey{
+						Arn:          "arn:aws:kms:us-east-1:000000000000:key/00000000-0000-0000-0000-000000000000",
+						CreationDate: time.Unix(0, 0).UTC(),
+						EncryptionContext: map[string]*string{
+							"tenant": &tenant,
+						},
+					},
+				},
+			},
+		},
+	}
+	branches, err := SerializeMetadata(tree, MetadataOpts{Flatten: MetadataFlattenFull})
+	assert.Nil(t, err)
+	// Find the flattened context key and assert its value is the string "example-tenant", not a pointer address.
+	var contextValue interface{}
+	for _, item := range branches[0] {
+		if item.Key == "sops_kms__list_0__map_context__map_tenant" {
+			contextValue = item.Value
+			break
+		}
+	}
+	assert.Equal(t, "example-tenant", contextValue, "KMS encryption context value must be a string, not a pointer")
 }
