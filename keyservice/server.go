@@ -6,6 +6,7 @@ import (
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/ocikms"
@@ -61,6 +62,18 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 		return nil, err
 	}
 	return []byte(azkvKey.EncryptedKey), nil
+}
+
+func (ks *Server) encryptWithHckms(key *HckmsKey, plaintext []byte) ([]byte, error) {
+	hckmsKey, err := hckms.NewMasterKey(key.KeyId)
+	if err != nil {
+		return nil, err
+	}
+	err = hckmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(hckmsKey.EncryptedKey), nil
 }
 
 func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
@@ -131,6 +144,19 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 	azkvKey.EncryptedKey = string(ciphertext)
 	plaintext, err := azkvKey.Decrypt()
 	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithHckms(key *HckmsKey, ciphertext []byte) ([]byte, error) {
+	hckmsKey, err := hckms.NewMasterKey(key.KeyId)
+	if err != nil {
+		return nil, err
+	}
+	hckmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := hckmsKey.Decrypt()
+	if err != nil {
+		return nil, err
+	}
+	return plaintext, nil
 }
 
 func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, error) {
@@ -217,6 +243,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_HckmsKey:
+		ciphertext, err := ks.encryptWithHckms(k.HckmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case *Key_OciKey:
 		ciphertext, err := ks.encryptWithOciKms(k.OciKey, req.Plaintext)
 		if err != nil {
@@ -251,6 +285,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Azure Key Vault key with URL %s/keys/%s/%s", k.AzureKeyvaultKey.VaultUrl, k.AzureKeyvaultKey.Name, k.AzureKeyvaultKey.Version)
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
+	case *Key_HckmsKey:
+		return fmt.Sprintf("HuaweiCloud KMS key with ID %s", k.HckmsKey.KeyId)
 	case *Key_OciKey:
 		return fmt.Sprintf("OCI KMS key with OCID %s", k.OciKey.Ocid)
 	default:
@@ -323,6 +359,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_AgeKey:
 		plaintext, err := ks.decryptWithAge(k.AgeKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_HckmsKey:
+		plaintext, err := ks.decryptWithHckms(k.HckmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

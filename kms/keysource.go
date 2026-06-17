@@ -109,7 +109,10 @@ func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile stri
 	key := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	key.Arn = arn
-	roleIndex := strings.Index(arn, "+arn:aws:iam::")
+	// While ARN paths can contain '+', they cannot contain ':'.
+	// Thus '+arn:' must be separating two ARNs that have been concatenated with '+'.
+	// (While KMS ARN paths currently do not contain '+', I think it's better to be safe than sorry.)
+	roleIndex := strings.Index(arn, "+arn:")
 	if roleIndex > 0 {
 		// Overwrite ARN
 		key.Arn = arn[:roleIndex]

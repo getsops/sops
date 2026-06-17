@@ -32,14 +32,14 @@ func WritePipe(pipe string, contents []byte) {
 	handle.Close()
 }
 
-func GetPipe(dir, filename string) string {
+func GetPipe(dir, filename string) (string, error) {
 	tmpfn := filepath.Join(dir, filename)
 	err := syscall.Mkfifo(tmpfn, 0600)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	return tmpfn
+	return tmpfn, nil
 }
 
 func SwitchUser(username string) {
@@ -49,8 +49,9 @@ func SwitchUser(username string) {
 	}
 
 	uid, _ := strconv.Atoi(user.Uid)
+	gid, _ := strconv.Atoi(user.Gid)
 
-	err = syscall.Setgid(uid)
+	err = syscall.Setgid(gid)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +66,7 @@ func SwitchUser(username string) {
 		log.Fatal(err)
 	}
 
-	err = syscall.Setregid(uid, uid)
+	err = syscall.Setregid(gid, gid)
 	if err != nil {
 		log.Fatal(err)
 	}

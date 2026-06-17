@@ -682,6 +682,7 @@ func Test_gpgBinary(t *testing.T) {
 }
 
 func Test_gnuPGHome(t *testing.T) {
+	t.Setenv("GNUPGHOME", "")
 	usr, err := user.Current()
 	if err == nil {
 		assert.Equal(t, filepath.Join(usr.HomeDir, ".gnupg"), gnuPGHome(""))

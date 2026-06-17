@@ -17,6 +17,7 @@ import (
 	"filippo.io/age/armor"
 	"filippo.io/age/plugin"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/ssh"
 
 	"github.com/getsops/sops/v3/logging"
 	"github.com/google/shlex"
@@ -32,6 +33,13 @@ const (
 	// SopsAgeKeyCmdEnv can be set as an environment variable with a command
 	// to execute that returns the age keys.
 	SopsAgeKeyCmdEnv = "SOPS_AGE_KEY_CMD"
+	// SopsAgeRecipientEnv is passed as an environment variable to the command
+	// set in SopsAgeKeyCmdEnv and contains the Bech32-encoded age public key
+	// for which the private key should be returned.
+	SopsAgeRecipientEnv = "SOPS_AGE_RECIPIENT"
+	// SopsAgeSshPrivateKeyCmdEnv can be set as an environment variable with a command
+	// to execute that returns the private SSH key.
+	SopsAgeSshPrivateKeyCmdEnv = "SOPS_AGE_SSH_PRIVATE_KEY_CMD"
 	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
 	// a private SSH key file.
 	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
@@ -137,7 +145,7 @@ func (i *ParsedIdentities) Import(identity ...string) error {
 	// one identity per line
 	r := strings.NewReader(strings.Join(identity, "\n"))
 
-	identities, err := parseIdentities(r)
+	identities, err := parseIdentities(r, false)
 	if err != nil {
 		return fmt.Errorf("failed to parse and add to age identities: %w", err)
 	}
@@ -219,7 +227,7 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 		} else if count == 2 {
 			unusedSuffix = fmt.Sprintf("s '%s' and '%s'", unusedLocations[0], unusedLocations[1])
 		} else {
-			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
+			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count-1], "', '"), unusedLocations[count-1])
 		}
 		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
 	}
@@ -286,11 +294,35 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
-// loadAgeSSHIdentity attempts to load the age SSH identity based on an SSH
-// private key from the SopsAgeSshPrivateKeyFileEnv environment variable. If the
-// environment variable is not present, it will fall back to `~/.ssh/id_ed25519`
-// or `~/.ssh/id_rsa`. If no age SSH identity is found, it will return nil.
-func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
+// getOutputFromCmd executes a shell command provided in param 'cmdString',
+// optionally adding env vars provided in param 'envVars',
+// and returns the command's output and error
+func getOutputFromCmd(cmdString string, envVars []string) ([]byte, error) {
+	var out []byte
+
+	args, err := shlex.Split(cmdString)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse command %s: %w", cmdString, err)
+	}
+	cmd := exec.Command(args[0], args[1:]...)
+	if envVars != nil {
+		cmd.Env = append(os.Environ(), envVars[0:]...)
+	}
+	out, err = cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute command %s: %w", cmdString, err)
+	}
+
+	return out, nil
+}
+
+// loadAgeSSHIdentity attempts to load age SSH identities in this order:
+// 1. An SSH private key from the SopsAgeSshPrivateKeyFileEnv environment variable.
+// 2. An SSH private key returned by executing the command from the
+// SopsAgeSshPrivateKeyCmdEnv environment variable
+// 3. `~/.ssh/id_ed25519` or `~/.ssh/id_rsa`.
+// If no age SSH identity is found, it will return nil.
+func (key *MasterKey) loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 	var identities []age.Identity
 	var unusedLocations []string
 	var errs errSet
@@ -305,6 +337,23 @@ func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyFileEnv)
+	}
+
+	sshKeyCmd, ok := os.LookupEnv(SopsAgeSshPrivateKeyCmdEnv)
+	if ok {
+		out, err := getOutputFromCmd(sshKeyCmd, []string{fmt.Sprintf("%s=%s", SopsAgeRecipientEnv, key.Recipient)})
+		if err != nil {
+			errs = append(errs, err)
+		} else {
+			identity, err := parseSSHIdentityFromPrivateKeyCmdOutput(out)
+			if err != nil {
+				errs = append(errs, err)
+			} else {
+				identities = append(identities, identity)
+			}
+		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyCmdEnv)
 	}
 
 	userHomeDir, err := os.UserHomeDir()
@@ -350,17 +399,25 @@ func getUserConfigDir() (string, error) {
 	return os.UserConfigDir()
 }
 
+type identityReader struct {
+	reader                   io.Reader
+	allowMultipleKeysPerLine bool
+}
+
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
 // found references, and expects at least one configuration to be present.
 func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
-	identities, unusedLocations, errs := loadAgeSSHIdentities()
+	identities, unusedLocations, errs := key.loadAgeSSHIdentities()
 
-	var readers = make(map[string]io.Reader, 0)
+	var readers = make(map[string]identityReader, 0)
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
-		readers[SopsAgeKeyEnv] = strings.NewReader(ageKey)
+		readers[SopsAgeKeyEnv] = identityReader{
+			reader:                   strings.NewReader(ageKey),
+			allowMultipleKeysPerLine: true,
+		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
 	}
@@ -371,22 +428,23 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
 			defer f.Close()
-			readers[SopsAgeKeyFileEnv] = f
+			readers[SopsAgeKeyFileEnv] = identityReader{
+				reader:                   f,
+				allowMultipleKeysPerLine: false,
+			}
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
 	}
 
 	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
-		args, err := shlex.Split(ageKeyCmd)
+		out, err := getOutputFromCmd(ageKeyCmd, []string{fmt.Sprintf("%s=%s", SopsAgeRecipientEnv, key.Recipient)})
 		if err != nil {
-			errs = append(errs, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
+			errs = append(errs, err)
 		} else {
-			out, err := exec.Command(args[0], args[1:]...).Output()
-			if err != nil {
-				errs = append(errs, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
-			} else {
-				readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
+			readers[SopsAgeKeyCmdEnv] = identityReader{
+				reader:                   bytes.NewReader(out),
+				allowMultipleKeysPerLine: false,
 			}
 		}
 	} else {
@@ -405,12 +463,15 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
 			defer f.Close()
-			readers[ageKeyFilePath] = f
+			readers[ageKeyFilePath] = identityReader{
+				reader:                   f,
+				allowMultipleKeysPerLine: false,
+			}
 		}
 	}
 
 	for location, r := range readers {
-		ids, err := unwrapIdentities(location, r)
+		ids, err := unwrapIdentities(location, r.reader, r.allowMultipleKeysPerLine)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
@@ -427,6 +488,13 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 // key or a public ssh key.
 func parseRecipient(recipient string) (age.Recipient, error) {
 	switch {
+	case strings.HasPrefix(recipient, "age1pq1"):
+		parsedRecipient, err := age.ParseHybridRecipient(recipient)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %w", err)
+		}
+
+		return parsedRecipient, nil
 	case strings.HasPrefix(recipient, "age1") && strings.Count(recipient, "1") > 1:
 		parsedRecipient, err := plugin.NewRecipient(recipient, pluginTerminalUI)
 		if err != nil {
@@ -454,7 +522,9 @@ func parseRecipient(recipient string) (age.Recipient, error) {
 // parseIdentities attempts to parse one or more age identities from the provided reader.
 // One identity per line.
 // Empty lines and lines starting with "#" are ignored.
-func parseIdentities(r io.Reader) (ParsedIdentities, error) {
+// If allowMultipleKeysPerLine is true, every non-empty lines is split by words,
+// and every word is parsed as an identity.
+func parseIdentities(r io.Reader, allowMultipleKeysPerLine bool) (ParsedIdentities, error) {
 	var identities ParsedIdentities
 
 	scanner := bufio.NewScanner(r)
@@ -466,12 +536,24 @@ func parseIdentities(r io.Reader) (ParsedIdentities, error) {
 			continue
 		}
 
-		parsed, err := parseIdentity(line)
-		if err != nil {
-			return nil, err
+		if allowMultipleKeysPerLine {
+			lineScanner := bufio.NewScanner(strings.NewReader(line))
+			lineScanner.Split(bufio.ScanWords)
+			for lineScanner.Scan() {
+				word := lineScanner.Text()
+				parsed, err := parseIdentity(word)
+				if err != nil {
+					return nil, err
+				}
+				identities = append(identities, parsed)
+			}
+		} else {
+			parsed, err := parseIdentity(line)
+			if err != nil {
+				return nil, err
+			}
+			identities = append(identities, parsed)
 		}
-
-		identities = append(identities, parsed)
 	}
 
 	return identities, nil
@@ -481,9 +563,24 @@ func parseIdentity(s string) (age.Identity, error) {
 	switch {
 	case strings.HasPrefix(s, "AGE-PLUGIN-"):
 		return plugin.NewIdentity(s, pluginTerminalUI)
+	case strings.HasPrefix(s, "AGE-SECRET-KEY-PQ-1"):
+		return age.ParseHybridIdentity(s)
 	case strings.HasPrefix(s, "AGE-SECRET-KEY-1"):
 		return age.ParseX25519Identity(s)
 	default:
 		return nil, fmt.Errorf("unknown identity type")
 	}
+}
+
+// parseSSHIdentityFromPrivateKeyCmdOutput returns an age.Identity from the given
+// private key. Note that encrypted private keys are not supported.
+func parseSSHIdentityFromPrivateKeyCmdOutput(key []byte) (age.Identity, error) {
+	id, err := agessh.ParseIdentity(key)
+	if sshErr, ok := err.(*ssh.PassphraseMissingError); ok {
+		return nil, fmt.Errorf("the SSH key returned by running SOPS_AGE_SSH_PRIVATE_KEY_CMD is password protected, which is unsupported. (%q)", sshErr)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("malformed SSH identity returned by running SOPS_AGE_SSH_PRIVATE_KEY_CMD: %q", err)
+	}
+	return id, nil
 }

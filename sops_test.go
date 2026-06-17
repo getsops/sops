@@ -352,7 +352,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 	branches := TreeBranches{
 		TreeBranch{
 			TreeItem{
-				Key:   Comment{"sops:enc"},
+				Key:   Comment{Value: "sops:enc"},
 				Value: nil,
 			},
 			TreeItem{
@@ -367,11 +367,11 @@ func TestEncryptedCommentRegex(t *testing.T) {
 						Value: "bar",
 					},
 					TreeItem{
-						Key:   Comment{"before"},
+						Key:   Comment{Value: "before"},
 						Value: nil,
 					},
 					TreeItem{
-						Key:   Comment{"sops:enc"},
+						Key:   Comment{Value: "sops:enc"},
 						Value: nil,
 					},
 					TreeItem{
@@ -384,16 +384,16 @@ func TestEncryptedCommentRegex(t *testing.T) {
 				Key: "array",
 				Value: []interface{}{
 					"bar",
-					Comment{"sops:enc"},
+					Comment{Value: "sops:enc"},
 					"baz",
 				},
 			},
 			TreeItem{
-				Key:   Comment{"sops:enc"},
+				Key:   Comment{Value: "sops:enc"},
 				Value: nil,
 			},
 			TreeItem{
-				Key:   Comment{"after"},
+				Key:   Comment{Value: "after"},
 				Value: nil,
 			},
 			TreeItem{
@@ -408,7 +408,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedCommentRegex: "sops:enc"}}
 	expected := TreeBranch{
 		TreeItem{
-			Key:   Comment{"sops:enc"},
+			Key:   Comment{Value: "sops:enc"},
 			Value: nil,
 		},
 		TreeItem{
@@ -423,11 +423,11 @@ func TestEncryptedCommentRegex(t *testing.T) {
 					Value: "bar",
 				},
 				TreeItem{
-					Key:   Comment{"before"},
+					Key:   Comment{Value: "before"},
 					Value: nil,
 				},
 				TreeItem{
-					Key:   Comment{"sops:enc"},
+					Key:   Comment{Value: "sops:enc"},
 					Value: nil,
 				},
 				TreeItem{
@@ -440,16 +440,16 @@ func TestEncryptedCommentRegex(t *testing.T) {
 			Key: "array",
 			Value: []interface{}{
 				"bar",
-				Comment{"sops:enc"},
+				Comment{Value: "sops:enc"},
 				"zab",
 			},
 		},
 		TreeItem{
-			Key:   Comment{"sops:enc"},
+			Key:   Comment{Value: "sops:enc"},
 			Value: nil,
 		},
 		TreeItem{
-			Key:   Comment{"retfa"},
+			Key:   Comment{Value: "retfa"},
 			Value: nil,
 		},
 		TreeItem{
@@ -475,7 +475,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 	expected[1].Value = "bar"
 	expected[2].Value.(TreeBranch)[3].Value = "bar"
 	expected[3].Value.([]interface{})[2] = "baz"
-	expected[5].Key = Comment{"after"}
+	expected[5].Key = Comment{Value: "after"}
 	expected[6].Value = []interface{}{
 		"bar",
 		"baz",
@@ -489,7 +489,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 	branches := TreeBranches{
 		TreeBranch{
 			TreeItem{
-				Key:   Comment{"sops:noenc"},
+				Key:   Comment{Value: "sops:noenc"},
 				Value: nil,
 			},
 			TreeItem{
@@ -504,11 +504,11 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 						Value: "bar",
 					},
 					TreeItem{
-						Key:   Comment{"before"},
+						Key:   Comment{Value: "before"},
 						Value: nil,
 					},
 					TreeItem{
-						Key:   Comment{"sops:noenc"},
+						Key:   Comment{Value: "sops:noenc"},
 						Value: nil,
 					},
 					TreeItem{
@@ -521,16 +521,16 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 				Key: "array",
 				Value: []interface{}{
 					"bar",
-					Comment{"sops:noenc"},
+					Comment{Value: "sops:noenc"},
 					"baz",
 				},
 			},
 			TreeItem{
-				Key:   Comment{"sops:noenc"},
+				Key:   Comment{Value: "sops:noenc"},
 				Value: nil,
 			},
 			TreeItem{
-				Key:   Comment{"after"},
+				Key:   Comment{Value: "after"},
 				Value: nil,
 			},
 			TreeItem{
@@ -545,7 +545,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 	tree := Tree{Branches: branches, Metadata: Metadata{UnencryptedCommentRegex: "sops:noenc"}}
 	expected := TreeBranch{
 		TreeItem{
-			Key:   Comment{"sops:noenc"},
+			Key:   Comment{Value: "sops:noenc"},
 			Value: nil,
 		},
 		TreeItem{
@@ -560,11 +560,11 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 					Value: "rab",
 				},
 				TreeItem{
-					Key:   Comment{"erofeb"},
+					Key:   Comment{Value: "erofeb"},
 					Value: nil,
 				},
 				TreeItem{
-					Key:   Comment{"sops:noenc"},
+					Key:   Comment{Value: "sops:noenc"},
 					Value: nil,
 				},
 				TreeItem{
@@ -577,16 +577,16 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 			Key: "array",
 			Value: []interface{}{
 				"rab",
-				Comment{"sops:noenc"},
+				Comment{Value: "sops:noenc"},
 				"baz",
 			},
 		},
 		TreeItem{
-			Key:   Comment{"sops:noenc"},
+			Key:   Comment{Value: "sops:noenc"},
 			Value: nil,
 		},
 		TreeItem{
-			Key:   Comment{"after"},
+			Key:   Comment{Value: "after"},
 			Value: nil,
 		},
 		TreeItem{
@@ -610,7 +610,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 		t.Errorf("Decrypting the tree failed: %s", err)
 	}
 	expected[2].Value.(TreeBranch)[0].Value = "bar"
-	expected[2].Value.(TreeBranch)[1].Key = Comment{"before"}
+	expected[2].Value.(TreeBranch)[1].Key = Comment{Value: "before"}
 	expected[3].Value.([]interface{})[0] = "bar"
 	if !reflect.DeepEqual(tree.Branches[0], expected) {
 		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
@@ -621,7 +621,7 @@ func TestUnencryptedCommentRegexFail(t *testing.T) {
 	branches := TreeBranches{
 		TreeBranch{
 			TreeItem{
-				Key:   Comment{"sops:noenc"},
+				Key:   Comment{Value: "sops:noenc"},
 				Value: nil,
 			},
 			TreeItem{
@@ -936,14 +936,14 @@ func TestEncryptComments(t *testing.T) {
 		Branches: TreeBranches{
 			TreeBranch{
 				TreeItem{
-					Key:   Comment{"foo"},
+					Key:   Comment{Value: "foo"},
 					Value: nil,
 				},
 				TreeItem{
 					Key: "list",
 					Value: []interface{}{
 						"1",
-						Comment{"bar"},
+						Comment{Value: "bar"},
 						"2",
 					},
 				},
@@ -963,14 +963,14 @@ func TestDecryptComments(t *testing.T) {
 		Branches: TreeBranches{
 			TreeBranch{
 				TreeItem{
-					Key:   Comment{"oof"},
+					Key:   Comment{Value: "oof"},
 					Value: nil,
 				},
 				TreeItem{
 					Key: "list",
 					Value: []interface{}{
 						"1",
-						Comment{"rab"},
+						Comment{Value: "rab"},
 						"2",
 					},
 				},
@@ -995,7 +995,7 @@ func TestDecryptUnencryptedComments(t *testing.T) {
 			TreeBranch{
 				TreeItem{
 					// We use `error` to simulate an error decrypting, the fake cipher will error in this case
-					Key:   Comment{"error"},
+					Key:   Comment{Value: "error"},
 					Value: nil,
 				},
 			},
@@ -1521,7 +1521,7 @@ func TestEmitAsMap(t *testing.T) {
 				Value: 42,
 			},
 			TreeItem{
-				Key:   Comment{"comment"},
+				Key:   Comment{Value: "comment"},
 				Value: nil,
 			},
 		},

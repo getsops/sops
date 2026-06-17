@@ -52,15 +52,28 @@ func (err *fileAlreadyEncryptedError) UserError() string {
 		"encrypt files that already contain such an entry.\n\n" +
 		"If this is an unencrypted file, rename the '" + stores.SopsMetadataKey + "' entry.\n\n" +
 		"If this is an encrypted file and you want to edit it, use the " +
-		"editor mode, for example: `sops my_file.yaml`"
+		"editor mode, for example: `sops edit my_file.yaml`"
 	return wordwrap.WrapString(message, 75)
 }
 
-func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
-	if opts.OutputStore.HasSopsTopLevelKey(branch) {
-		return &fileAlreadyEncryptedError{}
+type needAtLeastOneDocument struct{}
+
+func (err *needAtLeastOneDocument) Error() string {
+	return "Empty file"
+}
+
+func (err *needAtLeastOneDocument) UserError() string {
+	return "File cannot be completely empty, it must contain at least one document"
+}
+
+func validateFileForEncryption(outputStore sops.Store, branches []sops.TreeBranch) (sops.UserError, int) {
+	if len(branches) < 1 {
+		return &needAtLeastOneDocument{}, codes.NeedAtLeastOneDocument
 	}
-	return nil
+	if outputStore.HasSopsTopLevelKey(branches[0]) {
+		return &fileAlreadyEncryptedError{}, codes.FileAlreadyEncrypted
+	}
+	return nil, 0
 }
 
 func metadataFromEncryptionConfig(config encryptConfig) sops.Metadata {
@@ -96,11 +109,8 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
-	if len(branches) < 1 {
-		return nil, common.NewExitError("File cannot be completely empty, it must contain at least one document", codes.NeedAtLeastOneDocument)
-	}
-	if err := ensureNoMetadata(opts, branches[0]); err != nil {
-		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
+	if err, code := validateFileForEncryption(opts.OutputStore, branches); err != nil {
+		return nil, common.NewExitError(err, code)
 	}
 	path, err := filepath.Abs(opts.InputPath)
 	if err != nil {

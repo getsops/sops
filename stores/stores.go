@@ -19,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/ocikms"
@@ -30,102 +31,102 @@ const (
 	SopsMetadataKey = "sops"
 )
 
-// SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
-type SopsFile struct {
-	// Metadata is a pointer so we can easily tell when the field is not present
-	// in the SOPS file by checking for nil. This way we can show the user a
-	// helpful error message indicating that the metadata wasn't found, instead
-	// of showing a cryptic parsing error
-	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops"`
-}
-
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.
 // This struct is just used for serialization, and SOPS uses another struct internally, sops.Metadata. It exists
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
-type Metadata struct {
-	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
-	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
-	OCIKMSKeys                []ocikmskey `yaml:"oci_kms" json:"oci_kms"`
-	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
-	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
-	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
-	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
-	UnencryptedCommentRegex   string      `yaml:"unencrypted_comment_regex,omitempty" json:"unencrypted_comment_regex,omitempty"`
-	EncryptedCommentRegex     string      `yaml:"encrypted_comment_regex,omitempty" json:"encrypted_comment_regex,omitempty"`
-	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
-	Version                   string      `yaml:"version" json:"version"`
+type metadata struct {
+	ShamirThreshold           int         `mapstructure:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup  `mapstructure:"key_groups,omitempty,deep"`
+	KMSKeys                   []kmskey    `mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys                []gcpkmskey `mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys                 []hckmskey  `mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys         []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys                 []vaultkey  `mapstructure:"hc_vault,omitempty,deep"`
+	AgeKeys                   []agekey    `mapstructure:"age,omitempty,deep"`
+	OCIKMSKeys                []ocikmskey `mapstructure:"oci_kms,omitempty,deep"`
+	LastModified              string      `mapstructure:"lastmodified"`
+	MessageAuthenticationCode string      `mapstructure:"mac"`
+	PGPKeys                   []pgpkey    `mapstructure:"pgp,omitempty,deep"`
+	UnencryptedSuffix         string      `mapstructure:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string      `mapstructure:"encrypted_suffix,omitempty"`
+	UnencryptedRegex          string      `mapstructure:"unencrypted_regex,omitempty"`
+	EncryptedRegex            string      `mapstructure:"encrypted_regex,omitempty"`
+	UnencryptedCommentRegex   string      `mapstructure:"unencrypted_comment_regex,omitempty"`
+	EncryptedCommentRegex     string      `mapstructure:"encrypted_comment_regex,omitempty"`
+	MACOnlyEncrypted          bool        `mapstructure:"mac_only_encrypted,omitempty"`
+	Version                   string      `mapstructure:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys           []agekey    `yaml:"age" json:"age"`
-	OCIKMSKeys        []ocikmskey `yaml:"oci_kms" json:"oci_kms"`
+	PGPKeys           []pgpkey    `mapstructure:"pgp,omitempty,deep"`
+	KMSKeys           []kmskey    `mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys        []gcpkmskey `mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys         []hckmskey  `mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys         []vaultkey  `mapstructure:"hc_vault,deep"`
+	AgeKeys           []agekey    `mapstructure:"age,deep"`
+	OCIKMSKeys        []ocikmskey `mapstructure:"oci_kms,omitempty,deep"`
 }
 
 type pgpkey struct {
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
-	Fingerprint      string `yaml:"fp" json:"fp"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
+	Fingerprint      string `mapstructure:"fp"`
 }
 
 type kmskey struct {
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
-	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
+	Arn              string             `mapstructure:"arn"`
+	Role             string             `mapstructure:"role,omitempty"`
+	Context          map[string]*string `mapstructure:"context,omitempty"`
+	CreatedAt        string             `mapstructure:"created_at"`
+	EncryptedDataKey string             `mapstructure:"enc"`
+	AwsProfile       string             `mapstructure:"aws_profile"`
 }
 
 type gcpkmskey struct {
-	ResourceID       string `yaml:"resource_id" json:"resource_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	ResourceID       string `mapstructure:"resource_id"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
 }
 
 type vaultkey struct {
-	VaultAddress     string `yaml:"vault_address" json:"vault_address"`
-	EnginePath       string `yaml:"engine_path" json:"engine_path"`
-	KeyName          string `yaml:"key_name" json:"key_name"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultAddress     string `mapstructure:"vault_address"`
+	EnginePath       string `mapstructure:"engine_path"`
+	KeyName          string `mapstructure:"key_name"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
 }
 
 type azkvkey struct {
-	VaultURL         string `yaml:"vault_url" json:"vault_url"`
-	Name             string `yaml:"name" json:"name"`
-	Version          string `yaml:"version" json:"version"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultURL         string `mapstructure:"vault_url"`
+	Name             string `mapstructure:"name"`
+	Version          string `mapstructure:"version"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
 }
 
 type agekey struct {
-	Recipient        string `yaml:"recipient" json:"recipient"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	Recipient        string `mapstructure:"recipient"`
+	EncryptedDataKey string `mapstructure:"enc"`
+}
+
+type hckmskey struct {
+	KeyID            string `mapstructure:"key_id"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
 }
 
 type ocikmskey struct {
-	Ocid             string `yaml:"ocid" json:"ocid"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	Ocid             string `mapstructure:"ocid"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
 }
 
-// MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
-func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
-	var m Metadata
+// metadataFromInternal converts an internal SOPS metadata representation to a
+// representation appropriate for storage.
+func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
+	var m metadata
 	m.LastModified = sopsMetadata.LastModified.Format(time.RFC3339)
 	m.UnencryptedSuffix = sopsMetadata.UnencryptedSuffix
 	m.EncryptedSuffix = sopsMetadata.EncryptedSuffix
@@ -142,6 +143,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.PGPKeys = pgpKeysFromGroup(group)
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
+		m.HCKmsKeys = hckmsKeysFromGroup(group)
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
@@ -152,6 +154,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				KMSKeys:           kmsKeysFromGroup(group),
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
+				HCKmsKeys:         hckmsKeysFromGroup(group),
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
@@ -252,6 +255,20 @@ func ageKeysFromGroup(group sops.KeyGroup) (keys []agekey) {
 	return
 }
 
+func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *hckms.MasterKey:
+			keys = append(keys, hckmskey{
+				KeyID:            key.KeyID,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
 func ocikmsKeysFromGroup(group sops.KeyGroup) (keys []ocikmskey) {
 	for _, key := range group {
 		switch key := key.(type) {
@@ -267,7 +284,7 @@ func ocikmsKeysFromGroup(group sops.KeyGroup) (keys []ocikmskey) {
 }
 
 // ToInternal converts a storage-appropriate Metadata struct to a SOPS internal representation
-func (m *Metadata) ToInternal() (sops.Metadata, error) {
+func (m *metadata) ToInternal() (sops.Metadata, error) {
 	lastModified, err := time.Parse(time.RFC3339, m.LastModified)
 	if err != nil {
 		return sops.Metadata{}, err
@@ -320,7 +337,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, ociKmsKeys []ocikmskey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, ociKmsKeys []ocikmskey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -331,6 +348,13 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	}
 	for _, gcpKmsKey := range gcpKmsKeys {
 		k, err := gcpKmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
+	for _, hckmsKey := range hckmsKeys {
+		k, err := hckmsKey.toInternal()
 		if err != nil {
 			return nil, err
 		}
@@ -374,10 +398,10 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	return internalGroup, nil
 }
 
-func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
+func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.OCIKMSKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.OCIKMSKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.OCIKMSKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.OCIKMSKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -385,7 +409,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.OCIKMSKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.OCIKMSKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -469,6 +493,20 @@ func (ageKey *agekey) toInternal() (*age.MasterKey, error) {
 		EncryptedKey: ageKey.EncryptedDataKey,
 		Recipient:    ageKey.Recipient,
 	}, nil
+}
+
+func (hckmsKey *hckmskey) toInternal() (*hckms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, hckmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	key, err := hckms.NewMasterKey(hckmsKey.KeyID)
+	if err != nil {
+		return nil, err
+	}
+	key.EncryptedKey = hckmsKey.EncryptedDataKey
+	key.CreationDate = creationDate
+	return key, nil
 }
 
 func (ociKmsKey *ocikmskey) toInternal() (*ocikms.MasterKey, error) {

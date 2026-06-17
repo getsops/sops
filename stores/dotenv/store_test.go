@@ -44,6 +44,13 @@ func TestLoadPlainFile(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, BRANCH, branches[0])
 }
+
+func TestLoadEncryptedFileNoMetadata(t *testing.T) {
+	branches, err := (&Store{}).LoadEncryptedFile(PLAIN)
+	assert.Equal(t, err, sops.MetadataNotFound)
+	assert.Equal(t, branches, sops.Tree{})
+}
+
 func TestEmitPlainFile(t *testing.T) {
 	branches := sops.TreeBranches{
 		BRANCH,
