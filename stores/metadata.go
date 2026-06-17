@@ -184,6 +184,11 @@ func (mapKeys byName) Less(i, j int) bool {
 func goToSops(value interface{}) (interface{}, error) {
 	val := reflect.ValueOf(value)
 	switch val.Kind() {
+	case reflect.Pointer:
+		if val.IsNil() {
+			return nil, nil
+		}
+		return goToSops(val.Elem().Interface())
 	case reflect.Array, reflect.Slice:
 		result := make([]interface{}, val.Len())
 		for j := 0; j < val.Len(); j++ {
