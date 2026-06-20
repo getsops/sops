@@ -614,11 +614,13 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 								"SOPS.")
 						v = c
 					}
-				} else {
-					v, err = cipher.Decrypt(in.(string), key, pathString)
+				} else if inStr, inIsStr := in.(string); inIsStr {
+					v, err = cipher.Decrypt(inStr, key, pathString)
 					if err != nil {
 						return nil, fmt.Errorf("Could not decrypt value: %s", err)
 					}
+				} else {
+					return nil, fmt.Errorf("Expected encrypted value as string, but got %T", in)
 				}
 			} else {
 				v = in
