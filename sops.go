@@ -418,8 +418,8 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack 
 		}
 		key, ok := item.Key.(string)
 		if !ok {
-			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
-				"supported", item.Key, item.Key)
+			return nil, fmt.Errorf(
+				"Tree contains a non-string key (type %T): %s. Only string keys are supported", item.Key, item.Key)
 		}
 		newV, err := branch.walkValue(item.Value, append(path, key), commentsStack, onLeaves)
 		if err != nil {
