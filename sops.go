@@ -613,7 +613,11 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 						v = c
 					}
 				} else {
-					v, err = cipher.Decrypt(in.(string), key, pathString)
+					str, isString := in.(string)
+									if !isString {
+										v = in // non-string value from unencrypted field
+									} else {
+										v, err = cipher.Decrypt(str, key, pathString)
 					if err != nil {
 						return nil, fmt.Errorf("Could not decrypt value: %s", err)
 					}
