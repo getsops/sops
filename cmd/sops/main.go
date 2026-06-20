@@ -315,7 +315,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename",
-					Usage: fmt.Sprintf("filename for the temporarily file (default: %s)", exec.FallbackFilename),
+					Usage: fmt.Sprintf("filename for the temporary file (default: %s)", exec.FallbackFilename),
 				},
 				cli.StringFlag{
 					Name:   "decryption-order",
