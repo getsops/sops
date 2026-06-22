@@ -57,7 +57,9 @@ func GetFile(dir, filename string) (*os.File, error) {
 }
 
 func ExecWithFile(opts ExecOpts) error {
+	var userEnv []string
 	if opts.User != "" {
+		userEnv = UserEnv(opts.User)
 		SwitchUser(opts.User)
 	}
 
@@ -107,6 +109,7 @@ func ExecWithFile(opts ExecOpts) error {
 	if !opts.Pristine {
 		env = os.Environ()
 	}
+	env = append(env, userEnv...)
 	env = append(env, opts.Env...)
 
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
@@ -125,7 +128,9 @@ func ExecWithFile(opts ExecOpts) error {
 }
 
 func ExecWithEnv(opts ExecOpts) error {
+	var userEnv []string
 	if opts.User != "" {
+		userEnv = UserEnv(opts.User)
 		SwitchUser(opts.User)
 	}
 
@@ -150,6 +155,7 @@ func ExecWithEnv(opts ExecOpts) error {
 		env = append(env, string(line))
 	}
 
+	env = append(env, userEnv...)
 	env = append(env, opts.Env...)
 
 	if opts.SameProcess {
