@@ -14,6 +14,10 @@ func BuildCommand(command string) *exec.Cmd {
 	return exec.Command("cmd.exe", "/C", command)
 }
 
+func RunCommand(cmd *exec.Cmd) error {
+	return cmd.Run()
+}
+
 func WritePipe(pipe string, contents []byte) {
 	log.Fatal("fifos are not available on windows")
 }

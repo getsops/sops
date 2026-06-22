@@ -121,7 +121,7 @@ func ExecWithFile(opts ExecOpts) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	return RunCommand(cmd)
 }
 
 func ExecWithEnv(opts ExecOpts) error {
@@ -172,5 +172,5 @@ func ExecWithEnv(opts ExecOpts) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	return RunCommand(cmd)
 }
