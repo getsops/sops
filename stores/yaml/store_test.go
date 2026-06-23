@@ -285,7 +285,6 @@ func TestComment3(t *testing.T) {
 	assert.Equal(t, COMMENT_3_OUT, bytes)
 }
 
-/* TODO: re-enable once https://github.com/go-yaml/yaml/pull/690 is merged
 func TestComment4(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_4)
@@ -305,7 +304,6 @@ func TestComment5(t *testing.T) {
 	assert.Equal(t, string(COMMENT_5), string(bytes))
 	assert.Equal(t, COMMENT_5, bytes)
 }
-*/
 
 func TestEmpty(t *testing.T) {
 	// First iteration: load and store
@@ -317,7 +315,6 @@ func TestEmpty(t *testing.T) {
 	assert.Equal(t, ``, string(bytes))
 }
 
-/* TODO: re-enable once https://github.com/go-yaml/yaml/pull/690 is merged
 func TestEmpty2(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile([]byte(`---`))
@@ -328,7 +325,6 @@ func TestEmpty2(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, ``, string(bytes))
 }
-*/
 
 func TestEmpty3(t *testing.T) {
 	branches, err := (&Store{}).LoadPlainFile([]byte("{}\n"))
