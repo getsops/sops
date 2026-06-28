@@ -26,6 +26,7 @@ import (
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
+	configcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/config"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
 	filestatuscmd "github.com/getsops/sops/v3/cmd/sops/subcommand/filestatus"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/groups"
@@ -547,6 +548,73 @@ func main() {
 
 				fmt.Println(string(json))
 
+				return nil
+			},
+		},
+		{
+			Name:      "config",
+			Usage:     "print the .sops.yaml rules (creation + destination) that apply to a file path",
+			ArgsUsage: `file`,
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "require-match",
+					Usage: "exit non-zero if no creation_rule or destination_rule applies to the given file path",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				if c.NArg() > 1 {
+					return common.NewExitError("Error: too many arguments", codes.ErrorGeneric)
+				}
+
+				inputPath := c.Args()[0]
+
+				absFilePath, err := filepath.Abs(inputPath)
+				if err != nil {
+					return common.NewExitError(fmt.Sprintf("Error: cannot resolve file path: %v", err), codes.ErrorGeneric)
+				}
+
+				// Resolve config path. --config (top-level flag) wins; otherwise auto-discover.
+				configPath := c.GlobalString("config")
+				if configPath == "" {
+					// FindConfigFile takes a file path; it walks up from the file's directory
+					// looking for .sops.yaml (LookupConfigFile internally calls path.Dir).
+					configPath, err = config.FindConfigFile(absFilePath)
+					if err != nil {
+						return common.NewExitError(fmt.Sprintf("Error: %v", err), codes.ConfigFileNotFound)
+					}
+				}
+				absConfPath, err := filepath.Abs(configPath)
+				if err != nil {
+					return common.NewExitError(fmt.Sprintf("Error: cannot resolve config path: %v", err), codes.ErrorGeneric)
+				}
+
+				opts := configcmd.Opts{
+					ConfigPath:   absConfPath,
+					FilePath:     absFilePath,
+					RequireMatch: c.Bool("require-match"),
+				}
+
+				output, exitCode, runErr := configcmd.Run(opts)
+
+				// Always print the JSON if we have an Output (even when runErr is set
+				// for --require-match — consumers may still want the structured data).
+				if output != nil {
+					b, mErr := configcmd.Marshal(output)
+					if mErr != nil {
+						return common.NewExitError(fmt.Sprintf("Error: cannot marshal output: %v", mErr), codes.ErrorGeneric)
+					}
+					fmt.Println(string(b))
+				}
+
+				if runErr != nil {
+					return common.NewExitError(fmt.Sprintf("Error: %v", runErr), exitCode)
+				}
+				if exitCode != 0 {
+					return common.NewExitError("", exitCode)
+				}
 				return nil
 			},
 		},
