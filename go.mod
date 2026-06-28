@@ -33,6 +33,8 @@ require (
 	github.com/ory/dockertest/v3 v3.12.0
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.9.4
+	github.com/stackitcloud/stackit-sdk-go/core v0.22.0
+	github.com/stackitcloud/stackit-sdk-go/services/kms v1.3.2
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli v1.22.17
 	go.yaml.in/yaml/v3 v3.0.4
