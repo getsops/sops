@@ -1,5 +1,56 @@
 # Changelog
 
+## 3.13.2
+
+Improvements:
+
+* Dependency updates ([#2185](https://github.com/getsops/sops/pull/2185)),
+  ([#2193](https://github.com/getsops/sops/pull/2193)),
+  ([#2197](https://github.com/getsops/sops/pull/2197)),
+  ([#2212](https://github.com/getsops/sops/pull/2212)),
+  ([#2218](https://github.com/getsops/sops/pull/2218)),
+  ([#2229](https://github.com/getsops/sops/pull/2229)),
+  ([#2231](https://github.com/getsops/sops/pull/2231)),
+  ([#2231](https://github.com/getsops/sops/pull/2233)).
+* Fix typos in documentation
+  ([#2221](https://github.com/getsops/sops/pull/2221)).
+
+Bugfixes:
+
+* When using `--user` in the `sops exec-file` and `sops exec-env` subcommands,
+  supplementary groups are now reset to the ones of the supplied user
+  ([#2194](https://github.com/getsops/sops/pull/2194)).
+* When using `--user` in the `sops exec-file` and `sops exec-env` subcommands,
+  make sure that `HOME`, `USER`, and `LOGNAME` are set to the correct values
+  for the supplied user ([#2230](https://github.com/getsops/sops/pull/2230)).
+* AWS KMS: Handle pointers when serializing AWS context
+  ([#2219](https://github.com/getsops/sops/pull/2219)).
+* JSON store: Preverse large integers that fit into `int64`
+  ([#2222](https://github.com/getsops/sops/pull/2222)).
+* INI store: Restore old behavior of double-escaping newlines in metadata, and
+  adjust code to handle both the 3.13.0/3.13.1 single-escaped newlines as well
+  as double-escaped newlines
+  ([#2189](https://github.com/getsops/sops/pull/2189)).
+* Fix panic when expecting a string for encrypted data, but when encountering
+  something else ([#2227](https://github.com/getsops/sops/pull/2227)).
+
+Project changes:
+
+* CI dependency updates ([#2184](https://github.com/getsops/sops/pull/2184)),
+  ([#2192](https://github.com/getsops/sops/pull/2192)),
+  ([#2196](https://github.com/getsops/sops/pull/2196)),
+  ([#2211](https://github.com/getsops/sops/pull/2211)),
+  ([#2228](https://github.com/getsops/sops/pull/2228)),
+  ([#2236](https://github.com/getsops/sops/pull/2236)).
+* Rust dependency updates for functional tests
+  ([#2191](https://github.com/getsops/sops/pull/2191)).
+* Build alpine container in CI
+  ([#2217](https://github.com/getsops/sops/pull/2217)).
+* Improve `make test` by unsetting all age environment variables
+  ([#2208](https://github.com/getsops/sops/pull/2208)).
+* Shorten lines in MarkDown files
+  ([#2206](https://github.com/getsops/sops/pull/2206)).
+
 ## 3.13.1
 
 Improvements:
