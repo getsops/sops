@@ -22,6 +22,7 @@ import (
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 )
 
@@ -43,6 +44,7 @@ type metadata struct {
 	AzureKeyVaultKeys         []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
 	VaultKeys                 []vaultkey  `mapstructure:"hc_vault,omitempty,deep"`
 	AgeKeys                   []agekey    `mapstructure:"age,omitempty,deep"`
+	OCIKMSKeys                []ocikmskey `mapstructure:"oci_kms,omitempty,deep"`
 	LastModified              string      `mapstructure:"lastmodified"`
 	MessageAuthenticationCode string      `mapstructure:"mac"`
 	PGPKeys                   []pgpkey    `mapstructure:"pgp,omitempty,deep"`
@@ -64,6 +66,7 @@ type keygroup struct {
 	AzureKeyVaultKeys []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
 	VaultKeys         []vaultkey  `mapstructure:"hc_vault,deep"`
 	AgeKeys           []agekey    `mapstructure:"age,deep"`
+	OCIKMSKeys        []ocikmskey `mapstructure:"oci_kms,omitempty,deep"`
 }
 
 type pgpkey struct {
@@ -114,6 +117,12 @@ type hckmskey struct {
 	EncryptedDataKey string `mapstructure:"enc"`
 }
 
+type ocikmskey struct {
+	Ocid             string `mapstructure:"ocid"`
+	CreatedAt        string `mapstructure:"created_at"`
+	EncryptedDataKey string `mapstructure:"enc"`
+}
+
 // metadataFromInternal converts an internal SOPS metadata representation to a
 // representation appropriate for storage.
 func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
@@ -138,6 +147,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
+		m.OCIKMSKeys = ocikmsKeysFromGroup(group)
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
 			m.KeyGroups = append(m.KeyGroups, keygroup{
@@ -148,6 +158,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
+				OCIKMSKeys:        ocikmsKeysFromGroup(group),
 			})
 		}
 	}
@@ -258,6 +269,20 @@ func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
 	return
 }
 
+func ocikmsKeysFromGroup(group sops.KeyGroup) (keys []ocikmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *ocikms.MasterKey:
+			keys = append(keys, ocikmskey{
+				Ocid:             key.Ocid,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
 // ToInternal converts a storage-appropriate Metadata struct to a SOPS internal representation
 func (m *metadata) ToInternal() (sops.Metadata, error) {
 	lastModified, err := time.Parse(time.RFC3339, m.LastModified)
@@ -312,7 +337,7 @@ func (m *metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, ociKmsKeys []ocikmskey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -363,13 +388,20 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 		}
 		internalGroup = append(internalGroup, k)
 	}
+	for _, ociKmsKey := range ociKmsKeys {
+		k, err := ociKmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
 	return internalGroup, nil
 }
 
 func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.OCIKMSKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.OCIKMSKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -377,7 +409,7 @@ func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.OCIKMSKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -475,6 +507,18 @@ func (hckmsKey *hckmskey) toInternal() (*hckms.MasterKey, error) {
 	key.EncryptedKey = hckmsKey.EncryptedDataKey
 	key.CreationDate = creationDate
 	return key, nil
+}
+
+func (ociKmsKey *ocikmskey) toInternal() (*ocikms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, ociKmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &ocikms.MasterKey{
+		Ocid:         ociKmsKey.Ocid,
+		EncryptedKey: ociKmsKey.EncryptedDataKey,
+		CreationDate: creationDate,
+	}, nil
 }
 
 // ExampleComplexTree is an example sops.Tree object exhibiting complex relationships
