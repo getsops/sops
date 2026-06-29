@@ -33,6 +33,7 @@ import (
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
 	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/encrypt"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
@@ -1059,14 +1060,14 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
-				output, err := encrypt(encryptOpts{
+				output, err := encrypt.Encrypt(encrypt.EncryptOpts{
 					OutputStore:   outputStore,
 					InputStore:    inputStore,
 					InputPath:     fileName,
 					ReadFromStdin: readFromStdin,
 					Cipher:        aes.NewCipher(),
 					KeyServices:   svcs,
-					encryptConfig: encConfig,
+					EncryptConfig: encConfig,
 				})
 
 				if err != nil {
@@ -1420,7 +1421,7 @@ func main() {
 					}
 					output, err = editExample(editExampleOpts{
 						editOpts:      opts,
-						encryptConfig: encConfig,
+						EncryptConfig: encConfig,
 					})
 					if err != nil {
 						return toExitError(err)
@@ -1971,13 +1972,13 @@ func main() {
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = encrypt(encryptOpts{
+			output, err = encrypt.Encrypt(encrypt.EncryptOpts{
 				OutputStore:   outputStore,
 				InputStore:    inputStore,
 				InputPath:     fileName,
 				Cipher:        aes.NewCipher(),
 				KeyServices:   svcs,
-				encryptConfig: encConfig,
+				EncryptConfig: encConfig,
 			})
 			// While this check is also done below, the `err` in this scope shadows
 			// the `err` in the outer scope.  **Only** do this in case --decrypt,
@@ -2061,7 +2062,7 @@ func main() {
 				}
 				output, err = editExample(editExampleOpts{
 					editOpts:      opts,
-					encryptConfig: encConfig,
+					EncryptConfig: encConfig,
 				})
 				// While this check is also done below, the `err` in this scope shadows
 				// the `err` in the outer scope
@@ -2109,7 +2110,7 @@ func main() {
 	}
 }
 
-func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, optionalConfig *config.Config) (encryptConfig, error) {
+func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, optionalConfig *config.Config) (encrypt.EncryptConfig, error) {
 	unencryptedSuffix := c.String("unencrypted-suffix")
 	encryptedSuffix := c.String("encrypted-suffix")
 	encryptedRegex := c.String("encrypted-regex")
@@ -2121,7 +2122,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	if optionalConfig == nil {
 		optionalConfig, err = loadConfig(c, fileName, nil)
 		if err != nil {
-			return encryptConfig{}, toExitError(err)
+			return encrypt.EncryptConfig{}, toExitError(err)
 		}
 	}
 	if optionalConfig != nil {
@@ -2202,7 +2203,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	}
 
 	if cryptRuleCount > 1 {
-		return encryptConfig{}, common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file", codes.ErrorConflictingParameters)
+		return encrypt.EncryptConfig{}, common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file", codes.ErrorConflictingParameters)
 	}
 
 	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
@@ -2213,16 +2214,16 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	var groups []sops.KeyGroup
 	groups, err = keyGroups(c, fileName, optionalConfig)
 	if err != nil {
-		return encryptConfig{}, err
+		return encrypt.EncryptConfig{}, err
 	}
 
 	var threshold int
 	threshold, err = shamirThreshold(c, fileName, optionalConfig)
 	if err != nil {
-		return encryptConfig{}, err
+		return encrypt.EncryptConfig{}, err
 	}
 
-	return encryptConfig{
+	return encrypt.EncryptConfig{
 		UnencryptedSuffix:       unencryptedSuffix,
 		EncryptedSuffix:         encryptedSuffix,
 		UnencryptedRegex:        unencryptedRegex,
