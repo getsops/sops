@@ -28,6 +28,12 @@ const (
 
 type MetadataOpts struct {
 	Flatten MetadataFlatten
+	// Whether strings need "\n" replaced by "\\n".
+	// Only used if Flatten is not MetadataFlattenNone.
+	// This does provide a double escape for newlines, since the store itself
+	// is already expected to take care of them. This is mainly needed for
+	// backwards compatibility with the INI store.
+	EscapeNewlines bool
 }
 
 // SopsPrefix is the prefix for all metadata entry keys.
@@ -145,6 +151,16 @@ func ExtractMetadata(branches sops.TreeBranches, opts MetadataOpts) (sops.TreeBr
 	}
 	if opts.Flatten != MetadataFlattenNone {
 		var err error
+		if opts.EscapeNewlines {
+			for i, item := range metadataTree {
+				if value, ok := item.Value.(string); ok {
+					metadataTree[i] = sops.TreeItem{
+						Key:   item.Key,
+						Value: strings.ReplaceAll(value, "\\n", "\n"),
+					}
+				}
+			}
+		}
 		metadataTree, err = unflattenTreeBranch(metadataTree)
 		if err != nil {
 			return nil, sops.Metadata{}, err
@@ -184,6 +200,11 @@ func (mapKeys byName) Less(i, j int) bool {
 func goToSops(value interface{}) (interface{}, error) {
 	val := reflect.ValueOf(value)
 	switch val.Kind() {
+	case reflect.Pointer:
+		if val.IsNil() {
+			return nil, nil
+		}
+		return goToSops(val.Elem().Interface())
 	case reflect.Array, reflect.Slice:
 		result := make([]interface{}, val.Len())
 		for j := 0; j < val.Len(); j++ {
@@ -258,6 +279,16 @@ func SerializeMetadata(data sops.Tree, opts MetadataOpts) (sops.TreeBranches, er
 		md, err = flattenTreeBranch(md, prefix)
 		if err != nil {
 			return nil, fmt.Errorf("Error while flattening metadata: %w", err)
+		}
+		if opts.EscapeNewlines {
+			for i, item := range md {
+				if value, ok := item.Value.(string); ok {
+					md[i] = sops.TreeItem{
+						Key:   item.Key,
+						Value: strings.ReplaceAll(value, "\n", "\\n"),
+					}
+				}
+			}
 		}
 	}
 	if opts.Flatten != MetadataFlattenFull {

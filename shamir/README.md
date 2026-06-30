@@ -48,7 +48,8 @@ defined as follows:
 
 `L(x) = sum from j=0 to j=(n-1) of {y_j * l_j(x)}`
 
-and `l_j(x) = product from m=0 to m=(n-1) except when m=j of {(x - x_m)/(x_j - x_m)}`
+where `l_j(x) = product from m=0 to m=(n-1) except when m=j of
+{(x - x_m)/(x_j - x_m)}`.
 
 A concrete example, with 3 points:
 
