@@ -40,8 +40,8 @@ This configuration is quite sophisticated, and ensures at least the following:
 - [ ] Create a pull request to update the [`CHANGELOG.md`](../CHANGELOG.md)
   file. This should include a summary of all changes since the last release,
   including references to any relevant pull requests.
-- [ ] In this same pull request, update the version number in `version/version.go`
-  to the new version number.
+- [ ] In this same pull request, update the version number in
+  `version/version.go` to the new version number.
 - [ ] Get approval for the pull request from at least one other maintainer, and
   merge it into `main`.
 - [ ] Ensure CI passes on the `main` branch.
@@ -74,4 +74,5 @@ This configuration is quite sophisticated, and ensures at least the following:
 - [ ] Ensure the release is built successfully on GitHub Actions. This will
   automatically create a release on GitHub.
 - [ ] In [the getsops/docs repository](https://github.com/getsops/docs/),
-  merge `main` into `stable` and push `stable` to update [getsops.io](https://getsops.io/).
+  merge `main` into `stable` and push `stable` to update
+  [getsops.io](https://getsops.io/).
