@@ -78,6 +78,13 @@ func main() {
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
 
+	// Bridge --age-key-file into its environment variable before any command
+	// runs, so it applies to every decrypt path (the top-level action as well
+	// as the decrypt/edit/exec-env/exec-file subcommands, which have their own
+	// actions). Like other global flags (e.g. --config, --verbose), it must be
+	// given before the subcommand.
+	app.Before = ageKeyFileFlagBefore
+
 	keyserviceFlags := []cli.Flag{
 		cli.BoolTFlag{
 			Name:   "enable-local-keyservice",
@@ -1734,6 +1741,11 @@ func main() {
 			Usage:  "comma separated list of age recipients",
 			EnvVar: "SOPS_AGE_RECIPIENTS",
 		},
+		cli.StringFlag{
+			Name:   "age-key-file",
+			Usage:  "path to a file containing age identities used for decryption",
+			EnvVar: "SOPS_AGE_KEY_FILE",
+		},
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -2298,6 +2310,28 @@ func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, out
 		AddMasterKeys:    addMasterKeys,
 		RemoveMasterKeys: rmMasterKeys,
 	}, nil
+}
+
+// ageKeyFileFlagBefore is the app-level Before hook that applies the
+// --age-key-file flag. It runs ahead of every command (the implicit top-level
+// action and each subcommand), so the flag takes effect on all decrypt paths.
+func ageKeyFileFlagBefore(c *cli.Context) error {
+	return applyAgeKeyFileFlag(c.String("age-key-file"))
+}
+
+// applyAgeKeyFileFlag bridges the --age-key-file CLI flag into the
+// SOPS_AGE_KEY_FILE environment variable, which the age keysource reads in
+// loadIdentities to locate the identity file used for decryption. Decrypt-time
+// age identities are reconstructed from a file's metadata, so there is no
+// MasterKey to inject the path into directly; setting the environment the
+// keysource already consumes is the least-invasive way to expose this as a
+// POSIX-style flag. An explicitly passed flag therefore overrides any
+// pre-existing SOPS_AGE_KEY_FILE value. A no-op when the flag is unset.
+func applyAgeKeyFileFlag(ageKeyFile string) error {
+	if ageKeyFile == "" {
+		return nil
+	}
+	return os.Setenv(age.SopsAgeKeyFileEnv, ageKeyFile)
 }
 
 func toExitError(err error) error {
