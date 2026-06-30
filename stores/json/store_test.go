@@ -120,7 +120,7 @@ func TestDecodeSimpleJSONObject(t *testing.T) {
 		},
 		sops.TreeItem{
 			Key:   "baz",
-			Value: 2.0,
+			Value: 2,
 		},
 	}
 	branch, err := Store{}.treeBranchFromJSON([]byte(in))
@@ -128,11 +128,54 @@ func TestDecodeSimpleJSONObject(t *testing.T) {
 	assert.Equal(t, expected, branch)
 }
 
+func TestLargeIntegerRoundtrip(t *testing.T) {
+	// Large integers (e.g. snowflake IDs, account numbers) must not be
+	// silently mangled by being decoded as float64. They must round-trip
+	// losslessly through the store.
+	store := Store{config: config.JSONStoreConfig{Indent: -1}}
+	in := []byte("{\n\t\"id\": 1234567890123456789\n}")
+	branch, err := store.treeBranchFromJSON(in)
+	assert.Nil(t, err)
+	assert.Equal(t, sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "id",
+			Value: 1234567890123456789,
+		},
+	}, branch)
+	out, err := store.jsonFromTreeBranch(branch)
+	assert.Nil(t, err)
+	assert.Equal(t, string(in), string(out))
+
+	// The decoded value must be a concrete int, not a json.Number that no
+	// non-JSON store or the cipher could handle.
+	assert.IsType(t, int(0), branch[0].Value)
+}
+
+// TestIntegerBoundaries pins the behavior across the int64 range: negative,
+// zero, and the int64 limits all decode to an exact int and round-trip.
+func TestIntegerBoundaries(t *testing.T) {
+	store := Store{config: config.JSONStoreConfig{Indent: -1}}
+	for _, lit := range []string{
+		"-1234567890123456789",
+		"-9223372036854775808", // math.MinInt64
+		"9223372036854775807",  // math.MaxInt64
+		"0",
+	} {
+		in := []byte("{\n\t\"v\": " + lit + "\n}")
+		branch, err := store.treeBranchFromJSON(in)
+		assert.Nil(t, err)
+		assert.IsType(t, int(0), branch[0].Value, "value %s should decode to int", lit)
+		out, err := store.jsonFromTreeBranch(branch)
+		assert.Nil(t, err)
+		assert.Equal(t, string(in), string(out), "value %s should round-trip exactly", lit)
+	}
+}
+
 func TestDecodeNumber(t *testing.T) {
 	in := `42`
 	_, err := Store{}.treeBranchFromJSON([]byte(in))
 	assert.NotNil(t, err)
-	assert.Equal(t, "SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got 42 of type float64 instead", err.Error())
+	assert.Equal(t, "SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got 42 of type int instead", err.Error())
 }
 
 func TestDecodeArray(t *testing.T) {
@@ -175,7 +218,7 @@ func TestDecodeJSONWithArray(t *testing.T) {
 			Value: sops.TreeBranch{
 				sops.TreeItem{
 					Key:   "foo",
-					Value: []interface{}{1.0, 2.0, 3.0},
+					Value: []interface{}{1, 2, 3},
 				},
 			},
 		},
@@ -248,7 +291,7 @@ func TestEncodeSimpleJSON(t *testing.T) {
 		},
 		sops.TreeItem{
 			Key:   "foo",
-			Value: 3.0,
+			Value: 3,
 		},
 		sops.TreeItem{
 			Key:   "bar",
@@ -269,11 +312,11 @@ func TestEncodeJSONWithEscaping(t *testing.T) {
 		},
 		sops.TreeItem{
 			Key:   "a_key_with\"quotes\"",
-			Value: 4.0,
+			Value: 4,
 		},
 		sops.TreeItem{
 			Key:   "baz\\\\foo",
-			Value: 2.0,
+			Value: 2,
 		},
 	}
 	out, err := Store{}.jsonFromTreeBranch(branch)
