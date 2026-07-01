@@ -42,6 +42,18 @@ func GetPipe(dir, filename string) (string, error) {
 	return tmpfn, nil
 }
 
+func UserEnv(username string) []string {
+	u, err := user.Lookup(username)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return []string{
+		"HOME=" + u.HomeDir,
+		"USER=" + u.Username,
+		"LOGNAME=" + u.Username,
+	}
+}
+
 func SwitchUser(username string) {
 	user, err := user.Lookup(username)
 	if err != nil {
