@@ -1738,4 +1738,84 @@ bar: |-
             "Unexpected decrypted content"
         );
     }
+
+    #[test]
+    fn proper_subcommands_reject_shadowed_global_flags() {
+        let decrypt_flags: &[&[&str]] = &[
+            &["--output-type", "json"],
+            &["--input-type", "json"],
+            &["--output", "ignored-output.json"],
+            &["--extract", "[\"foo\"]"],
+            &["--ignore-mac"],
+        ];
+
+        for flags in decrypt_flags {
+            let output = Command::new(SOPS_BINARY_PATH)
+                .args(*flags)
+                .arg("decrypt")
+                .arg("res/format.enc.yaml")
+                .output()
+                .expect("Error running sops");
+            assert!(
+                !output.status.success(),
+                "sops unexpectedly accepted global flags: {flags:?}"
+            );
+            assert!(
+                output.stdout.is_empty(),
+                "sops wrote output after rejecting global flags: {flags:?}"
+            );
+            assert!(
+                String::from_utf8_lossy(&output.stderr)
+                    .contains("must be specified after the decrypt subcommand"),
+                "sops did not explain the rejected global flags: {flags:?}"
+            );
+        }
+
+        for (subcommand, arguments) in [
+            ("encrypt", vec!["nonexistent.yaml"]),
+            ("rotate", vec!["nonexistent.yaml"]),
+            ("edit", vec!["nonexistent.yaml"]),
+            ("set", vec!["nonexistent.yaml", "[\"foo\"]", "bar"]),
+            ("unset", vec!["nonexistent.yaml", "[\"foo\"]"]),
+        ] {
+            let output = Command::new(SOPS_BINARY_PATH)
+                .arg("--output-type")
+                .arg("json")
+                .arg(subcommand)
+                .args(arguments)
+                .output()
+                .expect("Error running sops");
+            assert!(
+                !output.status.success(),
+                "sops unexpectedly accepted --output-type before {subcommand}"
+            );
+            assert!(
+                output.stdout.is_empty(),
+                "sops wrote output after rejecting --output-type before {subcommand}"
+            );
+            assert!(
+                String::from_utf8_lossy(&output.stderr).contains(&format!(
+                    "must be specified after the {subcommand} subcommand"
+                )),
+                "sops did not explain the rejected --output-type before {subcommand}"
+            );
+        }
+    }
+
+    #[test]
+    fn decrypt_output_type_after_subcommand_emits_json() {
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--output-type")
+            .arg("json")
+            .arg("res/format.enc.yaml")
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            "{\n\t\"foo\": \"bar\"\n}\n",
+            "Unexpected decrypted content"
+        );
+    }
 }
