@@ -27,8 +27,6 @@ var (
 type Server struct {
 	// Prompt indicates whether the server should prompt before decrypting or encrypting data
 	Prompt bool
-	// SkipAzureKvUriValidation indicates whether Azure Key Vault URI/challenge resource validation should be skipped
-	SkipAzureKvUriValidation bool
 }
 
 func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
@@ -65,11 +63,6 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 		VaultURL: key.VaultUrl,
 		Name:     key.Name,
 		Version:  key.Version,
-	}
-
-	// only disable challenge resource (URI) verification if flag was provided.
-	if ks.SkipAzureKvUriValidation {
-		azkv.ApplyDisableChallengeResourceVerification(&azkvKey)
 	}
 	if testHookCaptureAzureKey != nil {
 		testHookCaptureAzureKey(&azkvKey)
@@ -150,11 +143,6 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 		VaultURL: key.VaultUrl,
 		Name:     key.Name,
 		Version:  key.Version,
-	}
-
-	// only disable challenge resource (URI) verification if flag was provided.
-	if ks.SkipAzureKvUriValidation {
-		azkv.ApplyDisableChallengeResourceVerification(&azkvKey)
 	}
 	if testHookCaptureAzureKey != nil {
 		testHookCaptureAzureKey(&azkvKey)

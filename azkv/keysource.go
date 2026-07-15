@@ -9,7 +9,9 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -25,6 +27,9 @@ import (
 const (
 	// KeyTypeIdentifier is the string used to identify an Azure Key Vault MasterKey.
 	KeyTypeIdentifier = "azure_kv"
+	// SopsAzureKeyvaultSkipUriVerificationEnv can be set to disable Azure Key Vault
+	// challenge resource verification (for example: "true", "1", "t").
+	SopsAzureKeyvaultSkipUriVerificationEnv = "SOPS_AZURE_KEYVAULT_SKIP_URI_VERIFICATION"
 )
 
 var (
@@ -173,6 +178,12 @@ func (key *MasterKey) ClientOptions() *azkeys.ClientOptions {
 	return key.clientOptions
 }
 
+// EffectiveClientOptions returns the azkeys.ClientOptions that will be used by
+// the Azure client, combining explicit options with environment defaults.
+func (key *MasterKey) EffectiveClientOptions() *azkeys.ClientOptions {
+	return key.effectiveClientOptions()
+}
+
 // Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
 // the result in the EncryptedKey field.
 //
@@ -194,7 +205,7 @@ func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
 		return fmt.Errorf("failed to get Azure token credential to retrieve key version: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.effectiveClientOptions())
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to construct Azure Key Vault client to retrieve key version: %w", err)
@@ -220,7 +231,7 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 		return fmt.Errorf("failed to get Azure token credential to encrypt data: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.effectiveClientOptions())
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to construct Azure Key Vault client to encrypt data: %w", err)
@@ -283,7 +294,7 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 		return nil, fmt.Errorf("failed to base64 decode Azure Key Vault encrypted key: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.effectiveClientOptions())
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to construct Azure Key Vault client to decrypt data: %w", err)
@@ -334,4 +345,26 @@ func (key *MasterKey) getTokenCredential() (azcore.TokenCredential, error) {
 		return azidentity.NewDefaultAzureCredential(nil)
 	}
 	return key.tokenCredential, nil
+}
+
+func (key *MasterKey) effectiveClientOptions() *azkeys.ClientOptions {
+	if key.clientOptions != nil {
+		return key.clientOptions
+	}
+	if !shouldSkipChallengeResourceVerificationFromEnv() {
+		return nil
+	}
+	return &azkeys.ClientOptions{DisableChallengeResourceVerification: true}
+}
+
+func shouldSkipChallengeResourceVerificationFromEnv() bool {
+	raw := os.Getenv(SopsAzureKeyvaultSkipUriVerificationEnv)
+	if raw == "" {
+		return false
+	}
+	v, err := strconv.ParseBool(raw)
+	if err != nil {
+		return false
+	}
+	return v
 }

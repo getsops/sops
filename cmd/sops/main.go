@@ -131,6 +131,8 @@ func main() {
    SOPS_AZURE_KEYVAULT_URL environment variable.
    (Authentication is based on environment variables, see
     https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
+	Set SOPS_AZURE_KEYVAULT_SKIP_URI_VERIFICATION=true to disable
+	challenge-resource URI verification when required by your environment.
     The user/sp needs the key/encrypt and key/decrypt permissions.)
 
    To encrypt or decrypt using age, specify the recipient in the -a flag,
@@ -1880,10 +1882,6 @@ func main() {
 			Usage:  "comma separated list of decryption key types",
 			EnvVar: "SOPS_DECRYPTION_ORDER",
 		},
-		cli.BoolFlag{
-			Name:  "azure-kv-skip-uri-validation",
-			Usage: "skip Azure Key Vault URI validation",
-		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -2317,10 +2315,7 @@ func toExitError(err error) error {
 
 func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	if c.Bool("enable-local-keyservice") {
-		// propagate azure-kv-skip-uri-validation flag to local keyservice server instance
-		skipAzureKvUriValidation := c.Bool("azure-kv-skip-uri-validation") || c.GlobalBool("azure-kv-skip-uri-validation")
-		local := keyservice.NewCustomLocalClient(keyservice.Server{Prompt: false, SkipAzureKvUriValidation: skipAzureKvUriValidation})
-		svcs = append(svcs, local)
+		svcs = append(svcs, keyservice.NewLocalClient())
 	}
 	uris := c.StringSlice("keyservice")
 	for _, uri := range uris {
