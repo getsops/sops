@@ -123,9 +123,32 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 			}
 			slice = append(slice, item)
 		} else {
-			slice = append(slice, t)
+			v, err := normalizeJSONNumber(t)
+			if err != nil {
+				return slice, err
+			}
+			slice = append(slice, v)
 		}
 	}
+}
+
+// normalizeJSONNumber converts a json.Number scalar (produced because the
+// decoder runs with UseNumber) into an int for integers within the int64 range
+// and a float64 otherwise. Non-number tokens are returned unchanged; a number
+// representable as neither returns the json.Number.Float64 error.
+func normalizeJSONNumber(t interface{}) (interface{}, error) {
+	n, ok := t.(json.Number)
+	if !ok {
+		return t, nil
+	}
+	if i, err := n.Int64(); err == nil {
+		return int(i), nil
+	}
+	f, err := n.Float64()
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
 }
 
 var errEndOfObject = fmt.Errorf("End of object")
@@ -163,7 +186,11 @@ func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, er
 			item.Value = v
 		}
 	} else {
-		item.Value = value
+		v, err := normalizeJSONNumber(value)
+		if err != nil {
+			return item, err
+		}
+		item.Value = v
 	}
 	return item, nil
 
@@ -252,16 +279,24 @@ func (store Store) jsonFromTreeBranch(branch sops.TreeBranch) ([]byte, error) {
 
 func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 	dec := json.NewDecoder(bytes.NewReader(in))
+	// Decode numbers as json.Number instead of the default float64, then
+	// normalize each to int/float64 (see normalizeJSONNumber). The default
+	// float64 silently loses precision for integers larger than 2^53.
+	dec.UseNumber()
 	value, err := dec.Token()
 	if err != nil {
 		return nil, err
 	}
 	if delim, ok := value.(json.Delim); ok {
 		if delim.String() != "{" {
-			return nil, fmt.Errorf("Expected JSON object start, got delimiter %s instead", value)
+			return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not arrays or other types. Got delimiter %s instead. To encrypt this file, wrap it in an object, e.g., {\"data\": [...]}", value)
 		}
 	} else {
-		return nil, fmt.Errorf("Expected JSON object start, got %#v of type %T instead", value, value)
+		v, nerr := normalizeJSONNumber(value)
+		if nerr != nil {
+			v = value
+		}
+		return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got %#v of type %T instead", v, v)
 	}
 	return store.treeBranchFromJSONDecoder(dec)
 }
@@ -280,46 +315,18 @@ func (store Store) reindentJSON(in []byte) ([]byte, error) {
 
 // LoadEncryptedFile loads an encrypted secrets file onto a sops.Tree object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	// Because we don't know what fields the input file will have, we have to
-	// load the file in two steps.
-	// First, we load the file's metadata, the structure of which is known.
-	metadataHolder := stores.SopsFile{}
-	err := json.Unmarshal(in, &metadataHolder)
-	if err != nil {
-		if err, ok := err.(*json.UnmarshalTypeError); ok {
-			if err.Value == "number" && err.Struct == "Metadata" && err.Field == "version" {
-				return sops.Tree{},
-					fmt.Errorf("SOPS versions higher than 2.0.10 can not automatically decrypt JSON files " +
-						"created with SOPS 1.x. In order to be able to decrypt this file, you can either edit it " +
-						"manually and make sure the JSON value under `sops -> version` is a string and not a " +
-						"number, or you can rotate the file's key with any version of SOPS between 2.0 and 2.0.10 " +
-						"using `sops -r your_file.json`")
-			}
-		}
-		return sops.Tree{}, fmt.Errorf("Error unmarshalling input json: %s", err)
-	}
-	if metadataHolder.Metadata == nil {
-		return sops.Tree{}, sops.MetadataNotFound
-	}
-	metadata, err := metadataHolder.Metadata.ToInternal()
+	branches, err := store.LoadPlainFile(in)
 	if err != nil {
 		return sops.Tree{}, err
 	}
-	// After that, we load the whole file into a map.
-	branch, err := store.treeBranchFromJSON(in)
+	branches, metadata, err := stores.ExtractMetadata(branches, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenNone,
+	})
 	if err != nil {
-		return sops.Tree{}, fmt.Errorf("Could not unmarshal input data: %s", err)
-	}
-	// Discard metadata, as we already loaded it.
-	for i, item := range branch {
-		if item.Key == stores.SopsMetadataKey {
-			branch = append(branch[:i], branch[i+1:]...)
-		}
+		return sops.Tree{}, err
 	}
 	return sops.Tree{
-		Branches: sops.TreeBranches{
-			branch,
-		},
+		Branches: branches,
 		Metadata: metadata,
 	}, nil
 }
@@ -338,13 +345,13 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // EmitEncryptedFile returns the encrypted bytes of the json file corresponding to a
 // sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-	tree := append(in.Branches[0], sops.TreeItem{Key: stores.SopsMetadataKey, Value: stores.MetadataFromInternal(in.Metadata)})
-	out, err := store.jsonFromTreeBranch(tree)
+	branches, err := stores.SerializeMetadata(in, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenNone,
+	})
 	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to json: %s", err)
+		return nil, fmt.Errorf("Error marshaling metadata: %s", err)
 	}
-	out = append(out, '\n')
-	return out, nil
+	return store.EmitPlainFile(branches)
 }
 
 // EmitPlainFile returns the plaintext bytes of the json file corresponding to a

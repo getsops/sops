@@ -50,11 +50,15 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
+    hckms:
+      - "tr-west-1:test-key-1"
     hc_vault_transit_uri: http://4:8200/v1/4/keys/4
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
+    hckms:
+      - "tr-west-1:test-key-2"
     hc_vault_transit_uri: http://127.0.1.1/v1/baz/keys/baz
 `)
 
@@ -114,6 +118,8 @@ creation_rules:
       - bar
       gcp_kms:
       - resource_id: foo
+      hckms:
+      - key_id: tr-west-1:test-key-1
       azure_keyvault:
       - vaultUrl: https://foo.vault.azure.net
         key: foo-key
@@ -128,6 +134,8 @@ creation_rules:
       gcp_kms:
       - resource_id: bar
       - resource_id: baz
+      hckms:
+      - key_id: tr-west-1:test-key-2
       azure_keyvault:
       - vaultUrl: https://bar.vault.azure.net
         key: bar-key
@@ -429,6 +437,7 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "1",
 				PGP:       "2",
 				GCPKMS:    "3",
+				HCKms:     []string{"tr-west-1:test-key-1"},
 				VaultURI:  "http://4:8200/v1/4/keys/4",
 			},
 			{
@@ -436,6 +445,7 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "foo",
 				PGP:       "bar",
 				GCPKMS:    "baz",
+				HCKms:     []string{"tr-west-1:test-key-2"},
 				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
 			},
 		},
@@ -493,6 +503,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 						},
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
+						HCKms:   []hckmsKey{{KeyID: "tr-west-1:test-key-1"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
 						Vault:   []string{"https://foo.vault:8200/v1/foo/keys/foo-key"},
 					},
@@ -503,6 +514,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 							{ResourceID: "bar"},
 							{ResourceID: "baz"},
 						},
+						HCKms:   []hckmsKey{{KeyID: "tr-west-1:test-key-2"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
 						Vault:   []string{"https://baz.vault:8200/v1/baz/keys/baz-key"},
 					},
@@ -878,4 +890,32 @@ destination_rules:
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
 	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "https://vault.example.com/v1/secret/data/secret/sops/secrets.yaml")
+}
+
+// TestKeyGroupsForFileWithExternalEncryptionContext tests that when kmsEncryptionContext
+// is passed to parseCreationRuleForFile, the resulting KMS keys have the encryption context set.
+// This is a regression test for https://github.com/getsops/sops/issues/1972
+func TestKeyGroupsForFileWithExternalEncryptionContext(t *testing.T) {
+	// Config with flat KMS format (not key_groups) - this is where external context applies
+	var sampleConfigWithFlatKMS = []byte(`
+creation_rules:
+  - path_regex: ""
+    kms: "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012"
+`)
+
+	// External encryption context passed via --encryption-context flag
+	appName := "myapp"
+	kmsEncryptionContext := map[string]*string{
+		"AppName": &appName,
+	}
+
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithFlatKMS, t), "/conf/path", "secrets.yaml", kmsEncryptionContext)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 1, len(conf.KeyGroups[0]))
+
+	// The KMS key should have the encryption context applied
+	// Format: ARN|context where context is "AppName:myapp"
+	assert.Equal(t, "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012|AppName:myapp", conf.KeyGroups[0][0].ToString())
 }

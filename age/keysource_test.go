@@ -16,6 +16,8 @@ const (
 	mockRecipient string = "age1lzd99uklcjnc0e7d860axevet2cz99ce9pq6tzuzd05l5nr28ams36nvun"
 	// mockIdentity is a mock age identity.
 	mockIdentity string = "AGE-SECRET-KEY-1G0Q5K9TV4REQ3ZSQRMTMG8NSWQGYT0T7TZ33RAZEE0GZYVZN0APSU24RK7"
+	// mockHybridIdentity is a mock post-quantum age identity using a hybrid ML-KEM-768 KEM.
+	mockHybridIdentity string = "AGE-SECRET-KEY-PQ-1JPDDEMSK6G9MG0VNJRSA0QKZ05CF4H6TK50YZGDKZKTRGC5Z7KEQUDUPG6"
 	// mockOtherIdentity is another mock age identity.
 	mockOtherIdentity string = "AGE-SECRET-KEY-1432K5YRNSC44GC4986NXMX6GVZ52WTMT9C79CLUVWYY4DKDHD5JSNDP4MC"
 	// mockEncryptedKey equals to mockEncryptedKeyPlain when decrypted with mockIdentity.
@@ -147,11 +149,11 @@ func TestMasterKeyFromRecipient(t *testing.T) {
 
 func TestParsedIdentities_Import(t *testing.T) {
 	i := make(ParsedIdentities, 0)
-	assert.NoError(t, i.Import(mockIdentity, mockOtherIdentity))
-	assert.Len(t, i, 2)
+	assert.NoError(t, i.Import(mockIdentity, mockOtherIdentity, mockHybridIdentity))
+	assert.Len(t, i, 3)
 
 	assert.Error(t, i.Import("invalid"))
-	assert.Len(t, i, 2)
+	assert.Len(t, i, 3)
 }
 
 func TestParsedIdentities_ApplyToMasterKey(t *testing.T) {
@@ -303,7 +305,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 
 		got, err := key.Decrypt()
 		assert.Error(t, err)
-		assert.ErrorContains(t, err, "no identity matched any of the recipients")
+		assert.ErrorContains(t, err, "incorrect identity for recipient block")
 		assert.Nil(t, got)
 	})
 
@@ -372,7 +374,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
 	})
 
 	t.Run(SopsAgeKeyEnv+" multiple", func(t *testing.T) {
@@ -386,7 +388,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
 	})
 
 	t.Run(SopsAgeKeyFileEnv, func(t *testing.T) {
@@ -403,7 +405,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
 	})
 
 	t.Run(SopsAgeKeyUserConfigPath, func(t *testing.T) {
@@ -422,7 +424,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
-		assert.Len(t, unusedLocations, 6)
+		assert.Len(t, unusedLocations, 7)
 	})
 
 	t.Run(SopsAgeSshPrivateKeyFileEnv, func(t *testing.T) {
@@ -442,7 +444,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
 	})
 
 	t.Run("no identity", func(t *testing.T) {
@@ -452,7 +454,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Nil(t, got)
-		assert.Len(t, unusedLocations, 7)
+		assert.Len(t, unusedLocations, 8)
 	})
 
 	t.Run("multiple identities", func(t *testing.T) {
@@ -475,7 +477,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
 	})
 
 	t.Run("parsing error", func(t *testing.T) {
@@ -491,7 +493,37 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], fmt.Sprintf("failed to parse '%s' age identities", SopsAgeKeyEnv))
 		assert.Nil(t, got)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
+	})
+
+	t.Run(SopsAgeSshPrivateKeyCmdEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeSshPrivateKeyCmdEnv, "echo '"+mockSshIdentity+"'")
+
+		key := &MasterKey{}
+		got, unusedLocations, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
+		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 6)
+	})
+
+	t.Run("cmd error", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeSshPrivateKeyCmdEnv, "meow")
+
+		key := &MasterKey{}
+		got, unusedLocations, errs := key.loadIdentities()
+		assert.Len(t, errs, 1)
+		assert.Error(t, errs[0])
+		assert.ErrorContains(t, errs[0], "failed to execute command meow")
+		assert.Nil(t, got)
+		assert.Len(t, unusedLocations, 7)
 	})
 
 	t.Run(SopsAgeKeyCmdEnv, func(t *testing.T) {
@@ -505,7 +537,27 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
-		assert.Len(t, unusedLocations, 5)
+		assert.Len(t, unusedLocations, 6)
+	})
+
+	t.Run(SopsAgeRecipientEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeKeyCmdEnv, fmt.Sprintf("bash -c 'if [[ $SOPS_AGE_RECIPIENT = %s ]]; then echo %s; fi'", mockRecipient, mockIdentity))
+
+		key := &MasterKey{Recipient: mockRecipient}
+		got, unusedLocations, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
+		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 6)
+
+		key = &MasterKey{Recipient: mockRecipient + "abc"}
+		got, unusedLocations, errs = key.loadIdentities()
+		assert.Len(t, errs, 0)
+		assert.Len(t, got, 0)
+		assert.Len(t, unusedLocations, 7)
 	})
 
 	t.Run("cmd error", func(t *testing.T) {
@@ -521,7 +573,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], "failed to execute command meow")
 		assert.Nil(t, got)
-		assert.Len(t, unusedLocations, 6)
+		assert.Len(t, unusedLocations, 7)
 	})
 }
 

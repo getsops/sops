@@ -35,29 +35,31 @@ type ExecOpts struct {
 	Env         []string
 }
 
-func GetFile(dir, filename string) *os.File {
+func GetFile(dir, filename string) (*os.File, error) {
 	// If no filename is provided, create a random one based on FallbackFilename
 	if filename == "" {
 		handle, err := os.CreateTemp(dir, FallbackFilename)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
-		return handle
+		return handle, nil
 	}
 	// If a filename is provided, use that one
 	handle, err := os.Create(filepath.Join(dir, filename))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	// read+write for owner only
 	if err = handle.Chmod(0600); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return handle
+	return handle, nil
 }
 
 func ExecWithFile(opts ExecOpts) error {
+	var userEnv []string
 	if opts.User != "" {
+		userEnv = UserEnv(opts.User)
 		SwitchUser(opts.User)
 	}
 
@@ -68,9 +70,15 @@ func ExecWithFile(opts ExecOpts) error {
 
 	dir, err := os.MkdirTemp("", ".sops")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer os.RemoveAll(dir)
+
+	if opts.Filename != "" {
+		if filepath.IsAbs(opts.Filename) || !filepath.IsLocal(opts.Filename) {
+			return fmt.Errorf("The provided filename is not a local path.")
+		}
+	}
 
 	var filename string
 	if opts.Fifo {
@@ -80,12 +88,18 @@ func ExecWithFile(opts ExecOpts) error {
 		if filename == "" {
 			filename = FallbackFilename
 		}
-		filename = GetPipe(dir, filename)
+		filename, err = GetPipe(dir, filename)
+		if err != nil {
+			return err
+		}
 		go WritePipe(filename, opts.Plaintext)
 	} else {
 		// GetFile handles opts.Filename == "" specially, that's why we have
 		// to pass in opts.Filename without handling the fallback here
-		handle := GetFile(dir, opts.Filename)
+		handle, err := GetFile(dir, opts.Filename)
+		if err != nil {
+			return err
+		}
 		handle.Write(opts.Plaintext)
 		handle.Close()
 		filename = handle.Name()
@@ -95,6 +109,7 @@ func ExecWithFile(opts ExecOpts) error {
 	if !opts.Pristine {
 		env = os.Environ()
 	}
+	env = append(env, userEnv...)
 	env = append(env, opts.Env...)
 
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
@@ -113,7 +128,9 @@ func ExecWithFile(opts ExecOpts) error {
 }
 
 func ExecWithEnv(opts ExecOpts) error {
+	var userEnv []string
 	if opts.User != "" {
+		userEnv = UserEnv(opts.User)
 		SwitchUser(opts.User)
 	}
 
@@ -138,6 +155,7 @@ func ExecWithEnv(opts ExecOpts) error {
 		env = append(env, string(line))
 	}
 
+	env = append(env, userEnv...)
 	env = append(env, opts.Env...)
 
 	if opts.SameProcess {

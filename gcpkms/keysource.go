@@ -27,6 +27,17 @@ const (
 	// SopsGoogleCredentialsOAuthTokenEnv is the environment variable used for the
 	// GCP OAuth 2.0 Token.
 	SopsGoogleCredentialsOAuthTokenEnv = "GOOGLE_OAUTH_ACCESS_TOKEN"
+	// SopsGCPKMSClientTypeEnv is the environment variable used to specify the
+	// GCP KMS client type. Valid values are "grpc" (default) and "rest".
+	SopsGCPKMSClientTypeEnv = "SOPS_GCP_KMS_CLIENT_TYPE"
+	// SopsGCPKMSEndpointEnv overrides the GCP KMS endpoint URL. Useful for
+	// sovereign cloud environments that expose a GCP-compatible KMS API at a
+	// non-standard endpoint (e.g. S3NS/Thales TPC: cloudkms.s3nsapis.fr).
+	SopsGCPKMSEndpointEnv = "SOPS_GCP_KMS_ENDPOINT"
+	// SopsGCPKMSUniverseDomainEnv sets the universe domain for the GCP KMS
+	// client, which derives the endpoint as cloudkms.{UNIVERSE_DOMAIN}:443.
+	// Example: "s3nsapis.fr" for S3NS/Thales TPC.
+	SopsGCPKMSUniverseDomainEnv = "SOPS_GCP_KMS_UNIVERSE_DOMAIN"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
 )
@@ -68,6 +79,10 @@ type MasterKey struct {
 	grpcConn *grpc.ClientConn
 	// grpcDialOpts are the gRPC dial options used to create the gRPC connection.
 	grpcDialOpts []grpc.DialOption
+	// useRESTClient indicates whether to use the REST client for GCP KMS.
+	useRESTClient bool
+	// clientOpts are the client options used to create the GCP KMS client.
+	clientOpts []option.ClientOption
 }
 
 // NewMasterKeyFromResourceID creates a new MasterKey with the provided resource
@@ -124,6 +139,22 @@ type DialOptions []grpc.DialOption
 // ApplyToMasterKey configures the DialOptions on the provided key.
 func (d DialOptions) ApplyToMasterKey(key *MasterKey) {
 	key.grpcDialOpts = d
+}
+
+// UseRESTClient configures the MasterKey to use the REST client for GCP KMS.
+type UseRESTClient struct{}
+
+// ApplyToMasterKey configures the MasterKey to use the REST client for GCP KMS.
+func (UseRESTClient) ApplyToMasterKey(key *MasterKey) {
+	key.useRESTClient = true
+}
+
+// ClientOptions are the client options used to create the GCP KMS client.
+type ClientOptions []option.ClientOption
+
+// ApplyToMasterKey configures the ClientOptions on the provided key.
+func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
+	key.clientOpts = c
 }
 
 // Encrypt takes a SOPS data key, encrypts it with GCP KMS, and stores the
@@ -294,7 +325,25 @@ func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClien
 		}
 	}
 
-	client, err := kms.NewKeyManagementClient(ctx, opts...)
+	// Add extra options.
+	opts = append(opts, key.clientOpts...)
+
+	if endpoint := os.Getenv(SopsGCPKMSEndpointEnv); endpoint != "" {
+		opts = append(opts, option.WithEndpoint(endpoint))
+	} else if ud := os.Getenv(SopsGCPKMSUniverseDomainEnv); ud != "" {
+		opts = append(opts, option.WithUniverseDomain(ud))
+	}
+
+	// Select client type based on inputs.
+	clientType := strings.ToLower(os.Getenv(SopsGCPKMSClientTypeEnv))
+	var client *kms.KeyManagementClient
+	var err error
+	switch {
+	case clientType == "rest", key.useRESTClient:
+		client, err = kms.NewKeyManagementRESTClient(ctx, opts...)
+	default:
+		client, err = kms.NewKeyManagementClient(ctx, opts...)
+	}
 	if err != nil {
 		return nil, err
 	}

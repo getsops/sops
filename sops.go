@@ -111,7 +111,8 @@ type Cipher interface {
 
 // Comment represents a comment in the sops tree for the file formats that actually support them.
 type Comment struct {
-	Value string
+	Value  string
+	Inline bool
 }
 
 // TreeItem is an item inside sops's tree
@@ -403,7 +404,7 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack 
 				in[i].Key = encComment
 				continue
 			} else if comment, ok := enc.(string); ok {
-				in[i].Key = Comment{Value: comment}
+				in[i].Key = Comment{Value: comment, Inline: c.Inline}
 				continue
 			} else {
 				return nil, fmt.Errorf("walkValue of Comment should be either Comment or string, was %T", enc)
@@ -417,8 +418,8 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack 
 		}
 		key, ok := item.Key.(string)
 		if !ok {
-			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
-				"supported", item.Key, item.Key)
+			return nil, fmt.Errorf(
+				"Tree contains a non-string key (type %T): %s. Only string keys are supported", item.Key, item.Key)
 		}
 		newV, err := branch.walkValue(item.Value, append(path, key), commentsStack, onLeaves)
 		if err != nil {
@@ -553,6 +554,8 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 				if ok && tree.Metadata.UnencryptedCommentRegex != "" {
 					// If an encrypted comment matches tree.Metadata.UnencryptedCommentRegex, decryption will fail
 					// as the MAC does not match, and the commented value will not be decrypted.
+					// Note that cipher.Encrypt() returns a string, but we stored the result in an interface{}
+					// variable, so we have to cast it back.
 					matched, _ := regexp.Match(tree.Metadata.UnencryptedCommentRegex, []byte(in.(string)))
 					if matched {
 						return nil, fmt.Errorf("Encrypted comment %q matches UnencryptedCommentRegex! Make sure that UnencryptedCommentRegex cannot match an encrypted comment.", in)
@@ -594,13 +597,13 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	}
 	walk := func(branch TreeBranch) error {
 		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in interface{}, path []string, commentsStack [][]string) (interface{}, error) {
-			c, ok := in.(Comment)
-			encrypted := tree.shouldBeEncrypted(path, commentsStack, ok)
+			c, isComment := in.(Comment)
+			encrypted := tree.shouldBeEncrypted(path, commentsStack, isComment)
 			var v interface{}
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
-				if ok {
+				if isComment {
 					v, err = cipher.Decrypt(c.Value, key, pathString)
 					if err != nil {
 						// Assume the comment was not encrypted in the first place
@@ -611,18 +614,22 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 								"SOPS.")
 						v = c
 					}
-				} else {
-					v, err = cipher.Decrypt(in.(string), key, pathString)
+				} else if inStr, inIsStr := in.(string); inIsStr {
+					v, err = cipher.Decrypt(inStr, key, pathString)
 					if err != nil {
 						return nil, fmt.Errorf("Could not decrypt value: %s", err)
 					}
+				} else {
+					return nil, fmt.Errorf("Expected encrypted value as string, but got %T", in)
 				}
 			} else {
 				v = in
 			}
 			if !tree.Metadata.MACOnlyEncrypted || encrypted {
-				// Only add to MAC if not a comment
-				if _, ok := v.(Comment); !ok {
+				// Since non-Comment values can be decrypted to Comment
+				// values if their metadata says they are comments, we cannot
+				// use isComment here. This does happen for comments in slices.
+				if _, resultIsComment := v.(Comment); !resultIsComment {
 					bytes, err := ToBytes(v)
 					if err != nil {
 						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)

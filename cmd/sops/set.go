@@ -51,6 +51,10 @@ func set(opts setOpts) ([]byte, bool, error) {
 	var changed bool
 	tree.Branches[0], changed = tree.Branches[0].Set(opts.TreePath, opts.Value)
 
+	if err, code := validateFileForEncryption(opts.OutputStore, tree.Branches); err != nil {
+		return nil, false, common.NewExitError(err, code)
+	}
+
 	err = common.EncryptTree(common.EncryptTreeOpts{
 		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})

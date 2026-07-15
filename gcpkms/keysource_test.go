@@ -189,6 +189,32 @@ func TestMasterKey_createCloudKMSService_withoutCredentials(t *testing.T) {
 	assert.ErrorContains(t, err, "credentials: could not find default credentials")
 }
 
+func TestMasterKey_createCloudKMSService_withEndpointEnv(t *testing.T) {
+	t.Setenv(SopsGCPKMSEndpointEnv, "cloudkms.example.com:443")
+	t.Setenv(SopsGoogleCredentialsOAuthTokenEnv, "token")
+
+	masterKey := MasterKey{
+		ResourceID: testResourceID,
+	}
+
+	client, err := masterKey.newKMSClient(context.Background())
+	assert.NoError(t, err)
+	assert.Contains(t, client.Connection().Target(), "cloudkms.example.com")
+}
+
+func TestMasterKey_createCloudKMSService_withUniverseDomainEnv(t *testing.T) {
+	t.Setenv(SopsGCPKMSUniverseDomainEnv, "example.com")
+	t.Setenv(SopsGoogleCredentialsOAuthTokenEnv, "token")
+
+	masterKey := MasterKey{
+		ResourceID: testResourceID,
+	}
+
+	client, err := masterKey.newKMSClient(context.Background())
+	assert.NoError(t, err)
+	assert.Contains(t, client.Connection().Target(), "cloudkms.example.com")
+}
+
 func newGRPCServer(port string) *grpc.ClientConn {
 	serv := grpc.NewServer()
 	kmspb.RegisterKeyManagementServiceServer(serv, &mockKeyManagement)
