@@ -510,6 +510,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	var rule *creationRule
 	var dRule *destinationRule
+	filePath = filepath.ToSlash(filePath)
 
 	if len(conf.DestinationRules) > 0 {
 		for _, r := range conf.DestinationRules {
@@ -580,6 +581,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 
 	// compare file path relative to path of config file
 	filePath = strings.TrimPrefix(filePath, configDir+string(filepath.Separator))
+	filePath = filepath.ToSlash(filePath)
 
 	var rule *creationRule
 
