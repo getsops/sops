@@ -16,6 +16,7 @@ import (
 	"filippo.io/age/agessh"
 	"filippo.io/age/armor"
 	"filippo.io/age/plugin"
+	"filippo.io/age/tag"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 
@@ -488,6 +489,13 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 // key or a public ssh key.
 func parseRecipient(recipient string) (age.Recipient, error) {
 	switch {
+	case strings.HasPrefix(recipient, "age1tag1") || strings.HasPrefix(recipient, "age1tagpq1"):
+		parsedRecipient, err := tag.ParseRecipient(recipient)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse input as Bech32-encoded age tagged public key: %w", err)
+		}
+
+		return parsedRecipient, nil
 	case strings.HasPrefix(recipient, "age1pq1"):
 		parsedRecipient, err := age.ParseHybridRecipient(recipient)
 		if err != nil {
