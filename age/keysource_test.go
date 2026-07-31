@@ -14,6 +14,8 @@ import (
 const (
 	// mockRecipient is a mock age recipient, it matches mockIdentity.
 	mockRecipient string = "age1lzd99uklcjnc0e7d860axevet2cz99ce9pq6tzuzd05l5nr28ams36nvun"
+	// mockTagRecipient is a mock age tagged recipient.
+	mockTagRecipient string = "age1tag1qv0h7q4p5zr5g0cy8rduxr8twtjgu2td4ufsyjgmrgm4zv655fk2v24507v"
 	// mockIdentity is a mock age identity.
 	mockIdentity string = "AGE-SECRET-KEY-1G0Q5K9TV4REQ3ZSQRMTMG8NSWQGYT0T7TZ33RAZEE0GZYVZN0APSU24RK7"
 	// mockHybridIdentity is a mock post-quantum age identity using a hybrid ML-KEM-768 KEM.
@@ -574,6 +576,30 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.ErrorContains(t, errs[0], "failed to execute command meow")
 		assert.Nil(t, got)
 		assert.Len(t, unusedLocations, 7)
+	})
+}
+
+func TestMasterKeyFromRecipient_TaggedRecipient(t *testing.T) {
+	t.Run("encrypts without an age-plugin-tag binary", func(t *testing.T) {
+		// Empty PATH: a regression to the plugin path would try to exec
+		// age-plugin-tag here and fail.
+		t.Setenv("PATH", t.TempDir())
+
+		key, err := MasterKeyFromRecipient(mockTagRecipient)
+		assert.NoError(t, err)
+
+		assert.NoError(t, key.Encrypt([]byte("data")))
+		assert.NotEmpty(t, key.EncryptedKey)
+	})
+
+	t.Run("routes malformed age1tag to the tag parser, not the plugin", func(t *testing.T) {
+		_, err := MasterKeyFromRecipient("age1tag1qqqq")
+		assert.ErrorContains(t, err, "tagged")
+	})
+
+	t.Run("routes malformed age1tagpq to the tag parser, not the plugin", func(t *testing.T) {
+		_, err := MasterKeyFromRecipient("age1tagpq1qqqq")
+		assert.ErrorContains(t, err, "tagged")
 	})
 }
 
