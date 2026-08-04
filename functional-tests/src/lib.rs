@@ -1650,4 +1650,92 @@ bar: |-
             "filename did not end with 'foobar'"
         );
     }
+
+    #[test]
+    fn decrypt_format() {
+        // YAML
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("res/format.enc.yaml")
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(
+            String::from_utf8_lossy(&output.stdout) == "foo: bar\n",
+            "Unexpected decrypted content"
+        );
+
+        // JSON
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("res/format.enc.json")
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(
+            String::from_utf8_lossy(&output.stdout) == "{\n\t\"foo\": \"bar\"\n}\n",
+            "Unexpected decrypted content"
+        );
+
+        // DotEnv
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("res/format.enc.env")
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(
+            String::from_utf8_lossy(&output.stdout) == "foo = bar\n",
+            "Unexpected decrypted content"
+        );
+
+        // INI
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("res/format.enc.ini")
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(
+            String::from_utf8_lossy(&output.stdout) == "[foo]\nbar = baz\n",
+            "Unexpected decrypted content"
+        );
+
+        // INI (SOPS 3.13.0 / 3.13.1)
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("res/format-2.enc.ini")
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(
+            String::from_utf8_lossy(&output.stdout) == "[foo]\nbar = baz\n",
+            "Unexpected decrypted content"
+        );
+    }
 }

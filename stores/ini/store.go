@@ -138,7 +138,8 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		return sops.Tree{}, err
 	}
 	branches, metadata, err := stores.ExtractMetadata(branches, stores.MetadataOpts{
-		Flatten: stores.MetadataFlattenBelowTop,
+		Flatten:        stores.MetadataFlattenBelowTop,
+		EscapeNewlines: true,
 	})
 	if err != nil {
 		return sops.Tree{}, err
@@ -162,7 +163,8 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	branches, err := stores.SerializeMetadata(in, stores.MetadataOpts{
-		Flatten: stores.MetadataFlattenBelowTop,
+		Flatten:        stores.MetadataFlattenBelowTop,
+		EscapeNewlines: true,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling metadata: %s", err)

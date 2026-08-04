@@ -123,9 +123,32 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 			}
 			slice = append(slice, item)
 		} else {
-			slice = append(slice, t)
+			v, err := normalizeJSONNumber(t)
+			if err != nil {
+				return slice, err
+			}
+			slice = append(slice, v)
 		}
 	}
+}
+
+// normalizeJSONNumber converts a json.Number scalar (produced because the
+// decoder runs with UseNumber) into an int for integers within the int64 range
+// and a float64 otherwise. Non-number tokens are returned unchanged; a number
+// representable as neither returns the json.Number.Float64 error.
+func normalizeJSONNumber(t interface{}) (interface{}, error) {
+	n, ok := t.(json.Number)
+	if !ok {
+		return t, nil
+	}
+	if i, err := n.Int64(); err == nil {
+		return int(i), nil
+	}
+	f, err := n.Float64()
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
 }
 
 var errEndOfObject = fmt.Errorf("End of object")
@@ -163,7 +186,11 @@ func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, er
 			item.Value = v
 		}
 	} else {
-		item.Value = value
+		v, err := normalizeJSONNumber(value)
+		if err != nil {
+			return item, err
+		}
+		item.Value = v
 	}
 	return item, nil
 
@@ -252,6 +279,10 @@ func (store Store) jsonFromTreeBranch(branch sops.TreeBranch) ([]byte, error) {
 
 func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 	dec := json.NewDecoder(bytes.NewReader(in))
+	// Decode numbers as json.Number instead of the default float64, then
+	// normalize each to int/float64 (see normalizeJSONNumber). The default
+	// float64 silently loses precision for integers larger than 2^53.
+	dec.UseNumber()
 	value, err := dec.Token()
 	if err != nil {
 		return nil, err
@@ -261,7 +292,11 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 			return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not arrays or other types. Got delimiter %s instead. To encrypt this file, wrap it in an object, e.g., {\"data\": [...]}", value)
 		}
 	} else {
-		return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got %#v of type %T instead", value, value)
+		v, nerr := normalizeJSONNumber(value)
+		if nerr != nil {
+			v = value
+		}
+		return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got %#v of type %T instead", v, v)
 	}
 	return store.treeBranchFromJSONDecoder(dec)
 }

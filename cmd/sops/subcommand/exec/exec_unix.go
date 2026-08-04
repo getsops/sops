@@ -42,6 +42,18 @@ func GetPipe(dir, filename string) (string, error) {
 	return tmpfn, nil
 }
 
+func UserEnv(username string) []string {
+	u, err := user.Lookup(username)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return []string{
+		"HOME=" + u.HomeDir,
+		"USER=" + u.Username,
+		"LOGNAME=" + u.Username,
+	}
+}
+
 func SwitchUser(username string) {
 	user, err := user.Lookup(username)
 	if err != nil {
@@ -50,6 +62,23 @@ func SwitchUser(username string) {
 
 	uid, _ := strconv.Atoi(user.Uid)
 	gid, _ := strconv.Atoi(user.Gid)
+
+	groupIds, err := user.GroupIds()
+	var intGroupIds []int
+	if err != nil {
+		log.Fatal(err)
+		intGroupIds = []int{gid}
+	} else {
+		intGroupIds = make([]int, len(groupIds))
+		for i, gid := range groupIds {
+			intGroupIds[i], _ = strconv.Atoi(gid)
+		}
+	}
+
+	err = syscall.Setgroups(intGroupIds)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	err = syscall.Setgid(gid)
 	if err != nil {

@@ -3,8 +3,7 @@ package main
 import "fmt"
 
 // https://github.com/urfave/cli/blob/v1-maint/autocomplete/zsh_autocomplete
-var Zshcompletion = `
-#compdef %s
+var Zshcompletion = `#compdef %s
 
 _cli_zsh_autocomplete() {
 
@@ -30,8 +29,7 @@ compdef _cli_zsh_autocomplete %s
 `
 
 // https://github.com/urfave/cli/blob/v1-maint/autocomplete/bash_autocomplete
-var Bashcompletion = `
-#! /bin/bash
+var Bashcompletion = `#! /bin/bash
 
 _cli_bash_autocomplete() {
   if [[ "${COMP_WORDS[0]}" != "source" ]]; then

@@ -22,6 +22,10 @@ func GetPipe(dir, filename string) (string, error) {
 	return "", fmt.Errorf("fifos are not available on windows")
 }
 
+func UserEnv(username string) []string {
+	return nil
+}
+
 func SwitchUser(username string) {
 	log.Fatal("user switching not available on windows")
 }
