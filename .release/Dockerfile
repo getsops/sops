@@ -13,4 +13,8 @@ ENV EDITOR vim
 # Glob pattern to match the binary for the current architecture
 COPY sops* /usr/local/bin/sops
 
+RUN useradd --create-home --shell /bin/bash sops
+
+USER sops
+
 ENTRYPOINT ["sops"]
