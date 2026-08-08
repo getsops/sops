@@ -17,6 +17,27 @@ Documentation
 
 You can find the SOPS documentation on `getsops.io <https://getsops.io/>`_ under `"Docs" <https://getsops.io/docs/>`_.
 
+Installation
+------------
+
+Binaries and packages for the latest stable release are available from the
+`GitHub Releases <https://github.com/getsops/sops/releases>`_ page. See also
+the `"Installation" <https://getsops.io/docs/installation/>`_ docs.
+
+On Linux, releases typically include both:
+
+* a standalone binary such as ``sops-vX.Y.Z.linux.amd64`` — download it, make
+  it executable, and place it on your ``PATH`` (for example
+  ``~/.local/bin`` or ``/usr/local/bin``);
+* a Debian package such as ``sops_X.Y.Z_amd64.deb`` — install with
+  ``sudo apt install ./sops_X.Y.Z_amd64.deb`` (works on Debian Trixie and
+  other apt-based systems).
+
+There is no official ``sops`` package in Debian's apt repositories; use the
+``.deb`` from GitHub Releases or the standalone binary. Prefer the ``.deb``
+when you want apt to manage the install; use the binary when you want a
+simple drop-in executable without a package manager.
+
 Security
 --------
 
