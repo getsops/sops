@@ -336,6 +336,48 @@ creation_rules:
     unencrypted_comment_regex: "sops:dec"
     `)
 
+var sampleConfigWithCommentEncryptionPlaintext = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    comment_encryption: plaintext
+    `)
+
+var sampleConfigWithCommentEncryptionEncrypted = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    comment_encryption: encrypted
+    `)
+
+var sampleConfigWithCommentEncryptionInvalidValue = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    comment_encryption: sometimes
+    `)
+
+var sampleConfigWithCommentEncryptionAndEncryptedCommentRegex = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    comment_encryption: plaintext
+    encrypted_comment_regex: "sops:enc"
+    `)
+
+var sampleConfigWithCommentEncryptionAndUnencryptedCommentRegex = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    comment_encryption: plaintext
+    unencrypted_comment_regex: "sops:dec"
+    `)
+
 var sampleConfigWithInvalidParameters = []byte(`
 creation_rules:
   - path_regex: foobar*
@@ -697,6 +739,91 @@ func TestLoadConfigFileWithEncryptedCommentRegex(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithEncryptedCommentRegexParameters, t), "/conf/path", "barbar", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "sops:enc", conf.EncryptedCommentRegex)
+}
+
+func TestLoadConfigFileWithCommentEncryptionPlaintext(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithCommentEncryptionPlaintext, t), "/conf/path", "barbar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "plaintext", conf.CommentEncryption)
+}
+
+func TestLoadConfigFileWithCommentEncryptionEncrypted(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithCommentEncryptionEncrypted, t), "/conf/path", "barbar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "encrypted", conf.CommentEncryption)
+}
+
+func TestLoadConfigFileWithCommentEncryptionInvalidValue(t *testing.T) {
+	_, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithCommentEncryptionInvalidValue, t), "/conf/path", "barbar", nil)
+	assert.NotNil(t, err)
+}
+
+// TestCommentEncryptionCompatibilityMatrix pins down the full compatibility surface:
+//
+//	Existing six selectors
+//	    │
+//	    └── remain mutually exclusive and unchanged
+//
+//	New comment_encryption
+//	    │
+//	    ├── compatible with:
+//	    │     encrypted_regex, unencrypted_regex, encrypted_suffix, unencrypted_suffix
+//	    │
+//	    └── incompatible with:
+//	          encrypted_comment_regex, unencrypted_comment_regex
+//
+// comment_encryption controls comments only, so it stays combinable with the four value-only
+// selectors, but conflicts with encrypted_comment_regex/unencrypted_comment_regex, which also
+// decide comment encryption.
+func TestCommentEncryptionCompatibilityMatrix(t *testing.T) {
+	compatible := map[string][]byte{
+		"unencrypted_regex": []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    comment_encryption: plaintext
+    unencrypted_regex: "^dec:"
+`),
+		"encrypted_regex": []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    comment_encryption: plaintext
+    encrypted_regex: "^enc:"
+`),
+		"unencrypted_suffix": []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    comment_encryption: plaintext
+    unencrypted_suffix: "_unencrypted"
+`),
+		"encrypted_suffix": []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    comment_encryption: plaintext
+    encrypted_suffix: "_enc"
+`),
+	}
+	for name, cfg := range compatible {
+		t.Run("compatible/"+name, func(t *testing.T) {
+			conf, err := parseCreationRuleForFile(parseConfigFile(cfg, t), "/conf/path", "barbar", nil)
+			assert.Nil(t, err, "comment_encryption + %s should be allowed", name)
+			assert.Equal(t, "plaintext", conf.CommentEncryption)
+		})
+	}
+
+	incompatible := map[string][]byte{
+		"encrypted_comment_regex":   sampleConfigWithCommentEncryptionAndEncryptedCommentRegex,
+		"unencrypted_comment_regex": sampleConfigWithCommentEncryptionAndUnencryptedCommentRegex,
+	}
+	for name, cfg := range incompatible {
+		t.Run("incompatible/"+name, func(t *testing.T) {
+			_, err := parseCreationRuleForFile(parseConfigFile(cfg, t), "/conf/path", "barbar", nil)
+			assert.NotNil(t, err, "comment_encryption + %s should be rejected", name)
+		})
+	}
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {

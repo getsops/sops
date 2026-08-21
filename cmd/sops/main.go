@@ -1843,6 +1843,10 @@ func main() {
 			Usage: "set the encrypted comment suffix. When specified, only keys that have comment matching the regex will be encrypted.",
 		},
 		cli.StringFlag{
+			Name:  "comment-encryption",
+			Usage: "control comment encryption independently of value encryption. One of \"plaintext\" or \"encrypted\". Cannot be used together with encrypted-comment-regex or unencrypted-comment-regex.",
+		},
+		cli.StringFlag{
 			Name:   "config",
 			Usage:  "path to sops' config file. If set, sops will not search for the config file recursively.",
 			EnvVar: "SOPS_CONFIG",
@@ -2116,6 +2120,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	unencryptedRegex := c.String("unencrypted-regex")
 	encryptedCommentRegex := c.String("encrypted-comment-regex")
 	unencryptedCommentRegex := c.String("unencrypted-comment-regex")
+	commentEncryption := c.String("comment-encryption")
 	macOnlyEncrypted := c.GlobalBool("mac-only-encrypted")
 	var err error
 	if optionalConfig == nil {
@@ -2144,6 +2149,9 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		if unencryptedCommentRegex == "" {
 			unencryptedCommentRegex = optionalConfig.UnencryptedCommentRegex
 		}
+		if commentEncryption == "" {
+			commentEncryption = optionalConfig.CommentEncryption
+		}
 		if !macOnlyEncrypted {
 			macOnlyEncrypted = optionalConfig.MACOnlyEncrypted
 		}
@@ -2171,6 +2179,9 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		if encryptedCommentRegex != "" {
 			log.Warn(fmt.Sprintf("Using an encrypted comment regex does not make sense with the input store (the %s store never produces comments) and will be ignored.", inputStore.Name()))
 		}
+		if commentEncryption != "" {
+			log.Warn(fmt.Sprintf("Using comment-encryption does not make sense with the input store (the %s store never produces comments) and will be ignored.", inputStore.Name()))
+		}
 		// Do not warn about unencryptedCommentRegex and macOnlyEncrypted since they cannot have any effect.
 		unencryptedSuffix = ""
 		encryptedSuffix = ""
@@ -2178,6 +2189,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		unencryptedRegex = ""
 		encryptedCommentRegex = ""
 		unencryptedCommentRegex = ""
+		commentEncryption = ""
 		macOnlyEncrypted = false
 	}
 
@@ -2205,6 +2217,10 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		return encryptConfig{}, common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file", codes.ErrorConflictingParameters)
 	}
 
+	if err := sops.ValidateCommentEncryption(commentEncryption, encryptedCommentRegex, unencryptedCommentRegex); err != nil {
+		return encryptConfig{}, common.NewExitError(fmt.Sprintf("Error: %s", err), codes.ErrorConflictingParameters)
+	}
+
 	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
 	if cryptRuleCount == 0 && !isSingleValueStore {
 		unencryptedSuffix = sops.DefaultUnencryptedSuffix
@@ -2229,6 +2245,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		EncryptedRegex:          encryptedRegex,
 		UnencryptedCommentRegex: unencryptedCommentRegex,
 		EncryptedCommentRegex:   encryptedCommentRegex,
+		CommentEncryption:       commentEncryption,
 		MACOnlyEncrypted:        macOnlyEncrypted,
 		KeyGroups:               groups,
 		GroupThreshold:          threshold,

@@ -52,6 +52,7 @@ type metadata struct {
 	EncryptedRegex            string      `mapstructure:"encrypted_regex,omitempty"`
 	UnencryptedCommentRegex   string      `mapstructure:"unencrypted_comment_regex,omitempty"`
 	EncryptedCommentRegex     string      `mapstructure:"encrypted_comment_regex,omitempty"`
+	CommentEncryption         string      `mapstructure:"comment_encryption,omitempty"`
 	MACOnlyEncrypted          bool        `mapstructure:"mac_only_encrypted,omitempty"`
 	Version                   string      `mapstructure:"version"`
 }
@@ -125,6 +126,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 	m.EncryptedRegex = sopsMetadata.EncryptedRegex
 	m.UnencryptedCommentRegex = sopsMetadata.UnencryptedCommentRegex
 	m.EncryptedCommentRegex = sopsMetadata.EncryptedCommentRegex
+	m.CommentEncryption = sopsMetadata.CommentEncryption
 	m.MessageAuthenticationCode = sopsMetadata.MessageAuthenticationCode
 	m.MACOnlyEncrypted = sopsMetadata.MACOnlyEncrypted
 	m.Version = sopsMetadata.Version
@@ -293,6 +295,13 @@ func (m *metadata) ToInternal() (sops.Metadata, error) {
 		return sops.Metadata{}, fmt.Errorf("Cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file")
 	}
 
+	// comment_encryption is orthogonal to the six selectors above (it stays out of
+	// cryptRuleCount), but it conflicts directly with encrypted_comment_regex/
+	// unencrypted_comment_regex, which also decide comment encryption.
+	if err := sops.ValidateCommentEncryption(m.CommentEncryption, m.EncryptedCommentRegex, m.UnencryptedCommentRegex); err != nil {
+		return sops.Metadata{}, err
+	}
+
 	if cryptRuleCount == 0 {
 		m.UnencryptedSuffix = sops.DefaultUnencryptedSuffix
 	}
@@ -307,6 +316,7 @@ func (m *metadata) ToInternal() (sops.Metadata, error) {
 		EncryptedRegex:            m.EncryptedRegex,
 		UnencryptedCommentRegex:   m.UnencryptedCommentRegex,
 		EncryptedCommentRegex:     m.EncryptedCommentRegex,
+		CommentEncryption:         m.CommentEncryption,
 		MACOnlyEncrypted:          m.MACOnlyEncrypted,
 		LastModified:              lastModified,
 	}, nil

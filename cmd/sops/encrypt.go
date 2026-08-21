@@ -22,6 +22,7 @@ type encryptConfig struct {
 	EncryptedRegex          string
 	UnencryptedCommentRegex string
 	EncryptedCommentRegex   string
+	CommentEncryption       string
 	MACOnlyEncrypted        bool
 	KeyGroups               []sops.KeyGroup
 	GroupThreshold          int
@@ -85,6 +86,7 @@ func metadataFromEncryptionConfig(config encryptConfig) sops.Metadata {
 		EncryptedRegex:          config.EncryptedRegex,
 		UnencryptedCommentRegex: config.UnencryptedCommentRegex,
 		EncryptedCommentRegex:   config.EncryptedCommentRegex,
+		CommentEncryption:       config.CommentEncryption,
 		MACOnlyEncrypted:        config.MACOnlyEncrypted,
 		Version:                 version.Version,
 		ShamirThreshold:         config.GroupThreshold,

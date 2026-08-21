@@ -193,6 +193,7 @@ type creationRule struct {
 	EncryptedRegex          string      `yaml:"encrypted_regex"`
 	UnencryptedCommentRegex string      `yaml:"unencrypted_comment_regex"`
 	EncryptedCommentRegex   string      `yaml:"encrypted_comment_regex"`
+	CommentEncryption       string      `yaml:"comment_encryption"`
 	MACOnlyEncrypted        bool        `yaml:"mac_only_encrypted"`
 }
 
@@ -285,6 +286,7 @@ type Config struct {
 	EncryptedRegex          string
 	UnencryptedCommentRegex string
 	EncryptedCommentRegex   string
+	CommentEncryption       string
 	MACOnlyEncrypted        bool
 	Destination             publish.Destination
 	OmitExtensions          bool
@@ -489,6 +491,14 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex for the same rule")
 	}
 
+	// comment_encryption is a separate, orthogonal setting: it does not participate in the
+	// six-way mutual exclusion above (it stays combinable with the four value-only
+	// selectors), but it directly conflicts with encrypted_comment_regex/
+	// unencrypted_comment_regex, which also decide comment encryption.
+	if err := sops.ValidateCommentEncryption(rule.CommentEncryption, rule.EncryptedCommentRegex, rule.UnencryptedCommentRegex); err != nil {
+		return nil, fmt.Errorf("error loading config: %s", err)
+	}
+
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
 	if err != nil {
 		return nil, err
@@ -503,6 +513,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		EncryptedRegex:          rule.EncryptedRegex,
 		UnencryptedCommentRegex: rule.UnencryptedCommentRegex,
 		EncryptedCommentRegex:   rule.EncryptedCommentRegex,
+		CommentEncryption:       rule.CommentEncryption,
 		MACOnlyEncrypted:        rule.MACOnlyEncrypted,
 	}, nil
 }

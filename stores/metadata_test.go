@@ -1039,3 +1039,74 @@ func TestSerializeMetadata(t *testing.T) {
 	}
 	assert.Equal(t, "example-tenant", contextValue, "KMS encryption context value must be a string, not a pointer")
 }
+
+// TestCommentEncryptionRoundTrip proves CommentEncryption survives being written to and read
+// back from an encrypted file's persisted "sops" metadata block, for both enum values.
+func TestCommentEncryptionRoundTrip(t *testing.T) {
+	for _, commentEncryption := range []string{sops.CommentEncryptionPlaintext, sops.CommentEncryptionEncrypted} {
+		t.Run(commentEncryption, func(t *testing.T) {
+			tree := sops.Tree{
+				Branches: sops.TreeBranches{sops.TreeBranch{}},
+				Metadata: sops.Metadata{
+					LastModified:      time.Unix(0, 0).UTC(),
+					Version:           "3.0.0",
+					CommentEncryption: commentEncryption,
+					KeyGroups: []sops.KeyGroup{
+						{
+							&pgp.MasterKey{
+								Fingerprint:  "1234",
+								EncryptedKey: "ABCD",
+								CreationDate: time.Unix(0, 0).UTC(),
+							},
+						},
+					},
+				},
+			}
+			branches, err := SerializeMetadata(tree, MetadataOpts{Flatten: MetadataFlattenFull})
+			assert.Nil(t, err)
+
+			_, metadata, err := ExtractMetadata(branches, MetadataOpts{Flatten: MetadataFlattenFull})
+			assert.Nil(t, err)
+			assert.Equal(t, commentEncryption, metadata.CommentEncryption)
+		})
+	}
+}
+
+// TestCommentEncryptionConflictsWithCommentRegex mirrors config.configFromRule's validation:
+// a persisted file that combines CommentEncryption with EncryptedCommentRegex or
+// UnencryptedCommentRegex is rejected, since both mechanisms decide comment encryption.
+func TestCommentEncryptionConflictsWithCommentRegex(t *testing.T) {
+	baseTree := func(m sops.Metadata) sops.Tree {
+		m.LastModified = time.Unix(0, 0).UTC()
+		m.Version = "3.0.0"
+		m.KeyGroups = []sops.KeyGroup{
+			{
+				&pgp.MasterKey{
+					Fingerprint:  "1234",
+					EncryptedKey: "ABCD",
+					CreationDate: time.Unix(0, 0).UTC(),
+				},
+			},
+		}
+		return sops.Tree{Branches: sops.TreeBranches{sops.TreeBranch{}}, Metadata: m}
+	}
+
+	for name, metadata := range map[string]sops.Metadata{
+		"EncryptedCommentRegex": {
+			CommentEncryption:     sops.CommentEncryptionPlaintext,
+			EncryptedCommentRegex: "sops:enc",
+		},
+		"UnencryptedCommentRegex": {
+			CommentEncryption:       sops.CommentEncryptionPlaintext,
+			UnencryptedCommentRegex: "sops:dec",
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			branches, err := SerializeMetadata(baseTree(metadata), MetadataOpts{Flatten: MetadataFlattenFull})
+			assert.Nil(t, err)
+
+			_, _, err = ExtractMetadata(branches, MetadataOpts{Flatten: MetadataFlattenFull})
+			assert.NotNil(t, err)
+		})
+	}
+}

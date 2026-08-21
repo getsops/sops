@@ -63,6 +63,32 @@ import (
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
 const DefaultUnencryptedSuffix = "_unencrypted"
 
+// CommentEncryptionPlaintext is the Metadata.CommentEncryption value that forces every comment to
+// remain unencrypted, regardless of how associated values are encrypted.
+const CommentEncryptionPlaintext = "plaintext"
+
+// CommentEncryptionEncrypted is the Metadata.CommentEncryption value that forces every comment to
+// be encrypted, regardless of how associated values are encrypted.
+const CommentEncryptionEncrypted = "encrypted"
+
+// ValidateCommentEncryption checks a would-be CommentEncryption value against the rule shared by
+// every place that accepts one (the config file parser, the file-metadata loader, and the CLI
+// flag): it must be empty, CommentEncryptionPlaintext, or CommentEncryptionEncrypted, and it must
+// not be combined with an EncryptedCommentRegex/UnencryptedCommentRegex value, since both
+// mechanisms would then be deciding comment encryption at once. Returns nil when commentEncryption
+// is empty (the feature is opt-in) or valid and non-conflicting.
+func ValidateCommentEncryption(commentEncryption, encryptedCommentRegex, unencryptedCommentRegex string) error {
+	switch commentEncryption {
+	case "", CommentEncryptionPlaintext, CommentEncryptionEncrypted:
+	default:
+		return fmt.Errorf("invalid comment_encryption value %q, must be %q or %q", commentEncryption, CommentEncryptionPlaintext, CommentEncryptionEncrypted)
+	}
+	if commentEncryption != "" && (encryptedCommentRegex != "" || unencryptedCommentRegex != "") {
+		return fmt.Errorf("cannot use comment_encryption together with encrypted_comment_regex or unencrypted_comment_regex")
+	}
+	return nil
+}
+
 var DefaultDecryptionOrder = []string{age.KeyTypeIdentifier, pgp.KeyTypeIdentifier}
 
 type sopsError string
@@ -435,6 +461,12 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack 
 }
 
 func (tree Tree) shouldBeEncrypted(path []string, commentsStack [][]string, isComment bool) bool {
+	if isComment && tree.Metadata.CommentEncryption != "" {
+		// CommentEncryption is an orthogonal, opt-in override: when set, it alone decides
+		// whether a comment is encrypted, independently of the six value/comment selectors
+		// below. It never affects non-comment nodes, and it has no effect at all unless set.
+		return tree.Metadata.CommentEncryption == CommentEncryptionEncrypted
+	}
 	encrypted := true
 	if tree.Metadata.UnencryptedSuffix != "" {
 		for _, v := range path {
@@ -551,7 +583,7 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 				if err != nil {
 					return nil, fmt.Errorf("Could not encrypt value: %s", err)
 				}
-				if ok && tree.Metadata.UnencryptedCommentRegex != "" {
+				if ok && tree.Metadata.CommentEncryption == "" && tree.Metadata.UnencryptedCommentRegex != "" {
 					// If an encrypted comment matches tree.Metadata.UnencryptedCommentRegex, decryption will fail
 					// as the MAC does not match, and the commented value will not be decrypted.
 					// Note that cipher.Encrypt() returns a string, but we stored the result in an interface{}
@@ -672,13 +704,17 @@ func (tree *Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceCli
 
 // Metadata holds information about a file encrypted by sops
 type Metadata struct {
-	LastModified              time.Time
-	UnencryptedSuffix         string
-	EncryptedSuffix           string
-	UnencryptedRegex          string
-	EncryptedRegex            string
-	UnencryptedCommentRegex   string
-	EncryptedCommentRegex     string
+	LastModified            time.Time
+	UnencryptedSuffix       string
+	EncryptedSuffix         string
+	UnencryptedRegex        string
+	EncryptedRegex          string
+	UnencryptedCommentRegex string
+	EncryptedCommentRegex   string
+	// CommentEncryption, when non-empty ("plaintext" or "encrypted"), decides comment
+	// encryption on its own, independently of the six selectors above. It is opt-in:
+	// leaving it empty preserves prior behavior exactly.
+	CommentEncryption         string
 	MessageAuthenticationCode string
 	MACOnlyEncrypted          bool
 	Version                   string

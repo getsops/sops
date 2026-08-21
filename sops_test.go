@@ -636,6 +636,134 @@ func TestUnencryptedCommentRegexFail(t *testing.T) {
 	assert.ErrorContains(t, err, "Encrypted comment \"ENC:sops:noenc\" matches UnencryptedCommentRegex!")
 }
 
+// TestCommentEncryptionPlaintextIndependentOfValueRegex reproduces the
+// motivating scenario: a value policy (UnencryptedRegex) decides which
+// values are encrypted, while CommentEncryption independently forces every
+// comment to stay plaintext, including the comment directly preceding an
+// encrypted value.
+func TestCommentEncryptionPlaintextIndependentOfValueRegex(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "LOG_LEVEL",
+				Value: "DEBUG",
+			},
+			TreeItem{
+				Key:   Comment{Value: " required | default: db"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   "DATABASE_URL",
+				Value: "postgres://user:password@localhost/mydb",
+			},
+			TreeItem{
+				Key:   "JWT_SECRET",
+				Value: "secret",
+			},
+		},
+	}
+	tree := Tree{
+		Branches: branches,
+		Metadata: Metadata{
+			UnencryptedRegex:  "^LOG_LEVEL$",
+			CommentEncryption: CommentEncryptionPlaintext,
+		},
+	}
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	assert.NoError(t, err)
+
+	got := tree.Branches[0]
+	assert.Equal(t, "DEBUG", got[0].Value, "LOG_LEVEL matches UnencryptedRegex and must stay plaintext")
+	assert.Equal(t, Comment{Value: " required | default: db"}, got[1].Key, "comment must stay plaintext even though the following value is encrypted")
+	assert.Equal(t, reverse("postgres://user:password@localhost/mydb"), got[2].Value, "DATABASE_URL does not match UnencryptedRegex and must be encrypted")
+	assert.Equal(t, reverse("secret"), got[3].Value, "JWT_SECRET does not match UnencryptedRegex and must be encrypted")
+
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	assert.NoError(t, err)
+	got = tree.Branches[0]
+	assert.Equal(t, "DEBUG", got[0].Value)
+	assert.Equal(t, Comment{Value: " required | default: db"}, got[1].Key)
+	assert.Equal(t, "postgres://user:password@localhost/mydb", got[2].Value)
+	assert.Equal(t, "secret", got[3].Value)
+}
+
+// TestCommentEncryptionEncryptedIndependentOfUnencryptedSuffix proves
+// independence in the other direction: CommentEncryption forces comments to
+// be encrypted even where UnencryptedSuffix would otherwise leave them (and
+// their sibling value) plaintext, while the sibling value's own encryption
+// decision is left untouched by CommentEncryption.
+func TestCommentEncryptionEncryptedIndependentOfUnencryptedSuffix(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key: "bar_unencrypted",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   Comment{Value: "secret note"},
+						Value: nil,
+					},
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	tree := Tree{
+		Branches: branches,
+		Metadata: Metadata{
+			UnencryptedSuffix: "_unencrypted",
+			CommentEncryption: CommentEncryptionEncrypted,
+		},
+	}
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	assert.NoError(t, err)
+
+	inner := tree.Branches[0][0].Value.(TreeBranch)
+	assert.Equal(t, Comment{Value: reverse("secret note")}, inner[0].Key, "comment must be encrypted despite UnencryptedSuffix matching its path")
+	assert.Equal(t, "bar", inner[1].Value, "sibling value must stay plaintext per UnencryptedSuffix, unaffected by comment_encryption")
+
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	assert.NoError(t, err)
+	inner = tree.Branches[0][0].Value.(TreeBranch)
+	assert.Equal(t, Comment{Value: "secret note"}, inner[0].Key)
+	assert.Equal(t, "bar", inner[1].Value)
+}
+
+// TestCommentEncryptionUnsetPreservesLegacyBehavior guards against
+// regressions: when CommentEncryption is left unset (the default/zero
+// value), comment encryption must be decided exactly as before, from
+// EncryptedCommentRegex/UnencryptedCommentRegex, with no influence from the
+// new field.
+func TestCommentEncryptionUnsetPreservesLegacyBehavior(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   Comment{Value: "sops:enc"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   "foo",
+				Value: "bar",
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedCommentRegex: "sops:enc"}}
+	assert.Equal(t, "", tree.Metadata.CommentEncryption, "field must default to the empty string when not configured")
+
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	assert.NoError(t, err)
+	// The comment line itself matching EncryptedCommentRegex is the special
+	// "do not encrypt the triggering line" case, unchanged from before this
+	// feature existed.
+	assert.Equal(t, Comment{Value: "sops:enc"}, tree.Branches[0][0].Key)
+	assert.Equal(t, reverse("bar"), tree.Branches[0][1].Value)
+}
+
 type MockCipher struct{}
 
 func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
