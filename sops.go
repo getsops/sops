@@ -626,8 +626,10 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 				v = in
 			}
 			if !tree.Metadata.MACOnlyEncrypted || encrypted {
-				// Only add to MAC if not a comment
-				if !isComment {
+				// Since non-Comment values can be decrypted to Comment
+				// values if their metadata says they are comments, we cannot
+				// use isComment here. This does happen for comments in slices.
+				if _, resultIsComment := v.(Comment); !resultIsComment {
 					bytes, err := ToBytes(v)
 					if err != nil {
 						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
