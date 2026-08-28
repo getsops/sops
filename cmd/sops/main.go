@@ -995,6 +995,14 @@ func main() {
 					Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
 				},
 				cli.StringFlag{
+					Name:  "unencrypted-comment-regex",
+					Usage: "set the unencrypted comment suffix. When specified, only keys that have comment matching the regex will be left unencrypted.",
+				},
+				cli.StringFlag{
+					Name:  "encrypted-comment-regex",
+					Usage: "set the encrypted comment suffix. When specified, only keys that have comment matching the regex will be encrypted.",
+				},
+				cli.StringFlag{
 					Name:  "encryption-context",
 					Usage: "comma separated list of KMS encryption context key:value pairs",
 				},

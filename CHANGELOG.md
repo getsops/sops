@@ -1,17 +1,43 @@
 # Changelog
 
+## 3.13.3
+
+Improvements:
+
+* CLI help improvement ([#2239](https://github.com/getsops/sops/pull/2239)).
+* Dependency updates ([#2242](https://github.com/getsops/sops/pull/2242),
+  [#2251](https://github.com/getsops/sops/pull/2251),
+  [#2261](https://github.com/getsops/sops/pull/2261),
+  [#2248](https://github.com/getsops/sops/pull/2248)).
+
+Bugfixes:
+
+* Fix a bug introduced in 3.13.2 that computes a wrong MAC during decryption
+  for sequences (YAML lists) that contain a comment
+  ([#2245](https://github.com/getsops/sops/pull/2245)).
+* Fix ``completion`` subcommands so that they do not have an empty line before
+  the shebang ([#2253](https://github.com/getsops/sops/pull/2253)).
+
+Project changes:
+
+* CI dependency updates ([#2241](https://github.com/getsops/sops/pull/2241),
+  [#2250](https://github.com/getsops/sops/pull/2250),
+  [#2260](https://github.com/getsops/sops/pull/2260)).
+* Rust dependency updates for functional tests
+  ([#2259](https://github.com/getsops/sops/pull/2259)).
+
 ## 3.13.2
 
 Improvements:
 
-* Dependency updates ([#2185](https://github.com/getsops/sops/pull/2185)),
-  ([#2193](https://github.com/getsops/sops/pull/2193)),
-  ([#2197](https://github.com/getsops/sops/pull/2197)),
-  ([#2212](https://github.com/getsops/sops/pull/2212)),
-  ([#2218](https://github.com/getsops/sops/pull/2218)),
-  ([#2229](https://github.com/getsops/sops/pull/2229)),
-  ([#2231](https://github.com/getsops/sops/pull/2231)),
-  ([#2231](https://github.com/getsops/sops/pull/2233)).
+* Dependency updates ([#2185](https://github.com/getsops/sops/pull/2185),
+  [#2193](https://github.com/getsops/sops/pull/2193),
+  [#2197](https://github.com/getsops/sops/pull/2197),
+  [#2212](https://github.com/getsops/sops/pull/2212),
+  [#2218](https://github.com/getsops/sops/pull/2218),
+  [#2229](https://github.com/getsops/sops/pull/2229),
+  [#2231](https://github.com/getsops/sops/pull/2231),
+  [#2231](https://github.com/getsops/sops/pull/2233)).
 * Fix typos in documentation
   ([#2221](https://github.com/getsops/sops/pull/2221)).
 
@@ -36,12 +62,12 @@ Bugfixes:
 
 Project changes:
 
-* CI dependency updates ([#2184](https://github.com/getsops/sops/pull/2184)),
-  ([#2192](https://github.com/getsops/sops/pull/2192)),
-  ([#2196](https://github.com/getsops/sops/pull/2196)),
-  ([#2211](https://github.com/getsops/sops/pull/2211)),
-  ([#2228](https://github.com/getsops/sops/pull/2228)),
-  ([#2236](https://github.com/getsops/sops/pull/2236)).
+* CI dependency updates ([#2184](https://github.com/getsops/sops/pull/2184),
+  [#2192](https://github.com/getsops/sops/pull/2192),
+  [#2196](https://github.com/getsops/sops/pull/2196),
+  [#2211](https://github.com/getsops/sops/pull/2211),
+  [#2228](https://github.com/getsops/sops/pull/2228),
+  [#2236](https://github.com/getsops/sops/pull/2236)).
 * Rust dependency updates for functional tests
   ([#2191](https://github.com/getsops/sops/pull/2191)).
 * Build alpine container in CI
