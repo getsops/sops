@@ -74,6 +74,21 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 	}
 }
 
+func rejectGlobalFlagsShadowedBySubcommand(c *cli.Context) error {
+	for _, flag := range c.Command.Flags {
+		for _, name := range strings.Split(flag.GetName(), ",") {
+			name = strings.TrimSpace(name)
+			if c.GlobalIsSet(name) && !c.IsSet(name) {
+				return common.NewExitError(
+					fmt.Sprintf("Error: --%s must be specified after the %s subcommand", name, c.Command.Name),
+					codes.ErrorConflictingParameters,
+				)
+			}
+		}
+	}
+	return nil
+}
+
 func main() {
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
@@ -822,6 +837,9 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
+				if err := rejectGlobalFlagsShadowedBySubcommand(c); err != nil {
+					return err
+				}
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
@@ -1016,6 +1034,9 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
+				if err := rejectGlobalFlagsShadowedBySubcommand(c); err != nil {
+					return err
+				}
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
@@ -1202,6 +1223,9 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
+				if err := rejectGlobalFlagsShadowedBySubcommand(c); err != nil {
+					return err
+				}
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
@@ -1376,6 +1400,9 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
+				if err := rejectGlobalFlagsShadowedBySubcommand(c); err != nil {
+					return err
+				}
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
@@ -1490,6 +1517,9 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
+				if err := rejectGlobalFlagsShadowedBySubcommand(c); err != nil {
+					return err
+				}
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
@@ -1618,6 +1648,9 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
+				if err := rejectGlobalFlagsShadowedBySubcommand(c); err != nil {
+					return err
+				}
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
