@@ -325,7 +325,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename",
-					Usage: fmt.Sprintf("filename for the temporarily file (default: %s)", exec.FallbackFilename),
+					Usage: fmt.Sprintf("filename for the temporary file (default: %s)", exec.FallbackFilename),
 				},
 				cli.StringFlag{
 					Name:   "decryption-order",
@@ -811,11 +811,11 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 				cli.BoolFlag{
 					Name:  "ignore-mac",
@@ -988,11 +988,11 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 				cli.StringFlag{
 					Name:  "unencrypted-suffix",
@@ -1009,6 +1009,14 @@ func main() {
 				cli.StringFlag{
 					Name:  "encrypted-regex",
 					Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
+				},
+				cli.StringFlag{
+					Name:  "unencrypted-comment-regex",
+					Usage: "set the unencrypted comment suffix. When specified, only keys that have comment matching the regex will be left unencrypted.",
+				},
+				cli.StringFlag{
+					Name:  "encrypted-comment-regex",
+					Usage: "set the encrypted comment suffix. When specified, only keys that have comment matching the regex will be encrypted.",
 				},
 				cli.StringFlag{
 					Name:  "encryption-context",
@@ -1133,11 +1141,11 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 				cli.StringFlag{
 					Name:  "encryption-context",
@@ -1353,11 +1361,11 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 				cli.StringFlag{
 					Name:  "unencrypted-suffix",
@@ -1479,11 +1487,11 @@ func main() {
 			Flags: append([]cli.Flag{
 				cli.StringFlag{
 					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 				cli.BoolFlag{
 					Name:  "value-file",
@@ -1615,11 +1623,11 @@ func main() {
 			Flags: append([]cli.Flag{
 				cli.StringFlag{
 					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 				cli.IntFlag{
 					Name:  "shamir-secret-sharing-threshold",
@@ -1780,11 +1788,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "input-type",
-			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+			Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 		},
 		cli.StringFlag{
 			Name:  "output-type",
-			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+			Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 		},
 		cli.BoolFlag{
 			Name:  "show-master-keys, s",
