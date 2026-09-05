@@ -33,6 +33,7 @@ import (
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
 	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/fsio"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
@@ -75,6 +76,8 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 }
 
 func main() {
+	defer fsio.ClearCache()
+
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
 
