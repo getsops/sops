@@ -48,6 +48,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branch sops.TreeBranch
 
 	for _, line := range bytes.Split(in, []byte("\n")) {
+		line = bytes.TrimSuffix(line, []byte("\r"))
 		if len(line) == 0 {
 			continue
 		}
