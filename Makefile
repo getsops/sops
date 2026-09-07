@@ -7,7 +7,9 @@ PROJECT_DIR         := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 BIN_DIR             := $(PROJECT_DIR)/bin
 
 GO                  := GOPROXY=https://proxy.golang.org go
+GOPATH				:=$(shell go env GOPATH)
 GO_TEST_FLAGS       ?= -race -coverprofile=profile.out -covermode=atomic
+GO_BIN_DIR			:= $(GOPATH)/bin
 
 GITHUB_REPOSITORY   ?= github.com/getsops/sops
 
@@ -37,9 +39,14 @@ all: test vet generate install functional-tests
 .PHONY: origin-build
 origin-build: test vet generate install functional-tests-all
 
+.PHONY: build
+build:
+	$(GO) build -o $(BIN_DIR)/sops github.com/getsops/sops/v3/cmd/sops
+
 .PHONY: install
-install:
-	$(GO) install github.com/getsops/sops/v3/cmd/sops
+install: build
+	mkdir -p $(GO_BIN_DIR)
+	@install $(BIN_DIR)/sops $(GO_BIN_DIR)
 
 .PHONY: staticcheck
 staticcheck: install-staticcheck
