@@ -18,6 +18,7 @@ import (
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/ini"
 	"github.com/getsops/sops/v3/stores/json"
+	"github.com/getsops/sops/v3/stores/xml"
 	"github.com/getsops/sops/v3/stores/yaml"
 	"github.com/getsops/sops/v3/version"
 	"github.com/mitchellh/go-wordwrap"
@@ -55,6 +56,10 @@ func newJsonStore(c *config.StoresConfig) Store {
 	return json.NewStore(&c.JSON)
 }
 
+func newXmlStore(c *config.StoresConfig) Store {
+	return xml.NewStore(&c.XML)
+}
+
 func newYamlStore(c *config.StoresConfig) Store {
 	return yaml.NewStore(&c.YAML)
 }
@@ -64,6 +69,7 @@ var storeConstructors = map[Format]storeConstructor{
 	Dotenv: newDotenvStore,
 	Ini:    newIniStore,
 	Json:   newJsonStore,
+	Xml:    newXmlStore,
 	Yaml:   newYamlStore,
 }
 
