@@ -17,6 +17,7 @@ func TestFormatFromString(t *testing.T) {
 func TestFormatForPath(t *testing.T) {
 	assert.Equal(t, Binary, FormatForPath("/path/to/foobar"))
 	assert.Equal(t, Dotenv, FormatForPath("/path/to/foobar.env"))
+	assert.Equal(t, Dotenv, FormatForPath("/path/to/.env.foobar"))
 	assert.Equal(t, Ini, FormatForPath("/path/to/foobar.ini"))
 	assert.Equal(t, Json, FormatForPath("/path/to/foobar.json"))
 	assert.Equal(t, Yaml, FormatForPath("/path/to/foobar.yml"))
@@ -27,6 +28,7 @@ func TestFormatForPathOrString(t *testing.T) {
 	assert.Equal(t, Binary, FormatForPathOrString("/path/to/foobar", ""))
 	assert.Equal(t, Dotenv, FormatForPathOrString("/path/to/foobar", "dotenv"))
 	assert.Equal(t, Dotenv, FormatForPathOrString("/path/to/foobar.env", ""))
+	assert.Equal(t, Dotenv, FormatForPathOrString("/path/to/.env.foobar", ""))
 	assert.Equal(t, Ini, FormatForPathOrString("/path/to/foobar", "ini"))
 	assert.Equal(t, Ini, FormatForPathOrString("/path/to/foobar.ini", ""))
 	assert.Equal(t, Json, FormatForPathOrString("/path/to/foobar", "json"))
