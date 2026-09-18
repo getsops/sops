@@ -440,6 +440,165 @@ func TestIndent1(t *testing.T) {
 	assert.Equal(t, INDENT_1_OUT, bytes)
 }
 
+func TestCompactArrayIndent(t *testing.T) {
+	in := []byte(`spec:
+    rules:
+        - host: example.com
+          http:
+              paths:
+                  - path: /api
+                    backend:
+                        serviceName: api
+                  - path: /web
+                    backend:
+                        serviceName: web
+    tags:
+        - production
+        - web
+`)
+	// With default indent (4) and CompactSeqIndent, '- ' is considered
+	// part of the indentation, so arrays are indented by (indent - 2) spaces.
+	expected := []byte(`spec:
+    rules:
+      - host: example.com
+        http:
+            paths:
+              - path: /api
+                backend:
+                    serviceName: api
+              - path: /web
+                backend:
+                    serviceName: web
+    tags:
+      - production
+      - web
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			CompactArrayIndent: true,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(expected), string(bytes))
+}
+
+func TestCompactArrayIndentWithIndent2(t *testing.T) {
+	// With indent 2, compact array indent produces arrays flush with the parent key.
+	in := []byte(`spec:
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - path: /api
+            backend:
+              serviceName: api
+  tags:
+    - production
+    - web
+`)
+	expected := []byte(`spec:
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: api
+  tags:
+  - production
+  - web
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			Indent:             2,
+			CompactArrayIndent: true,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(expected), string(bytes))
+}
+
+func TestCompactArrayIndentDisabled(t *testing.T) {
+	in := []byte(`spec:
+    rules:
+        - host: example.com
+          http:
+            paths:
+                - path: /api
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			CompactArrayIndent: false,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(in), string(bytes))
+}
+
+func TestDocumentStartMarker(t *testing.T) {
+	in := []byte(`key: value
+nested:
+    list:
+        - a
+        - b
+`)
+	expected := []byte(`---
+key: value
+nested:
+    list:
+        - a
+        - b
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			DocumentStartMarker: true,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(expected), string(bytes))
+}
+
+func TestDocumentStartMarkerMultiDoc(t *testing.T) {
+	in := []byte(`---
+key1: value1
+---
+key2: value2`)
+	expected := []byte(`---
+key1: value1
+---
+key2: value2
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			DocumentStartMarker: true,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(expected), string(bytes))
+}
+
+func TestDocumentStartMarkerDisabled(t *testing.T) {
+	in := []byte(`key: value
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(in), string(bytes))
+	// Verify no '---' was prepended
+	assert.False(t, len(bytes) > 3 && string(bytes[:3]) == "---")
+}
+
 func TestHasSopsTopLevelKey(t *testing.T) {
 	ok := (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
 		sops.TreeItem{
