@@ -115,12 +115,17 @@ type YAMLStoreConfig struct {
 	Indent int `yaml:"indent"`
 }
 
+type XMLStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
 type StoresConfig struct {
 	Dotenv     DotenvStoreConfig     `yaml:"dotenv"`
 	INI        INIStoreConfig        `yaml:"ini"`
 	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
 	JSON       JSONStoreConfig       `yaml:"json"`
 	YAML       YAMLStoreConfig       `yaml:"yaml"`
+	XML        XMLStoreConfig        `yaml:"xml"`
 }
 
 type configFile struct {
@@ -263,6 +268,7 @@ func NewStoresConfig() *StoresConfig {
 	storesConfig := &StoresConfig{}
 	storesConfig.JSON.Indent = -1
 	storesConfig.JSONBinary.Indent = -1
+	storesConfig.XML.Indent = -1
 	return storesConfig
 }
 
