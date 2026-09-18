@@ -4,6 +4,7 @@ Package config provides a way to find and load SOPS configuration files
 package config //import "github.com/getsops/sops/v3/config"
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -567,6 +568,13 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	return config, nil
 }
 
+// ErrNoMatchingCreationRules is returned by parseCreationRuleForFile when a config file
+// has creation rules but none of them match the given file path. Exported as a sentinel
+// so callers that can source keys another way (e.g. explicit --age/--kms/... flags) can
+// tell this apart from other config-loading failures and treat it as "no applicable
+// config" instead of a hard error.
+var ErrNoMatchingCreationRules = errors.New("no matching creation rules found")
+
 func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	// If config file doesn't contain CreationRules (it's empty or only contains DestionationRules), assume it does not exist
 	if conf.CreationRules == nil {
@@ -599,7 +607,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	if rule == nil {
-		return nil, fmt.Errorf("error loading config: no matching creation rules found")
+		return nil, fmt.Errorf("error loading config: %w", ErrNoMatchingCreationRules)
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)
