@@ -6,6 +6,7 @@ package keyservice
 
 import (
 	"fmt"
+	"github.com/getsops/sops/v3/tencentkms"
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
@@ -83,6 +84,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		return Key{
 			KeyType: &Key_HckmsKey{
 				HckmsKey: &HckmsKey{
+					KeyId: mk.KeyID,
+				},
+			},
+		}
+	case *tencentkms.MasterKey:
+		return Key{
+			KeyType: &Key_TencentKey{
+				TencentKey: &TencentKey{
 					KeyId: mk.KeyID,
 				},
 			},
