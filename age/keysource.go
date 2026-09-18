@@ -10,7 +10,9 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
+	"sync"
 
 	"filippo.io/age"
 	"filippo.io/age/agessh"
@@ -43,6 +45,10 @@ const (
 	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
 	// a private SSH key file.
 	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
+	// SopsAgeKeyCmdCacheEnv can be set to a value considered true by
+	// strconv.ParseBool to execute each key command at most once per process,
+	// reusing its first output for every recipient.
+	SopsAgeKeyCmdCacheEnv = "SOPS_AGE_KEY_CMD_CACHE"
 	// SopsAgeKeyUserConfigPath is the default age keys file path in
 	// getUserConfigDir().
 	SopsAgeKeyUserConfigPath = "sops/age/keys.txt"
@@ -294,10 +300,44 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
+// cmdOutputCache memoises successful key command outputs per command string
+// when SopsAgeKeyCmdCacheEnv is set. Errors are never cached, and the lock is
+// not held while the command runs, so a slow or failing command cannot block
+// or poison other decrypts in long-lived processes such as the keyservice.
+var cmdOutputCache = struct {
+	sync.Mutex
+	results map[string][]byte
+}{results: make(map[string][]byte)}
+
 // getOutputFromCmd executes a shell command provided in param 'cmdString',
 // optionally adding env vars provided in param 'envVars',
-// and returns the command's output and error
+// and returns the command's output and error. If SopsAgeKeyCmdCacheEnv is
+// set to a true value, successful output is cached per command string for
+// the lifetime of the process, ignoring envVars on cache hits.
 func getOutputFromCmd(cmdString string, envVars []string) ([]byte, error) {
+	cache, err := strconv.ParseBool(os.Getenv(SopsAgeKeyCmdCacheEnv))
+	if err != nil || !cache {
+		return runCmd(cmdString, envVars)
+	}
+	cmdOutputCache.Lock()
+	out, ok := cmdOutputCache.results[cmdString]
+	cmdOutputCache.Unlock()
+	if ok {
+		return out, nil
+	}
+	out, err = runCmd(cmdString, envVars)
+	if err == nil {
+		cmdOutputCache.Lock()
+		cmdOutputCache.results[cmdString] = out
+		cmdOutputCache.Unlock()
+	}
+	return out, err
+}
+
+// runCmd executes a shell command provided in param 'cmdString',
+// optionally adding env vars provided in param 'envVars',
+// and returns the command's output and error
+func runCmd(cmdString string, envVars []string) ([]byte, error) {
 	var out []byte
 
 	args, err := shlex.Split(cmdString)

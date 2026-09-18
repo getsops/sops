@@ -575,6 +575,79 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Nil(t, got)
 		assert.Len(t, unusedLocations, 7)
 	})
+
+	t.Run(SopsAgeKeyCmdCacheEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		countFile := filepath.Join(tmpDir, "count")
+		t.Setenv(SopsAgeKeyCmdEnv, fmt.Sprintf("bash -c 'echo x >> %s; echo %s'", countFile, mockIdentity))
+		t.Setenv(SopsAgeKeyCmdCacheEnv, "true")
+
+		// The command runs once; the second recipient is served from the cache.
+		for _, recipient := range []string{mockRecipient, mockRecipient + "abc"} {
+			key := &MasterKey{Recipient: recipient}
+			got, unusedLocations, errs := key.loadIdentities()
+			assert.Len(t, errs, 0)
+			assert.Len(t, got, 1)
+			assert.Len(t, unusedLocations, 6)
+		}
+		count, err := os.ReadFile(countFile)
+		assert.NoError(t, err)
+		assert.Equal(t, "x\n", string(count))
+	})
+
+	t.Run(SopsAgeKeyCmdCacheEnv+" does not cache errors", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		flagFile := filepath.Join(tmpDir, "flag")
+		countFile := filepath.Join(tmpDir, "count")
+		t.Setenv(SopsAgeKeyCmdEnv, fmt.Sprintf(
+			"bash -c 'echo x >> %s; if [ ! -f %s ]; then touch %s; exit 1; fi; echo %s'",
+			countFile, flagFile, flagFile, mockIdentity))
+		t.Setenv(SopsAgeKeyCmdCacheEnv, "true")
+
+		// First run fails and must not be cached.
+		key := &MasterKey{Recipient: mockRecipient}
+		got, _, errs := key.loadIdentities()
+		assert.Len(t, errs, 1)
+		assert.Nil(t, got)
+
+		// Second run succeeds and is cached; the third is served from cache.
+		for range 2 {
+			key = &MasterKey{Recipient: mockRecipient}
+			got, _, errs = key.loadIdentities()
+			assert.Len(t, errs, 0)
+			assert.Len(t, got, 1)
+		}
+		count, err := os.ReadFile(countFile)
+		assert.NoError(t, err)
+		assert.Equal(t, "x\nx\n", string(count))
+	})
+
+	t.Run(SopsAgeKeyCmdCacheEnv+" disabled", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		countFile := filepath.Join(tmpDir, "count")
+		t.Setenv(SopsAgeKeyCmdEnv, fmt.Sprintf("bash -c 'echo x >> %s; echo %s'", countFile, mockIdentity))
+
+		// Without the cache flag the command runs once per recipient.
+		for _, recipient := range []string{mockRecipient, mockRecipient + "abc"} {
+			key := &MasterKey{Recipient: recipient}
+			got, unusedLocations, errs := key.loadIdentities()
+			assert.Len(t, errs, 0)
+			assert.Len(t, got, 1)
+			assert.Len(t, unusedLocations, 6)
+		}
+		count, err := os.ReadFile(countFile)
+		assert.NoError(t, err)
+		assert.Equal(t, "x\nx\n", string(count))
+	})
 }
 
 // overwriteUserConfigDir sets the user config directory and the user home directory
