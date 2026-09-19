@@ -12,6 +12,7 @@ import (
 	kms "cloud.google.com/go/kms/apiv1"
 	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/sirupsen/logrus"
+	"github.com/getsops/sops/v3/fsio"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
@@ -358,7 +359,7 @@ func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClien
 func getGoogleCredentials() ([]byte, error) {
 	if defaultCredentials, ok := os.LookupEnv(SopsGoogleCredentialsEnv); ok && len(defaultCredentials) > 0 {
 		if _, err := os.Stat(defaultCredentials); err == nil {
-			return os.ReadFile(defaultCredentials)
+			return fsio.Read(defaultCredentials)
 		}
 		return []byte(defaultCredentials), nil
 	}
