@@ -131,6 +131,8 @@ func main() {
    SOPS_AZURE_KEYVAULT_URL environment variable.
    (Authentication is based on environment variables, see
     https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
+	Set SOPS_AZURE_KEYVAULT_SKIP_URI_VERIFICATION=true to disable
+	challenge-resource URI verification when required by your environment.
     The user/sp needs the key/encrypt and key/decrypt permissions.)
 
    To encrypt or decrypt using age, specify the recipient in the -a flag,
