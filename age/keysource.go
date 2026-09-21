@@ -17,6 +17,7 @@ import (
 	"filippo.io/age/armor"
 	"filippo.io/age/plugin"
 	"github.com/sirupsen/logrus"
+	"github.com/getsops/sops/v3/fsio"
 	"golang.org/x/crypto/ssh"
 
 	"github.com/getsops/sops/v3/logging"
@@ -423,7 +424,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 	}
 
 	if ageKeyFile, ok := os.LookupEnv(SopsAgeKeyFileEnv); ok {
-		f, err := os.Open(ageKeyFile)
+		f, err := fsio.Open(ageKeyFile)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
@@ -456,7 +457,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		errs = append(errs, fmt.Errorf("user config directory could not be determined: %w", err))
 	} else if userConfigDir != "" {
 		ageKeyFilePath := filepath.Join(userConfigDir, filepath.FromSlash(SopsAgeKeyUserConfigPath))
-		f, err := os.Open(ageKeyFilePath)
+		f, err := fsio.Open(ageKeyFilePath)
 		if err != nil && !errors.Is(err, os.ErrNotExist) {
 			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
 		} else if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
