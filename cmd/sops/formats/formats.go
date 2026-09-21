@@ -1,6 +1,9 @@
 package formats
 
-import "strings"
+import (
+	"path/filepath"
+	"strings"
+)
 
 // Format is an enum type
 type Format int
@@ -43,7 +46,7 @@ func IsJSONFile(path string) bool {
 
 // IsEnvFile returns true if a given file path corresponds to a .env file
 func IsEnvFile(path string) bool {
-	return strings.HasSuffix(path, ".env")
+	return strings.HasSuffix(path, ".env") || strings.HasPrefix(filepath.Base(path), ".env")
 }
 
 // IsIniFile returns true if a given file path corresponds to a INI file
