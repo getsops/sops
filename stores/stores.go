@@ -23,6 +23,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/plugin"
 )
 
 const (
@@ -37,6 +38,7 @@ const (
 type metadata struct {
 	ShamirThreshold           int         `mapstructure:"shamir_threshold,omitempty"`
 	KeyGroups                 []keygroup  `mapstructure:"key_groups,omitempty,deep"`
+	PluginKeys                []pluginkey `mapstructure:"plugins,omitempty,deep"`
 	KMSKeys                   []kmskey    `mapstructure:"kms,omitempty,deep"`
 	GCPKMSKeys                []gcpkmskey `mapstructure:"gcp_kms,omitempty,deep"`
 	HCKmsKeys                 []hckmskey  `mapstructure:"hckms,omitempty,deep"`
@@ -58,6 +60,7 @@ type metadata struct {
 
 type keygroup struct {
 	PGPKeys           []pgpkey    `mapstructure:"pgp,omitempty,deep"`
+	PluginKeys        []pluginkey `mapstructure:"plugins,omitempty,deep"`
 	KMSKeys           []kmskey    `mapstructure:"kms,omitempty,deep"`
 	GCPKMSKeys        []gcpkmskey `mapstructure:"gcp_kms,omitempty,deep"`
 	HCKmsKeys         []hckmskey  `mapstructure:"hckms,omitempty,deep"`
@@ -70,6 +73,15 @@ type pgpkey struct {
 	CreatedAt        string `mapstructure:"created_at"`
 	EncryptedDataKey string `mapstructure:"enc"`
 	Fingerprint      string `mapstructure:"fp"`
+}
+
+type pluginkey struct {
+	Timeout          string         `mapstructure:"timeout,omitempty"`
+	BinaryName       string         `mapstructure:"binary_name"`
+	InstanceID       string         `mapstructure:"instance_id,omitempty"`
+	CreatedAt        string         `mapstructure:"created_at"`
+	EncryptedDataKey string         `mapstructure:"enc"`
+	Config           map[string]any `mapstructure:"config"`
 }
 
 type kmskey struct {
@@ -138,6 +150,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
+		m.PluginKeys = pluginKeysFromGroup(group)
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
 			m.KeyGroups = append(m.KeyGroups, keygroup{
@@ -148,6 +161,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
+				PluginKeys:        pluginKeysFromGroup(group),
 			})
 		}
 	}
@@ -244,6 +258,23 @@ func ageKeysFromGroup(group sops.KeyGroup) (keys []agekey) {
 	return
 }
 
+func pluginKeysFromGroup(group sops.KeyGroup) (keys []pluginkey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *plugin.MasterKey:
+			keys = append(keys, pluginkey{
+				BinaryName:       key.BinaryName,
+				InstanceID:       key.InstanceID,
+				Config:           key.PluginConfig,
+				EncryptedDataKey: key.EncryptedKey,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				Timeout:          key.Timeout,
+			})
+		}
+	}
+	return keys
+}
+
 func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
 	for _, key := range group {
 		switch key := key.(type) {
@@ -312,7 +343,7 @@ func (m *metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, pluginKeys []pluginkey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -363,13 +394,20 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 		}
 		internalGroup = append(internalGroup, k)
 	}
+	for _, pluginKey := range pluginKeys {
+		k, err := pluginKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
 	return internalGroup, nil
 }
 
 func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.PluginKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.PluginKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -377,7 +415,7 @@ func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.PluginKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -401,6 +439,21 @@ func (kmsKey *kmskey) toInternal() (*kms.MasterKey, error) {
 		CreationDate:      creationDate,
 		Arn:               kmsKey.Arn,
 		AwsProfile:        kmsKey.AwsProfile,
+	}, nil
+}
+
+func (pluginKey *pluginkey) toInternal() (*plugin.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, pluginKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &plugin.MasterKey{
+		BinaryName:   pluginKey.BinaryName,
+		InstanceID:   pluginKey.InstanceID,
+		PluginConfig: pluginKey.Config,
+		EncryptedKey: pluginKey.EncryptedDataKey,
+		CreationDate: creationDate,
+		Timeout:      pluginKey.Timeout,
 	}, nil
 }
 
