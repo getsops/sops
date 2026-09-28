@@ -4,6 +4,7 @@ Package config provides a way to find and load SOPS configuration files
 package config //import "github.com/getsops/sops/v3/config"
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -507,6 +508,10 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 	}, nil
 }
 
+// ErrNoMatchingDestination is returned when the config has destination rules
+// but none of them match the file path.
+var ErrNoMatchingDestination = errors.New("no matching destination found in config")
+
 func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	var rule *creationRule
 	var dRule *destinationRule
@@ -519,7 +524,11 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 				break
 			}
 			if r.PathRegex != "" {
-				if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
+				reg, err := regexp.Compile(r.PathRegex)
+				if err != nil {
+					return nil, fmt.Errorf("can not compile regexp: %w", err)
+				}
+				if reg.MatchString(filePath) {
 					dRule = &r
 					rule = &dRule.RecreationRule
 					break
@@ -529,7 +538,10 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	}
 
 	if dRule == nil {
-		return nil, fmt.Errorf("error loading config: no matching destination found in config")
+		if len(conf.DestinationRules) == 0 {
+			return nil, errors.New("error loading config: no destination rules found in config")
+		}
+		return nil, fmt.Errorf("error loading config: %w", ErrNoMatchingDestination)
 	}
 
 	var dest publish.Destination
