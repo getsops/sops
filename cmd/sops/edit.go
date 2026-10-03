@@ -16,6 +16,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/encrypt"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/version"
 	"github.com/google/shlex"
@@ -35,7 +36,7 @@ type editOpts struct {
 
 type editExampleOpts struct {
 	editOpts
-	encryptConfig
+	encrypt.EncryptConfig
 }
 
 type runEditorUntilOkOpts struct {
@@ -59,7 +60,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	}
 	tree := sops.Tree{
 		Branches: branches,
-		Metadata: metadataFromEncryptionConfig(opts.encryptConfig),
+		Metadata: encrypt.MetadataFromEncryptionConfig(opts.EncryptConfig),
 		FilePath: path,
 	}
 
@@ -271,7 +272,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			// contain the SOPS metadata
 			opts.Tree = &t
 		} else {
-			if userErr, _ := validateFileForEncryption(opts.OutputStore, newBranches); userErr != nil {
+			if userErr, _ := encrypt.ValidateFileForEncryption(opts.OutputStore, newBranches); userErr != nil {
 				log.WithField(
 					"error",
 					userErr.UserError(),
