@@ -380,6 +380,14 @@ func (branch TreeBranch) walkSlice(in []interface{}, path []string, commentsStac
 			return nil, err
 		}
 		in[i] = newV
+		// When encrypting comments in a slice, the Comment is converted to a non-Comment.
+		// When decrypting that non-Comment, the result is once again a Comment.
+		// Therefore, to figure out whether we clear the comment stack's top,
+		// we need to check whether both v and newV are not comments. Since we already checked
+		// v, we need to check newV as well if v was not a comment.
+		if !vIsComment {
+			_, vIsComment = newV.(Comment)
+		}
 		if !vIsComment {
 			// If v is not a comment, we clear the slice of active comments.
 			commentsStack[len(commentsStack)-1] = []string{}
