@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
@@ -18,10 +19,24 @@ import (
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
+	"github.com/sirupsen/logrus"
 	"go.yaml.in/yaml/v3"
 )
+
+var (
+	log *logrus.Logger
+
+	// Config files for which the duplicate path_regex warnings were already shown to the user.
+	// Used and set by warnDuplicatePathRegexes().
+	warnedDuplicatePathRegexes sync.Map
+)
+
+func init() {
+	log = logging.NewLogger("CONFIG")
+}
 
 type fileSystem interface {
 	Stat(name string) (os.FileInfo, error)
@@ -610,6 +625,50 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	return config, nil
 }
 
+// duplicatePathRegex describes a creation rule that has the same path_regex as an earlier creation rule.
+// First and Duplicate are the indices of the two rules in the list of creation rules.
+type duplicatePathRegex struct {
+	PathRegex string
+	First     int
+	Duplicate int
+}
+
+// findDuplicatePathRegexes returns the creation rules whose path_regex is identical to the path_regex of an
+// earlier creation rule. Since the first matching creation rule is used, such a rule is never used.
+// Rules without path_regex are ignored, and so are rules whose path_regex differs but matches the same files.
+func findDuplicatePathRegexes(rules []creationRule) []duplicatePathRegex {
+	var duplicates []duplicatePathRegex
+	first := make(map[string]int)
+	for i, r := range rules {
+		if r.PathRegex == "" {
+			continue
+		}
+		if j, ok := first[r.PathRegex]; ok {
+			duplicates = append(duplicates, duplicatePathRegex{PathRegex: r.PathRegex, First: j, Duplicate: i})
+			continue
+		}
+		first[r.PathRegex] = i
+	}
+	return duplicates
+}
+
+// warnDuplicatePathRegexes logs a warning for every creation rule that has the same path_regex as an earlier
+// creation rule. The warnings are only shown once for every config file.
+func warnDuplicatePathRegexes(conf *configFile, confPath string) {
+	duplicates := findDuplicatePathRegexes(conf.CreationRules)
+	if len(duplicates) == 0 {
+		return
+	}
+	if _, shown := warnedDuplicatePathRegexes.LoadOrStore(confPath, true); shown {
+		return
+	}
+	for _, d := range duplicates {
+		log.Warnf(
+			"creation rules %d and %d in %q have the same path_regex %q; only the first matching creation rule is used, so rule %d has no effect",
+			d.First+1, d.Duplicate+1, confPath, d.PathRegex, d.Duplicate+1)
+	}
+}
+
 // LoadCreationRuleForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
 // should be provided for configurations that do not contain key groups, as there's no way to specify context inside
 // a SOPS config file outside of key groups.
@@ -618,6 +677,7 @@ func LoadCreationRuleForFile(confPath string, filePath string, kmsEncryptionCont
 	if err != nil {
 		return nil, err
 	}
+	warnDuplicatePathRegexes(conf, confPath)
 
 	return parseCreationRuleForFile(conf, confPath, filePath, kmsEncryptionContext)
 }
