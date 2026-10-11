@@ -1,6 +1,7 @@
 package ini
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/getsops/sops/v3"
@@ -69,6 +70,30 @@ file="payroll.dat"
 	branch, err := Store{}.treeBranchesFromIni([]byte(in))
 	assert.Nil(t, err)
 	assert.Equal(t, expected, branch)
+}
+
+func TestRepeatedKeysRoundTrip(t *testing.T) {
+	input := []byte("[oslo_messaging_notifications]\ndriver = messagingv2\ndriver = log\ndriver = messagingv2\n")
+	store := Store{}
+
+	branches, err := store.treeBranchesFromIni(input)
+	assert.NoError(t, err)
+
+	section := branches[0][1].Value.(sops.TreeBranch)
+	assert.Equal(t, sops.TreeBranch{
+		{Key: "driver", Value: "messagingv2"},
+		{Key: "driver", Value: "log"},
+		{Key: "driver", Value: "messagingv2"},
+	}, section)
+
+	encoded, err := store.iniFromTreeBranches(branches)
+	assert.NoError(t, err)
+	assert.Equal(t, input, encoded)
+	assert.Equal(t, 3, strings.Count(string(encoded), "driver ="))
+
+	decoded, err := store.treeBranchesFromIni(encoded)
+	assert.NoError(t, err)
+	assert.Equal(t, branches, decoded)
 }
 
 func TestEncodeSimpleIni(t *testing.T) {
