@@ -45,6 +45,18 @@ func TestLoadPlainFile(t *testing.T) {
 	assert.Equal(t, BRANCH, branches[0])
 }
 
+func TestLoadPlainFileCRLF(t *testing.T) {
+	in := []byte("VAR1=val1\r\nVAR2=val2\r\n#comment\r\n")
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.NoError(t, err)
+	expected := sops.TreeBranch{
+		sops.TreeItem{Key: "VAR1", Value: "val1"},
+		sops.TreeItem{Key: "VAR2", Value: "val2"},
+		sops.TreeItem{Key: sops.Comment{Value: "comment"}, Value: nil},
+	}
+	assert.Equal(t, expected, branches[0])
+}
+
 func TestLoadEncryptedFileNoMetadata(t *testing.T) {
 	branches, err := (&Store{}).LoadEncryptedFile(PLAIN)
 	assert.Equal(t, err, sops.MetadataNotFound)
