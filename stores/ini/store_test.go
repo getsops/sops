@@ -96,6 +96,24 @@ func TestRepeatedKeysRoundTrip(t *testing.T) {
 	assert.Equal(t, branches, decoded)
 }
 
+func TestRepeatedKeyCommentIsAddedOnce(t *testing.T) {
+	input := []byte("[sec]\ndriver = a\n; note mid\ndriver = b\n")
+	store := Store{}
+
+	branches, err := store.treeBranchesFromIni(input)
+	assert.NoError(t, err)
+
+	section := branches[0][1].Value.(sops.TreeBranch)
+	assert.Equal(t, sops.TreeBranch{
+		{Key: "driver", Value: "a"},
+		{Key: "driver", Value: "b"},
+		{Key: sops.Comment{Value: "note mid"}, Value: nil},
+	}, section)
+	encoded, err := store.iniFromTreeBranches(branches)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, strings.Count(string(encoded), "note mid"))
+}
+
 func TestEncodeSimpleIni(t *testing.T) {
 	branches := sops.TreeBranches{
 		sops.TreeBranch{

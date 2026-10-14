@@ -128,14 +128,14 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 		for _, value := range key.ValueWithShadows() {
 			item := sops.TreeItem{Key: key.Name(), Value: value}
 			items = append(items, item)
-			if key.Comment != "" {
-				items = append(items, sops.TreeItem{
-					Key: sops.Comment{
-						Value: store.stripCommentChar(key.Comment),
-					},
-					Value: nil,
-				})
-			}
+		}
+		if key.Comment != "" {
+			items = append(items, sops.TreeItem{
+				Key: sops.Comment{
+					Value: store.stripCommentChar(key.Comment),
+				},
+				Value: nil,
+			})
 		}
 	}
 	sectionItem.Value = items
