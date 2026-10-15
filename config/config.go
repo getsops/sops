@@ -19,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/plugin"
 	"github.com/getsops/sops/v3/publish"
 	"go.yaml.in/yaml/v3"
 )
@@ -129,6 +130,13 @@ type configFile struct {
 	Stores           StoresConfig      `yaml:"stores"`
 }
 
+type pluginKey struct {
+	Timeout    string         `yaml:"timeout,omitempty"`
+	BinaryName string         `yaml:"binary_name"`
+	InstanceID string         `yaml:"instance_id,omitempty"`
+	Config     map[string]any `yaml:"config"`
+}
+
 type keyGroup struct {
 	Merge   []keyGroup   `yaml:"merge"`
 	KMS     []kmsKey     `yaml:"kms"`
@@ -138,6 +146,7 @@ type keyGroup struct {
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
 	PGP     []string     `yaml:"pgp"`
+	Plugin  []pluginKey  `yaml:"plugins"`
 }
 
 type gcpKmsKey struct {
@@ -177,6 +186,7 @@ type destinationRule struct {
 
 type creationRule struct {
 	PathRegex               string      `yaml:"path_regex"`
+	Timeout                 string      `yaml:"timeout,omitempty"`
 	KMS                     interface{} `yaml:"kms"` // string or []string
 	AwsProfile              string      `yaml:"aws_profile"`
 	Age                     interface{} `yaml:"age"`     // string or []string
@@ -187,6 +197,7 @@ type creationRule struct {
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
+	Plugin                  []pluginKey  `yaml:"plugins"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
 	EncryptedSuffix         string      `yaml:"encrypted_suffix"`
 	UnencryptedRegex        string      `yaml:"unencrypted_regex"`
@@ -357,6 +368,14 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			return nil, err
 		}
 	}
+
+
+	for _, p := range group.Plugin {
+		resolvedTimeout := p.Timeout
+		mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout, p.InstanceID)
+		keyGroup = append(keyGroup, mKey)
+     }
+
 	return deduplicateKeygroup(keyGroup), nil
 }
 
@@ -445,6 +464,14 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
+		for _, p := range cRule.Plugin {
+			resolvedTimeout := p.Timeout
+			if resolvedTimeout == "" {
+				resolvedTimeout = cRule.Timeout
+			}
+			mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout, p.InstanceID)
+			keyGroup = append(keyGroup, mKey)
+         }
 		groups = append(groups, keyGroup)
 	}
 	return groups, nil
