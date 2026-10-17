@@ -185,7 +185,12 @@ func main() {
 		{
 			Name:      "exec-env",
 			Usage:     "execute a command with decrypted values inserted into the environment",
-			ArgsUsage: "[file to decrypt] [command to run]",
+			ArgsUsage: "[file to decrypt]... [command to run]",
+			Description: `If more than one file is given, the values of all files are inserted into
+   the environment. If a key appears in several files, the value from the
+   last of these files is used. Flags must come before the first file: a
+   boolean flag placed between two files moves the file after it in front of
+   the others.`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "background",
@@ -210,32 +215,20 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				if c.NArg() != 2 {
+				if c.NArg() < 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 				}
 
-				fileName := c.Args()[0]
-				command := c.Args()[1]
-
-				inputStore, err := inputStore(c, fileName)
-				if err != nil {
-					return toExitError(err)
-				}
+				// All arguments but the last one are files to decrypt,
+				// the last one is the command to run.
+				fileNames := c.Args()[:c.NArg()-1]
+				command := c.Args()[c.NArg()-1]
 
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
 				if err != nil {
 					return toExitError(err)
-				}
-				opts := decryptOpts{
-					OutputStore:     &dotenv.Store{},
-					InputStore:      inputStore,
-					InputPath:       fileName,
-					Cipher:          aes.NewCipher(),
-					KeyServices:     svcs,
-					DecryptionOrder: order,
-					IgnoreMAC:       c.Bool("ignore-mac"),
 				}
 
 				if c.Bool("background") {
@@ -246,31 +239,27 @@ func main() {
 					}
 				}
 
-				tree, err := decryptTree(opts)
-				if err != nil {
-					return toExitError(err)
-				}
-
+				// Decrypt all files before running the command, so that it never
+				// runs with only part of the environment. A key that appears in
+				// several files gets the value from the last of them, as if
+				// exec-env had been nested once per file.
 				var env []string
-				for _, item := range tree.Branches[0] {
-					if stores.IsComplexValue(item.Value) {
-						return cli.NewExitError(fmt.Errorf("cannot use complex value in environment; offending key %s", item.Key), codes.ErrorGeneric)
+				for _, fileName := range fileNames {
+					store, err := inputStore(c, fileName)
+					if err != nil {
+						// The config is the same for all files, so this error
+						// is not about this file and keeps its message.
+						return toExitError(err)
 					}
-					if _, ok := item.Key.(sops.Comment); ok {
-						continue
+					fileEnv, err := decryptFileToEnv(c, fileName, store, svcs, order)
+					if err != nil {
+						if len(fileNames) > 1 {
+							// Not every error mentions the file it belongs to.
+							return exitErrorWithFileName(fileName, err)
+						}
+						return toExitError(err)
 					}
-					key, ok := item.Key.(string)
-					if !ok {
-						return cli.NewExitError(fmt.Errorf("cannot use non-string keys in environment, got %T", item.Key), codes.ErrorGeneric)
-					}
-					if strings.Contains(key, "=") {
-						return cli.NewExitError(fmt.Errorf("cannot use keys with '=' in environment: %s", key), codes.ErrorGeneric)
-					}
-					value, ok := item.Value.(string)
-					if !ok {
-						value = stores.ValToString(item.Value)
-					}
-					env = append(env, fmt.Sprintf("%s=%s", key, value))
+					env = exec.MergeEnv(env, fileEnv)
 				}
 
 				if err := exec.ExecWithEnv(exec.ExecOpts{
@@ -2306,6 +2295,61 @@ func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, out
 		AddMasterKeys:    addMasterKeys,
 		RemoveMasterKeys: rmMasterKeys,
 	}, nil
+}
+
+// decryptFileToEnv decrypts a file for exec-env and returns its top-level
+// keys and values as KEY=VALUE pairs.
+func decryptFileToEnv(c *cli.Context, fileName string, store common.Store, svcs []keyservice.KeyServiceClient, order []string) ([]string, error) {
+	tree, err := decryptTree(decryptOpts{
+		OutputStore:     &dotenv.Store{},
+		InputStore:      store,
+		InputPath:       fileName,
+		Cipher:          aes.NewCipher(),
+		KeyServices:     svcs,
+		DecryptionOrder: order,
+		IgnoreMAC:       c.Bool("ignore-mac"),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return envFromTree(tree)
+}
+
+// envFromTree converts the top-level keys and values of a decrypted tree
+// to KEY=VALUE pairs for use as environment variables.
+func envFromTree(tree *sops.Tree) ([]string, error) {
+	var env []string
+	for _, item := range tree.Branches[0] {
+		if stores.IsComplexValue(item.Value) {
+			return nil, fmt.Errorf("cannot use complex value in environment; offending key %s", item.Key)
+		}
+		if _, ok := item.Key.(sops.Comment); ok {
+			continue
+		}
+		key, ok := item.Key.(string)
+		if !ok {
+			return nil, fmt.Errorf("cannot use non-string keys in environment, got %T", item.Key)
+		}
+		if strings.Contains(key, "=") {
+			return nil, fmt.Errorf("cannot use keys with '=' in environment: %s", key)
+		}
+		value, ok := item.Value.(string)
+		if !ok {
+			value = stores.ValToString(item.Value)
+		}
+		env = append(env, fmt.Sprintf("%s=%s", key, value))
+	}
+	return env, nil
+}
+
+// exitErrorWithFileName converts err to an exit error whose message starts
+// with fileName, keeping the exit code that toExitError assigns to err.
+func exitErrorWithFileName(fileName string, err error) error {
+	exitCode := codes.ErrorGeneric
+	if exitCoder, ok := toExitError(err).(cli.ExitCoder); ok {
+		exitCode = exitCoder.ExitCode()
+	}
+	return cli.NewExitError(fmt.Sprintf("%s: %s", fileName, err), exitCode)
 }
 
 func toExitError(err error) error {
