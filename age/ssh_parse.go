@@ -12,11 +12,10 @@ package age
 
 import (
 	"fmt"
-	"io"
-	"os"
 
 	"filippo.io/age"
 	"filippo.io/age/agessh"
+	"github.com/getsops/sops/v3/fsio"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -26,14 +25,9 @@ import (
 // error is returned.
 func readPublicKeyFile(privateKeyPath string) (ssh.PublicKey, error) {
 	publicKeyPath := privateKeyPath + ".pub"
-	f, err := os.Open(publicKeyPath)
+	contents, err := fsio.Read(publicKeyPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to obtain public %q key for %q SSH key: %w", publicKeyPath, privateKeyPath, err)
-	}
-	defer f.Close()
-	contents, err := io.ReadAll(f)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read %q: %w", publicKeyPath, err)
 	}
 	pubKey, _, _, _, err := ssh.ParseAuthorizedKey(contents)
 	if err != nil {
@@ -46,12 +40,7 @@ func readPublicKeyFile(privateKeyPath string) (ssh.PublicKey, error) {
 // private key file. If the private key file is encrypted, it will configure
 // the identity to prompt for a passphrase.
 func parseSSHIdentityFromPrivateKeyFile(keyPath string) (age.Identity, error) {
-	keyFile, err := os.Open(keyPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %w", err)
-	}
-	defer keyFile.Close()
-	contents, err := io.ReadAll(keyFile)
+	contents, err := fsio.Read(keyPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read file: %w", err)
 	}
