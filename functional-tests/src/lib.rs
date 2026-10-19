@@ -1738,4 +1738,47 @@ bar: |-
             "Unexpected decrypted content"
         );
     }
+
+    #[test]
+    fn test_slice_comment_round_trip() {
+        let file_path = prepare_temp_file(
+            "test_slice_comment_round_trip.yaml",
+            b"items:
+  # sops:enc
+  # trigger
+  - real",
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("--encrypted-comment-regex")
+                .arg("sops:enc")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let data = &String::from_utf8_lossy(&output.stdout);
+        assert!(
+            data == "items:
+    # sops:enc
+    # trigger
+    - real
+"
+        );
+    }
 }
