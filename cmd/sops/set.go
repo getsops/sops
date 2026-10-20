@@ -6,6 +6,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/encrypt"
 	"github.com/getsops/sops/v3/keyservice"
 )
 
@@ -51,7 +52,7 @@ func set(opts setOpts) ([]byte, bool, error) {
 	var changed bool
 	tree.Branches[0], changed = tree.Branches[0].Set(opts.TreePath, opts.Value)
 
-	if err, code := validateFileForEncryption(opts.OutputStore, tree.Branches); err != nil {
+	if err, code := encrypt.ValidateFileForEncryption(opts.OutputStore, tree.Branches); err != nil {
 		return nil, false, common.NewExitError(err, code)
 	}
 
