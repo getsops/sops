@@ -400,6 +400,7 @@ func getUserConfigDir() (string, error) {
 }
 
 type identityReader struct {
+	location                 string
 	reader                   io.Reader
 	allowMultipleKeysPerLine bool
 }
@@ -411,13 +412,14 @@ type identityReader struct {
 func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 	identities, unusedLocations, errs := key.loadAgeSSHIdentities()
 
-	var readers = make(map[string]identityReader, 0)
+	var readers []identityReader
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
-		readers[SopsAgeKeyEnv] = identityReader{
+		readers = append(readers, identityReader{
+			location:                 SopsAgeKeyEnv,
 			reader:                   strings.NewReader(ageKey),
 			allowMultipleKeysPerLine: true,
-		}
+		})
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
 	}
@@ -428,10 +430,11 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
 			defer f.Close()
-			readers[SopsAgeKeyFileEnv] = identityReader{
+			readers = append(readers, identityReader{
+				location:                 SopsAgeKeyFileEnv,
 				reader:                   f,
 				allowMultipleKeysPerLine: false,
-			}
+			})
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
@@ -442,10 +445,11 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		if err != nil {
 			errs = append(errs, err)
 		} else {
-			readers[SopsAgeKeyCmdEnv] = identityReader{
+			readers = append(readers, identityReader{
+				location:                 SopsAgeKeyCmdEnv,
 				reader:                   bytes.NewReader(out),
 				allowMultipleKeysPerLine: false,
-			}
+			})
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyCmdEnv)
@@ -463,21 +467,22 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
 			defer f.Close()
-			readers[ageKeyFilePath] = identityReader{
+			readers = append(readers, identityReader{
+				location:                 ageKeyFilePath,
 				reader:                   f,
 				allowMultipleKeysPerLine: false,
-			}
+			})
 		}
 	}
 
-	for location, r := range readers {
-		ids, err := unwrapIdentities(location, r.reader, r.allowMultipleKeysPerLine)
+	for _, r := range readers {
+		ids, err := unwrapIdentities(r.location, r.reader, r.allowMultipleKeysPerLine)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
 			identities = append(identities, ids...)
 			if len(ids) == 0 {
-				unusedLocations = append(unusedLocations, location)
+				unusedLocations = append(unusedLocations, r.location)
 			}
 		}
 	}
