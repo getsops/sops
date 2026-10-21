@@ -8,6 +8,7 @@ type Format int
 const (
 	Binary Format = iota
 	Dotenv
+	Hcl
 	Ini
 	Json
 	Yaml
@@ -16,6 +17,7 @@ const (
 var stringToFormat = map[string]Format{
 	"binary": Binary,
 	"dotenv": Dotenv,
+	"hcl":    Hcl,
 	"ini":    Ini,
 	"json":   Json,
 	"yaml":   Yaml,
@@ -46,6 +48,11 @@ func IsEnvFile(path string) bool {
 	return strings.HasSuffix(path, ".env")
 }
 
+// IsHclFile returns true if a given file path corresponds to a HCL file
+func IsHclFile(path string) bool {
+	return strings.HasSuffix(path, ".hcl") || strings.HasSuffix(path, ".tfvars")
+}
+
 // IsIniFile returns true if a given file path corresponds to a INI file
 func IsIniFile(path string) bool {
 	return strings.HasSuffix(path, ".ini")
@@ -62,6 +69,8 @@ func FormatForPath(path string) Format {
 		format = Dotenv
 	} else if IsIniFile(path) {
 		format = Ini
+	} else if IsHclFile(path) {
+		format = Hcl
 	}
 	return format
 }
