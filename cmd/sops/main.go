@@ -134,7 +134,11 @@ func main() {
     The user/sp needs the key/encrypt and key/decrypt permissions.)
 
    To encrypt or decrypt using age, specify the recipient in the -a flag,
-   or in the SOPS_AGE_RECIPIENTS environment variable.
+   or in the SOPS_AGE_RECIPIENTS environment variable. Identities can be
+   used by specifying "age-identity:<source>" where "<source>" is one of 
+   "SOPS_AGE_KEY", "SOPS_AGE_KEY_FILE", "SOPS_AGE_KEY_CMD", referring to 
+   the corresponding environment variables, or "sops/age/keys.txt" to use
+   the default key file contents.
 
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
@@ -967,7 +971,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:   "age, a",
-					Usage:  "comma separated list of age recipients",
+					Usage:  "comma separated list of age recipients or identity sources",
 					EnvVar: "SOPS_AGE_RECIPIENTS",
 				},
 				cli.StringFlag{
@@ -1326,7 +1330,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:   "age, a",
-					Usage:  "comma separated list of age recipients",
+					Usage:  "comma separated list of age recipients, or age-identity:<source> to encrypt to the identities from SOPS_AGE_KEY, SOPS_AGE_KEY_FILE, SOPS_AGE_KEY_CMD or sops/age/keys.txt",
 					EnvVar: "SOPS_AGE_RECIPIENTS",
 				},
 				cli.StringFlag{
@@ -1739,7 +1743,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "age, a",
-			Usage:  "comma separated list of age recipients",
+			Usage:  "comma separated list of age recipients, or age-identity:<source> to encrypt to the identities from SOPS_AGE_KEY, SOPS_AGE_KEY_FILE, SOPS_AGE_KEY_CMD or sops/age/keys.txt",
 			EnvVar: "SOPS_AGE_RECIPIENTS",
 		},
 		cli.BoolFlag{
