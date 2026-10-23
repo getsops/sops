@@ -152,6 +152,9 @@ func LoadEncryptedFileEx(loader sops.EncryptedFileLoader, inputPath string, read
 	}
 	tree, err := loader.LoadEncryptedFile(fileBytes)
 	tree.FilePath = path
+	if err != nil && err != sops.MetadataNotFound {
+		err = fmt.Errorf("%w (is the file a sops-encrypted file in the expected format?)", err)
+	}
 	return &tree, err
 }
 
