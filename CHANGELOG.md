@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+Project changes:
+
+* Upgrade minimum Go version to 1.27.3 for vulnerability fixes.
+* Drop Go 1.25 from CI build matrix (end of life).
+* Update CONTRIBUTION.md to reflect Go 1.27 requirement.
+
 ## 3.13.3
 
 Improvements:
