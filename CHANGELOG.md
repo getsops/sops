@@ -4,9 +4,7 @@
 
 Project changes:
 
-* Upgrade minimum Go version to 1.27.3 for vulnerability fixes.
-* Drop Go 1.25 from CI build matrix (end of life).
-* Update CONTRIBUTION.md to reflect Go 1.27 requirement.
+* Add `toolchain go1.27.3` directive to go.mod for vulnerbility fix.
 
 ## 3.13.3
 
