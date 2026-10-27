@@ -577,6 +577,26 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 	})
 }
 
+func TestGetOutputFromCmd(t *testing.T) {
+	t.Run("backslashes in double quotes", func(t *testing.T) {
+		out, err := getOutputFromCmd(`printf %s "C:\Users\sops\keys.txt"`, nil)
+		assert.NoError(t, err)
+		assert.Equal(t, `C:\Users\sops\keys.txt`, string(out))
+	})
+
+	t.Run("env vars", func(t *testing.T) {
+		out, err := getOutputFromCmd(`sh -c 'printf %s "$FOO"'`, []string{"FOO=bar baz"})
+		assert.NoError(t, err)
+		assert.Equal(t, "bar baz", string(out))
+	})
+
+	t.Run("unterminated quote", func(t *testing.T) {
+		out, err := getOutputFromCmd(`printf %s 'foo`, nil)
+		assert.ErrorContains(t, err, "failed to parse command")
+		assert.Nil(t, out)
+	})
+}
+
 // overwriteUserConfigDir sets the user config directory and the user home directory
 // based on the os.UserConfigDir logic.
 func overwriteUserConfigDir(t *testing.T, path string) {

@@ -18,7 +18,7 @@ import (
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/version"
-	"github.com/google/shlex"
+	"github.com/kballard/go-shellquote"
 	exec "golang.org/x/sys/execabs"
 )
 
@@ -327,7 +327,7 @@ func runEditor(path string) error {
 		}
 		cmd = exec.Command(editor, path)
 	} else {
-		parts, err := shlex.Split(editor)
+		parts, err := shellquote.Split(editor)
 		if err != nil {
 			return fmt.Errorf("invalid $%s: %s", envVar, editor)
 		}
