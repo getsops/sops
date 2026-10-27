@@ -304,6 +304,9 @@ func getOutputFromCmd(cmdString string, envVars []string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse command %s: %w", cmdString, err)
 	}
+	if len(args) == 0 {
+		return nil, errors.New("failed to parse command: command is empty")
+	}
 	cmd := exec.Command(args[0], args[1:]...)
 	if envVars != nil {
 		cmd.Env = append(os.Environ(), envVars[0:]...)
