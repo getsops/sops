@@ -75,7 +75,7 @@ func (e sopsError) Error() string {
 const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
-const MetadataNotFound = sopsError("sops metadata not found")
+const MetadataNotFound = sopsError("sops metadata not found: the file does not appear to be encrypted with sops")
 
 type SopsKeyNotFound struct {
 	Key interface{}
