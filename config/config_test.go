@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/getsops/sops/v3/keys"
+	"github.com/sirupsen/logrus"
+	logrustest "github.com/sirupsen/logrus/hooks/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -918,4 +920,145 @@ creation_rules:
 	// The KMS key should have the encryption context applied
 	// Format: ARN|context where context is "AppName:myapp"
 	assert.Equal(t, "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012|AppName:myapp", conf.KeyGroups[0][0].ToString())
+}
+
+func TestFindDuplicatePathRegexes(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		pathRegex []string
+		expected  []duplicatePathRegex
+	}{
+		{
+			name: "no rules",
+		},
+		{
+			name:      "distinct path_regex",
+			pathRegex: []string{"foo/.*", "bar/.*"},
+		},
+		{
+			name:      "different path_regex matching the same files",
+			pathRegex: []string{`secrets\.yaml$`, `.*\.yaml$`, `.*`},
+		},
+		{
+			name:      "rules without path_regex",
+			pathRegex: []string{"", "foo/.*", ""},
+		},
+		{
+			name:      "identical path_regex",
+			pathRegex: []string{"secrets.yaml$", "secrets.yaml$"},
+			expected: []duplicatePathRegex{
+				{PathRegex: "secrets.yaml$", First: 0, Duplicate: 1},
+			},
+		},
+		{
+			name:      "identical path_regex with other rules in between",
+			pathRegex: []string{"foo/.*", "", "bar/.*", "foo/.*"},
+			expected: []duplicatePathRegex{
+				{PathRegex: "foo/.*", First: 0, Duplicate: 3},
+			},
+		},
+		{
+			name:      "path_regex used three times",
+			pathRegex: []string{"foo/.*", "foo/.*", "foo/.*"},
+			expected: []duplicatePathRegex{
+				{PathRegex: "foo/.*", First: 0, Duplicate: 1},
+				{PathRegex: "foo/.*", First: 0, Duplicate: 2},
+			},
+		},
+		{
+			name:      "two duplicated path_regex",
+			pathRegex: []string{"foo/.*", "bar/.*", "bar/.*", "foo/.*"},
+			expected: []duplicatePathRegex{
+				{PathRegex: "bar/.*", First: 1, Duplicate: 2},
+				{PathRegex: "foo/.*", First: 0, Duplicate: 3},
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var rules []creationRule
+			for _, pathRegex := range tc.pathRegex {
+				rules = append(rules, creationRule{PathRegex: pathRegex})
+			}
+			assert.Equal(t, tc.expected, findDuplicatePathRegexes(rules))
+		})
+	}
+}
+
+// captureConfigLog records the log entries written by this package until the end of the test.
+func captureConfigLog(t *testing.T) *logrustest.Hook {
+	hook := logrustest.NewLocal(log)
+	t.Cleanup(func() {
+		log.ReplaceHooks(make(logrus.LevelHooks))
+	})
+	return hook
+}
+
+func writeConfigFile(confBytes []byte, t *testing.T) string {
+	confPath := path.Join(t.TempDir(), configFileName)
+	assert.Nil(t, os.WriteFile(confPath, confBytes, 0o600))
+	return confPath
+}
+
+// This is a regression test for https://github.com/getsops/sops/issues/2238
+func TestLoadCreationRuleForFileWarnsAboutDuplicatePathRegex(t *testing.T) {
+	var sampleConfigWithDuplicatePathRegex = []byte(`
+creation_rules:
+  - path_regex: secrets.yaml$
+    pgp: first
+    encrypted_regex: ^(a|b|c)$
+  - path_regex: other.yaml$
+    pgp: other
+  - path_regex: secrets.yaml$
+    pgp: second
+    encrypted_regex: ^(d|e|f)$
+  - path_regex: secrets.yaml$
+    pgp: third
+  - pgp: default
+`)
+	confPath := writeConfigFile(sampleConfigWithDuplicatePathRegex, t)
+	hook := captureConfigLog(t)
+
+	conf, err := LoadCreationRuleForFile(confPath, path.Join(path.Dir(confPath), "secrets.yaml"), nil)
+	assert.Nil(t, err)
+	// The first matching rule is still the one that is used
+	assert.Equal(t, "first", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "^(a|b|c)$", conf.EncryptedRegex)
+
+	// One warning for every rule that repeats the path_regex of an earlier rule
+	entries := hook.AllEntries()
+	if len(entries) != 2 {
+		t.Fatalf("Expected 2 warnings but got %d", len(entries))
+	}
+	for i, duplicate := range []int{3, 4} {
+		assert.Equal(t, logrus.WarnLevel, entries[i].Level)
+		assert.Equal(t, fmt.Sprintf(
+			"creation rules 1 and %d in %q have the same path_regex \"secrets.yaml$\"; only the first matching creation rule is used, so rule %d has no effect",
+			duplicate, confPath, duplicate), entries[i].Message)
+	}
+
+	// The config file is loaded for every file, the warnings should only be shown once
+	hook.Reset()
+	conf, err = LoadCreationRuleForFile(confPath, path.Join(path.Dir(confPath), "other.yaml"), nil)
+	assert.Nil(t, err)
+	assert.Equal(t, "other", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, 0, len(hook.AllEntries()))
+}
+
+func TestLoadCreationRuleForFileDoesNotWarnWithoutDuplicatePathRegex(t *testing.T) {
+	var sampleConfigWithoutDuplicatePathRegex = []byte(`
+creation_rules:
+  - path_regex: secrets\.yaml$
+    pgp: first
+  - path_regex: .*\.yaml$
+    pgp: second
+  - pgp: third
+  - pgp: fourth
+`)
+	confPath := writeConfigFile(sampleConfigWithoutDuplicatePathRegex, t)
+	hook := captureConfigLog(t)
+
+	conf, err := LoadCreationRuleForFile(confPath, path.Join(path.Dir(confPath), "secrets.yaml"), nil)
+	assert.Nil(t, err)
+	assert.Equal(t, "first", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, 0, len(hook.AllEntries()))
 }
