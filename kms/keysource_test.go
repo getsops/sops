@@ -372,6 +372,16 @@ func TestMasterKey_NeedsRotation(t *testing.T) {
 	assert.True(t, key.NeedsRotation())
 }
 
+func TestMasterKey_EffectiveAwsProfile(t *testing.T) {
+	key := NewMasterKeyWithProfile(dummyARN, "", nil, "stored")
+	assert.Equal(t, "stored", key.EffectiveAwsProfile())
+	key.AwsProfileOverride = "override"
+	assert.Equal(t, "override", key.EffectiveAwsProfile())
+	assert.Equal(t, "stored", key.AwsProfile)
+	assert.NotContains(t, fmt.Sprint(key.ToMap()), "override")
+	assert.NotContains(t, key.ToString(), "override")
+}
+
 func TestMasterKey_ToString(t *testing.T) {
 	dummyARNWithRole := fmt.Sprintf("%s+arn:aws:iam::my-role", dummyARN)
 
