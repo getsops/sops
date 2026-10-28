@@ -6,7 +6,6 @@ package config //import "github.com/getsops/sops/v3/config"
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -53,11 +52,11 @@ type ConfigFileResult struct {
 // and on parent directories, up to the maxDepth limit.
 // It returns a result containing the file path and any warnings.
 func LookupConfigFile(start string) (ConfigFileResult, error) {
-	filepath := path.Dir(start)
+	dir := filepath.Dir(start)
 	var foundAlternatePath string
 
 	for i := 0; i < maxDepth; i++ {
-		configPath := path.Join(filepath, configFileName)
+		configPath := filepath.Join(dir, configFileName)
 		_, err := fs.Stat(configPath)
 		if err == nil {
 			result := ConfigFileResult{Path: configPath}
@@ -72,14 +71,14 @@ func LookupConfigFile(start string) (ConfigFileResult, error) {
 
 		// Check for alternate filename if we haven't found one yet
 		if foundAlternatePath == "" {
-			alternatePath := path.Join(filepath, alternateConfigName)
+			alternatePath := filepath.Join(dir, alternateConfigName)
 			_, altErr := fs.Stat(alternatePath)
 			if altErr == nil {
 				foundAlternatePath = alternatePath
 			}
 		}
 
-		filepath = path.Join(filepath, "..")
+		dir = filepath.Join(dir, "..")
 	}
 
 	// No config file found
