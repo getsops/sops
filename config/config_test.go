@@ -8,6 +8,7 @@ import (
 
 	"github.com/getsops/sops/v3/keys"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type mockFS struct {
@@ -918,4 +919,191 @@ creation_rules:
 	// The KMS key should have the encryption context applied
 	// Format: ARN|context where context is "AppName:myapp"
 	assert.Equal(t, "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012|AppName:myapp", conf.KeyGroups[0][0].ToString())
+}
+
+var sampleConfigCatchAll = []byte(`
+creation_rules:
+  - kms: 'arn:aws:kms:us-east-1:1:key/catch'
+    pgp: 'AAAA1111'
+`)
+
+func TestMatchRulesForConfigCatchAll(t *testing.T) {
+	conf := parseConfigFile(sampleConfigCatchAll, t)
+	result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/anything.yaml")
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, "/conf/.sops.yaml", result.ConfigPath)
+	assert.Equal(t, "/conf/anything.yaml", result.FilePath)
+	assert.NotNil(t, result.CreationRule)
+	assert.Equal(t, 0, result.CreationRule.RuleIndex)
+	assert.Equal(t, "", result.CreationRule.Rule.PathRegex)
+	assert.Nil(t, result.DestinationRule)
+}
+
+var sampleConfigPathRegex = []byte(`
+creation_rules:
+  - path_regex: 'staging/.*\.yaml$'
+    age: 'age1staging'
+  - path_regex: 'prod/.*\.yaml$'
+    kms: 'arn:prod'
+  - kms: 'arn:fallback'
+`)
+
+func TestMatchRulesForConfigPathRegex(t *testing.T) {
+	conf := parseConfigFile(sampleConfigPathRegex, t)
+	cases := []struct {
+		name      string
+		filePath  string
+		wantIndex int
+		wantRegex string
+	}{
+		{"first rule matches", "/conf/staging/db.yaml", 0, `staging/.*\.yaml$`},
+		{"second rule matches", "/conf/prod/api.yaml", 1, `prod/.*\.yaml$`},
+		{"fallback (catch-all) matches", "/conf/notes.md", 2, ""},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", tc.filePath)
+			assert.Nil(t, err)
+			assert.NotNil(t, result.CreationRule)
+			assert.Equal(t, tc.wantIndex, result.CreationRule.RuleIndex)
+			assert.Equal(t, tc.wantRegex, result.CreationRule.Rule.PathRegex)
+		})
+	}
+}
+
+var sampleConfigAmbiguousFirstMatchWins = []byte(`
+creation_rules:
+  - path_regex: 'shared/.*'
+    kms: 'arn:rule0'
+  - path_regex: 'shared/secret\.yaml'
+    kms: 'arn:rule1'
+`)
+
+func TestMatchRulesForConfigFirstMatchWins(t *testing.T) {
+	conf := parseConfigFile(sampleConfigAmbiguousFirstMatchWins, t)
+	result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/shared/secret.yaml")
+	assert.Nil(t, err)
+	assert.NotNil(t, result.CreationRule)
+	assert.Equal(t, 0, result.CreationRule.RuleIndex, "first matching rule wins, not most-specific")
+}
+
+var sampleConfigDestinationOnly = []byte(`
+destination_rules:
+  - path_regex: 'publish/.*\.json$'
+    s3_bucket: 'org-secrets'
+    s3_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:publish'
+`)
+
+func TestMatchRulesForConfigDestinationOnly(t *testing.T) {
+	conf := parseConfigFile(sampleConfigDestinationOnly, t)
+	result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/publish/app.json")
+	assert.Nil(t, err)
+	assert.Nil(t, result.CreationRule)
+	assert.NotNil(t, result.DestinationRule)
+	assert.Equal(t, 0, result.DestinationRule.RuleIndex)
+	assert.Equal(t, "org-secrets", result.DestinationRule.Rule.S3Bucket)
+}
+
+var sampleConfigBothRuleTypes = []byte(`
+creation_rules:
+  - kms: 'arn:creation'
+destination_rules:
+  - path_regex: 'publish/.*'
+    s3_bucket: 'b'
+    recreation_rule:
+      kms: 'arn:recreation'
+`)
+
+func TestMatchRulesForConfigBothRuleTypes(t *testing.T) {
+	conf := parseConfigFile(sampleConfigBothRuleTypes, t)
+	result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/publish/app.yaml")
+	assert.Nil(t, err)
+	assert.NotNil(t, result.CreationRule)
+	assert.NotNil(t, result.DestinationRule)
+}
+
+var sampleConfigForNormalization = []byte(`
+creation_rules:
+  - path_regex: '^secrets/.*\.yaml$'
+    kms: 'arn:secrets'
+`)
+
+func TestMatchRulesForConfigPathInsideTree(t *testing.T) {
+	conf := parseConfigFile(sampleConfigForNormalization, t)
+	// Absolute file path under config dir → prefix-stripped to "secrets/db.yaml"
+	// and matched against "^secrets/.*\.yaml$".
+	result, err := matchRulesForConfig(conf, "/repo/.sops.yaml", "/repo/secrets/db.yaml")
+	assert.Nil(t, err)
+	assert.NotNil(t, result.CreationRule)
+	assert.Equal(t, 0, result.CreationRule.RuleIndex)
+}
+
+func TestMatchRulesForConfigPathOutsideTree(t *testing.T) {
+	conf := parseConfigFile(sampleConfigForNormalization, t)
+	// Absolute file path NOT under config dir → matched as absolute.
+	// "^secrets/.*\.yaml$" does NOT match "/tmp/secrets/x.yaml" because of the ^ anchor.
+	result, err := matchRulesForConfig(conf, "/repo/.sops.yaml", "/tmp/secrets/x.yaml")
+	assert.Nil(t, err)
+	assert.Nil(t, result.CreationRule)
+}
+
+var sampleConfigEmpty = []byte(``)
+
+var sampleConfigEmptyCreationRules = []byte(`
+creation_rules: []
+`)
+
+var sampleConfigInvalidRegex = []byte(`
+creation_rules:
+  - path_regex: '[invalid('
+    kms: 'arn:x'
+`)
+
+func TestMatchRulesForConfigEmpty(t *testing.T) {
+	conf := parseConfigFile(sampleConfigEmpty, t)
+	result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/x.yaml")
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+	assert.Nil(t, result.CreationRule)
+	assert.Nil(t, result.DestinationRule)
+}
+
+func TestMatchRulesForConfigEmptyCreationRules(t *testing.T) {
+	conf := parseConfigFile(sampleConfigEmptyCreationRules, t)
+	result, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/x.yaml")
+	assert.Nil(t, err)
+	assert.Nil(t, result.CreationRule)
+}
+
+func TestMatchRulesForConfigInvalidRegex(t *testing.T) {
+	conf := parseConfigFile(sampleConfigInvalidRegex, t)
+	_, err := matchRulesForConfig(conf, "/conf/.sops.yaml", "/conf/x.yaml")
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "can not compile regexp")
+}
+
+func TestMatchRulesForFileRejectsRelativePaths(t *testing.T) {
+	_, err := MatchRulesForFile("relative/path.yaml", "/abs/file.yaml")
+	assert.ErrorIs(t, err, ErrPathNotAbsolute)
+
+	_, err = MatchRulesForFile("/abs/.sops.yaml", "relative/file.yaml")
+	assert.ErrorIs(t, err, ErrPathNotAbsolute)
+}
+
+func TestMatchRulesForFileRejectsEmptyPaths(t *testing.T) {
+	_, err := MatchRulesForFile("", "/abs/file.yaml")
+	assert.ErrorIs(t, err, ErrPathNotAbsolute)
+
+	_, err = MatchRulesForFile("/abs/.sops.yaml", "")
+	assert.ErrorIs(t, err, ErrPathNotAbsolute)
+}
+
+func TestMatchRulesForFileMissingConfigFile(t *testing.T) {
+	// Pointing at a path that does not exist — bubbles up loadConfigFile's error.
+	_, err := MatchRulesForFile("/definitely/not/a/real/path/.sops.yaml", "/abs/x.yaml")
+	require.Error(t, err)
+	// Don't assert on the exact wrap; just that we get an error from the loader.
 }
