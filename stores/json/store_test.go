@@ -678,3 +678,32 @@ func TestComments(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
 }
+
+
+func TestLoadPlainFileRejectsTruncatedJSON(t *testing.T) {
+	store := &Store{}
+	for _, in := range []string{
+		`{"a":1,"b"`,
+		`{"a":1,"b":`,
+		`{"a":1,"b":[1,2`,
+		`{"a":1,"b":{"c":`,
+	} {
+		_, err := store.LoadPlainFile([]byte(in))
+		assert.Error(t, err, "LoadPlainFile(%q) must fail: the JSON is truncated, but the store loaded it without error, silently dropping data", in)
+	}
+}
+
+func TestLoadPlainFileRejectsTrailingContent(t *testing.T) {
+	store := &Store{}
+	for _, in := range []string{
+		`{"a":1}{"b":2}`,
+		`{"a":1} trailing`,
+		`{"a":1} 42`,
+	} {
+		_, err := store.LoadPlainFile([]byte(in))
+		assert.Error(t, err, "LoadPlainFile(%q) must fail: unexpected data after the top-level JSON object", in)
+	}
+	// Trailing whitespace must still be accepted.
+	_, err := store.LoadPlainFile([]byte("{\"a\":1}\n"))
+	assert.NoError(t, err)
+}
