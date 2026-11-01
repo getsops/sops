@@ -156,7 +156,7 @@ var errEndOfObject = fmt.Errorf("End of object")
 func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, error) {
 	var item sops.TreeItem
 	key, err := dec.Token()
-	if err != nil && err != io.EOF {
+	if err != nil {
 		return item, err
 	}
 	if k, ok := key.(string); ok {
@@ -201,7 +201,7 @@ func (store Store) treeBranchFromJSONDecoder(dec *json.Decoder) (sops.TreeBranch
 	for {
 		item, err := store.treeItemFromJSONDecoder(dec)
 		if err == io.EOF {
-			return tree, nil
+			return nil, io.ErrUnexpectedEOF
 		}
 		if err == errEndOfObject {
 			return tree, nil
@@ -298,7 +298,17 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 		}
 		return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got %#v of type %T instead", v, v)
 	}
-	return store.treeBranchFromJSONDecoder(dec)
+	branch, err := store.treeBranchFromJSONDecoder(dec)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := dec.Token(); err != io.EOF {
+		if err == nil {
+			err = errors.New("unexpected content after the top-level JSON object")
+		}
+		return nil, err
+	}
+	return branch, nil
 }
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
