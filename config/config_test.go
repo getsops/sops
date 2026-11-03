@@ -731,6 +731,28 @@ func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
 	assert.Contains(t, conf.Destination.Path("barfoo"), "/v1/kv/barfoo/barfoo")
 }
 
+func TestLoadConfigFileWithNoMatchingDestinationRule(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "other/barfoo", nil)
+	assert.ErrorIs(t, err, ErrNoMatchingDestination)
+}
+
+func TestLoadConfigFileWithoutDestinationRules(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfig, t), "foobar2000", nil)
+	assert.EqualError(t, err, "error loading config: no destination rules found in config")
+	assert.NotErrorIs(t, err, ErrNoMatchingDestination)
+}
+
+func TestLoadConfigFileWithInvalidDestinationRegex(t *testing.T) {
+	conf := parseConfigFile([]byte(`
+destination_rules:
+  - vault_path: "foo/"
+    path_regex: "["
+`), t)
+	_, err := parseDestinationRuleForFile(conf, "foobar", nil)
+	assert.ErrorContains(t, err, "can not compile regexp")
+	assert.NotErrorIs(t, err, ErrNoMatchingDestination)
+}
+
 func TestCreationRuleNativeKeyLists(t *testing.T) {
 	var sampleConfigWithNativeKeyLists = []byte(`
 creation_rules:
