@@ -101,6 +101,8 @@ func FindConfigFile(start string) (string, error) {
 
 type DotenvStoreConfig struct{}
 
+type HCLStoreConfig struct{}
+
 type INIStoreConfig struct{}
 
 type JSONStoreConfig struct {
@@ -117,6 +119,7 @@ type YAMLStoreConfig struct {
 
 type StoresConfig struct {
 	Dotenv     DotenvStoreConfig     `yaml:"dotenv"`
+	HCL        HCLStoreConfig        `yaml:"hcl"`
 	INI        INIStoreConfig        `yaml:"ini"`
 	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
 	JSON       JSONStoreConfig       `yaml:"json"`

@@ -72,7 +72,7 @@ func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 
 // Data is a helper that takes encrypted data and a format string,
 // decrypts the data and returns its cleartext in an []byte.
-// The format string can be `json`, `yaml`, `ini`, `dotenv` or `binary`.
+// The format string can be `json`, `yaml`, `ini`, `hcl`, `dotenv` or `binary`.
 // If the format string is empty, binary format is assumed.
 func Data(data []byte, format string) (cleartext []byte, err error) {
 	formatFmt := FormatFromString(format)
