@@ -415,7 +415,7 @@ func main() {
 				if c.GlobalString("config") != "" {
 					configPath = c.GlobalString("config")
 				} else {
-					configPath, err = findConfigFile()
+					configPath, err = findConfigFile(c, c.Args().First())
 					if err != nil {
 						return common.NewExitError(err, codes.ErrorGeneric)
 					}
@@ -740,8 +740,8 @@ func main() {
 				var configPath string
 				if c.GlobalString("config") != "" {
 					configPath = c.GlobalString("config")
-				} else {
-					configPath, err = findConfigFile()
+				} else if !c.GlobalBool("config-from-file-dir") {
+					configPath, err = findConfigFile(c, "")
 					if err != nil {
 						return common.NewExitError(err, codes.ErrorGeneric)
 					}
@@ -751,12 +751,23 @@ func main() {
 				}
 				failedCounter := 0
 				for _, path := range c.Args() {
+					fileConfigPath := configPath
+					if fileConfigPath == "" {
+						// --config-from-file-dir: every file may have its own config
+						var err error
+						fileConfigPath, err = findConfigFile(c, path)
+						if err != nil {
+							failedCounter++
+							log.Error(err)
+							continue
+						}
+					}
 					err := updatekeys.UpdateKeys(updatekeys.Opts{
 						InputPath:       path,
 						ShamirThreshold: c.Int("shamir-secret-sharing-threshold"),
 						KeyServices:     keyservices(c),
 						Interactive:     !c.Bool("yes"),
-						ConfigPath:      configPath,
+						ConfigPath:      fileConfigPath,
 						InputType:       c.String("input-type"),
 					})
 
@@ -1855,6 +1866,11 @@ func main() {
 			Usage:  "path to sops' config file. If set, sops will not search for the config file recursively.",
 			EnvVar: "SOPS_CONFIG",
 		},
+		cli.BoolFlag{
+			Name:   "config-from-file-dir",
+			Usage:  "search for the config file starting from the target file's directory instead of the current directory. Ignored when --config is set.",
+			EnvVar: "SOPS_CONFIG_FROM_FILE_DIR",
+		},
 		cli.StringFlag{
 			Name:  "encryption-context",
 			Usage: "comma separated list of KMS encryption context key:value pairs",
@@ -2361,8 +2377,17 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 }
 
 // Wrapper of config.LookupConfigFile that takes care of handling the returned warning.
-func findConfigFile() (string, error) {
-	result, err := config.LookupConfigFile(".")
+// The search starts at the directory of file if --config-from-file-dir is set, and at the current directory otherwise.
+func findConfigFile(c *cli.Context, file string) (string, error) {
+	start := "."
+	if c.GlobalBool("config-from-file-dir") {
+		start = file
+		if info, err := os.Stat(file); err == nil && info.IsDir() {
+			// LookupConfigFile starts at the directory part, so make the directory itself that part
+			start = file + string(filepath.Separator)
+		}
+	}
+	result, err := config.LookupConfigFile(start)
 	if len(result.Warning) > 0 && !showedConfigFileWarning {
 		showedConfigFileWarning = true
 		log.Warn(result.Warning)
@@ -2374,7 +2399,7 @@ func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, 
 	configPath := context.GlobalString("config")
 	if configPath == "" {
 		// Ignore config not found errors returned from findConfigFile since the config file is not mandatory
-		foundPath, err := findConfigFile()
+		foundPath, err := findConfigFile(context, path)
 		if err != nil {
 			return config.NewStoresConfig(), nil
 		}
@@ -2531,7 +2556,7 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 	configPath := c.GlobalString("config")
 	if configPath == "" {
 		// Ignore config not found errors returned from findConfigFile since the config file is not mandatory
-		configPath, err = findConfigFile()
+		configPath, err = findConfigFile(c, file)
 		if err != nil {
 			// If we can't find a config file, but we were not explicitly requested to, assume it does not exist
 			return nil, nil
