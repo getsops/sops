@@ -69,6 +69,9 @@ type MasterKey struct {
 	// AwsProfile is the profile to use for loading configuration and credentials.
 	// Ref: https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#specifying-profiles
 	AwsProfile string
+	// AwsProfileOverride takes precedence over AwsProfile when set. It is never
+	// serialized, so it only affects the current invocation (see ToMap).
+	AwsProfileOverride string
 
 	// credentialsProvider is used to configure the AWS client config with
 	// credentials. It can be injected by a (local) keyservice.KeyServiceServer
@@ -387,6 +390,15 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
+// EffectiveAwsProfile returns the AWS profile to use for requests: the
+// override if set, the profile stored with the key otherwise.
+func (key MasterKey) EffectiveAwsProfile() string {
+	if key.AwsProfileOverride != "" {
+		return key.AwsProfileOverride
+	}
+	return key.AwsProfile
+}
+
 // createKMSConfig returns an AWS config with the credentialsProvider of the
 // MasterKey, or the default configuration sources.
 func (key MasterKey) createKMSConfig(ctx context.Context) (*aws.Config, error) {
@@ -403,8 +415,8 @@ func (key MasterKey) createKMSConfig(ctx context.Context) (*aws.Config, error) {
 		if key.credentialsProvider != nil {
 			lo.Credentials = key.credentialsProvider
 		}
-		if key.AwsProfile != "" {
-			lo.SharedConfigProfile = key.AwsProfile
+		if profile := key.EffectiveAwsProfile(); profile != "" {
+			lo.SharedConfigProfile = profile
 		}
 		lo.Region = region
 		if key.httpClient != nil {

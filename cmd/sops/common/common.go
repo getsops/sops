@@ -246,6 +246,36 @@ type GenericDecryptOpts struct {
 	IgnoreMAC       bool
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
+	AwsProfile      string
+}
+
+func forEachKMSKey(groups []sops.KeyGroup, fn func(*kms.MasterKey)) {
+	for _, group := range groups {
+		for _, key := range group {
+			if kmsKey, ok := key.(*kms.MasterKey); ok {
+				fn(kmsKey)
+			}
+		}
+	}
+}
+
+// SetAWSProfile overrides, for this invocation only, the AWS profile used by
+// all AWS KMS master keys in the given key groups. The override is not
+// serialized, so it is never written to a file. It does nothing if profile is
+// empty.
+func SetAWSProfile(groups []sops.KeyGroup, profile string) {
+	if profile != "" {
+		forEachKMSKey(groups, func(k *kms.MasterKey) { k.AwsProfileOverride = profile })
+	}
+}
+
+// PersistAWSProfile sets the AWS profile stored with all AWS KMS master keys
+// in the given key groups, so it is written to the files they are used for.
+// It does nothing if profile is empty.
+func PersistAWSProfile(groups []sops.KeyGroup, profile string) {
+	if profile != "" {
+		forEachKMSKey(groups, func(k *kms.MasterKey) { k.AwsProfile = profile })
+	}
 }
 
 // LoadEncryptedFileWithBugFixes is a wrapper around LoadEncryptedFile which includes
@@ -255,6 +285,7 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 	if err != nil {
 		return nil, err
 	}
+	SetAWSProfile(tree.Metadata.KeyGroups, opts.AwsProfile)
 
 	encCtxBug, err := DetectKMSEncryptionContextBug(tree)
 	if err != nil {
@@ -265,6 +296,8 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 		if err != nil {
 			return nil, err
 		}
+		// The fix may have reloaded the tree from disk.
+		SetAWSProfile(tree.Metadata.KeyGroups, opts.AwsProfile)
 	}
 
 	return tree, nil

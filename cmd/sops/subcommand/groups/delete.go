@@ -20,6 +20,7 @@ type DeleteOpts struct {
 	InPlace         bool
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
+	AwsProfile      string
 }
 
 // Delete deletes a key group from a SOPS file
@@ -28,6 +29,7 @@ func Delete(opts DeleteOpts) error {
 	if err != nil {
 		return err
 	}
+	common.SetAWSProfile(tree.Metadata.KeyGroups, opts.AwsProfile)
 	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return err

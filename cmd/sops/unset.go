@@ -15,6 +15,7 @@ type unsetOpts struct {
 	OutputStore     sops.Store
 	InputPath       string
 	IgnoreMAC       bool
+	AwsProfile      string
 	TreePath        []interface{}
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
@@ -27,6 +28,7 @@ func unset(opts unsetOpts) ([]byte, error) {
 		InputStore:  opts.InputStore,
 		InputPath:   opts.InputPath,
 		IgnoreMAC:   opts.IgnoreMAC,
+		AwsProfile:  opts.AwsProfile,
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {

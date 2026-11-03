@@ -21,6 +21,7 @@ type decryptOpts struct {
 	InputPath       string
 	ReadFromStdin   bool
 	IgnoreMAC       bool
+	AwsProfile      string
 	Extract         []interface{}
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
@@ -33,6 +34,7 @@ func decryptTree(opts decryptOpts) (tree *sops.Tree, err error) {
 		InputPath:     opts.InputPath,
 		ReadFromStdin: opts.ReadFromStdin,
 		IgnoreMAC:     opts.IgnoreMAC,
+		AwsProfile:    opts.AwsProfile,
 		KeyServices:   opts.KeyServices,
 	})
 	if err != nil {

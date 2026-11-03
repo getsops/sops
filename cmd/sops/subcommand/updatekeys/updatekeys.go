@@ -21,6 +21,7 @@ type Opts struct {
 	Interactive     bool
 	ConfigPath      string
 	InputType       string
+	AwsProfile      string
 }
 
 // UpdateKeys update the keys for a given file
@@ -51,6 +52,7 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
+	common.SetAWSProfile(tree.Metadata.KeyGroups, opts.AwsProfile)
 	conf, err := config.LoadCreationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
 		return err
@@ -58,6 +60,7 @@ func updateFile(opts Opts) error {
 	if conf == nil {
 		return fmt.Errorf("The config file %s does not contain any creation rule", opts.ConfigPath)
 	}
+	common.SetAWSProfile(conf.KeyGroups, opts.AwsProfile)
 
 	diffs := common.DiffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
 	keysWillChange := false

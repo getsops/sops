@@ -18,6 +18,7 @@ type AddOpts struct {
 	InPlace         bool
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
+	AwsProfile      string
 }
 
 // Add adds a key group to a SOPS file
@@ -26,6 +27,7 @@ func Add(opts AddOpts) error {
 	if err != nil {
 		return err
 	}
+	common.SetAWSProfile(tree.Metadata.KeyGroups, opts.AwsProfile)
 	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return err
