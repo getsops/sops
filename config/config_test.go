@@ -90,6 +90,18 @@ creation_rules:
     hc_vault_uris: http://4:8200/v1/4/keys/4
 `)
 
+var sampleConfigWithTencentKMS = []byte(`
+creation_rules:
+  - path_regex: scalar\.yaml$
+    tencent_kms: key-scalar
+  - path_regex: list\.yaml$
+    tencent_kms:
+      - key-list-1
+      - key-list-2
+  - path_regex: csv\.yaml$
+    tencent_kms: key-csv-1,key-csv-2
+`)
+
 var sampleConfigWithGroups = []byte(`
 creation_rules:
   - path_regex: foobar*
@@ -575,6 +587,36 @@ func TestLoadConfigFileWithMerge(t *testing.T) {
 		"kms: fnord||fnord", //key24
 		"hc_vault: https://fnord.vault:8200/v1/fnord/keys/fnord-key", //key25
 	}, ids(conf.KeyGroups[1]))
+}
+
+func TestLoadConfigFileWithTencentKMS(t *testing.T) {
+	for _, tc := range []struct {
+		filePath string
+		keys     []string
+	}{
+		{
+			filePath: "scalar.yaml",
+			keys:     []string{"tencent_kms: key-scalar"},
+		},
+		{
+			filePath: "list.yaml",
+			keys: []string{
+				"tencent_kms: key-list-1",
+				"tencent_kms: key-list-2",
+			},
+		},
+		{
+			filePath: "csv.yaml",
+			keys: []string{
+				"tencent_kms: key-csv-1",
+				"tencent_kms: key-csv-2",
+			},
+		},
+	} {
+		conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithTencentKMS, t), "/conf/path", tc.filePath, nil)
+		assert.Nil(t, err)
+		assert.Equal(t, tc.keys, ids(conf.KeyGroups[0]))
+	}
 }
 
 func TestLoadConfigFileWithNoMatchingRules(t *testing.T) {
