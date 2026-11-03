@@ -180,3 +180,28 @@ func ExecWithEnv(opts ExecOpts) error {
 
 	return cmd.Run()
 }
+
+// MergeEnv returns the KEY=VALUE pairs from base followed by the ones from
+// overrides, leaving out every entry of base whose key also appears in
+// overrides. This way the last value for a key wins without relying on how
+// the started process handles duplicate keys. Keys are compared as is,
+// that is, case-sensitively.
+func MergeEnv(base, overrides []string) []string {
+	overridden := make(map[string]struct{}, len(overrides))
+	for _, entry := range overrides {
+		overridden[envKey(entry)] = struct{}{}
+	}
+	merged := make([]string, 0, len(base)+len(overrides))
+	for _, entry := range base {
+		if _, ok := overridden[envKey(entry)]; !ok {
+			merged = append(merged, entry)
+		}
+	}
+	return append(merged, overrides...)
+}
+
+// envKey returns the key of a KEY=VALUE pair.
+func envKey(entry string) string {
+	key, _, _ := strings.Cut(entry, "=")
+	return key
+}
