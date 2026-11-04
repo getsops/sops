@@ -599,7 +599,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	if rule == nil {
-		return nil, fmt.Errorf("error loading config: no matching creation rules found")
+		return nil, fmt.Errorf("error loading config: no matching creation rules found for file %q; the config file was parsed successfully, so check whether the path is correct and matches a creation rule (a mistyped subcommand, e.g. 'updateKeys' instead of 'updatekeys', is treated as a file path)", filePath)
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)
