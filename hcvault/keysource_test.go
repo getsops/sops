@@ -438,11 +438,11 @@ func Test_vaultClient(t *testing.T) {
 }
 
 func Test_userVaultToken(t *testing.T) {
-	t.Run("reads token from file", func(t *testing.T) {
+	t.Run("reads token from file in HOME", func(t *testing.T) {
 		tmpDir := t.TempDir()
 
 		token := "test-token"
-		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0600))
+		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0o600))
 
 		// Reset before and after to make sure the override is taken into
 		// account, and restored after the test.
@@ -455,7 +455,7 @@ func Test_userVaultToken(t *testing.T) {
 		assert.Equal(t, token, got)
 	})
 
-	t.Run("ignores missing file", func(t *testing.T) {
+	t.Run("ignores missing file in HOME", func(t *testing.T) {
 		tmpDir := t.TempDir()
 
 		// Reset before and after to make sure the override is taken into
@@ -473,7 +473,7 @@ func Test_userVaultToken(t *testing.T) {
 		tmpDir := t.TempDir()
 
 		token := "  test-token  "
-		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0600))
+		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0o600))
 
 		// Reset before and after to make sure the override is taken into
 		// account, and restored after the test.
@@ -484,6 +484,30 @@ func Test_userVaultToken(t *testing.T) {
 		got, err := userVaultToken()
 		assert.NoError(t, err)
 		assert.Equal(t, "test-token", got)
+	})
+
+	t.Run("reads token from SOPS_VAULT_TOKEN_FILE", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		tokenFile := filepath.Join(tmpDir, "custom-token-file")
+		token := "env-token"
+		assert.NoError(t, os.WriteFile(tokenFile, []byte(token), 0o600))
+
+		t.Setenv(SopsVaultTokenFileEnv, tokenFile)
+
+		got, err := userVaultToken()
+		assert.NoError(t, err)
+		assert.Equal(t, token, got)
+	})
+
+	t.Run("fails if SOPS_VAULT_TOKEN_FILE is set but file is missing", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		tokenFile := filepath.Join(tmpDir, "missing-token-file")
+
+		t.Setenv(SopsVaultTokenFileEnv, tokenFile)
+
+		_, err := userVaultToken()
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "token file specified in SOPS_VAULT_TOKEN_FILE does not exist")
 	})
 }
 
