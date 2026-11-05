@@ -22,6 +22,7 @@ import (
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
+	"github.com/getsops/sops/v3/fsio"
 	gpgagent "github.com/getsops/gopgagent"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/term"
@@ -169,7 +170,7 @@ func (d GnuPGHome) ImportContext(ctx context.Context, armoredKey []byte) error {
 // It returns an error if the GnuPGHome does not pass Validate, or if the
 // import failed.
 func (d GnuPGHome) ImportFile(path string) error {
-	b, err := os.ReadFile(path)
+	b, err := fsio.Read(path)
 	if err != nil {
 		return fmt.Errorf("cannot read armored key data from file: %w", err)
 	}
@@ -594,7 +595,7 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 // Unsupported keys are ignored as long as at least a single valid key is
 // found.
 func loadRing(path string) (openpgp.EntityList, error) {
-	f, err := os.Open(path)
+	f, err := fsio.Open(path)
 	if err != nil {
 		return nil, err
 	}
