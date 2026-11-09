@@ -477,3 +477,28 @@ func PrettyPrintShamirDiff(oldValue, newValue int) {
 		}
 	}
 }
+
+// CheckNoClobberFlags rejects invalid combinations of --no-clobber with
+// --output and --in-place. --no-clobber only applies to explicit --output paths.
+func CheckNoClobberFlags(noClobber, hasOutput, inPlace bool) error {
+	if !noClobber {
+		return nil
+	}
+	if inPlace {
+		return NewExitError("Error: cannot use --no-clobber with --in-place", codes.ErrorConflictingParameters)
+	}
+	if !hasOutput {
+		return NewExitError("Error: --no-clobber requires --output", codes.ErrorConflictingParameters)
+	}
+	return nil
+}
+
+// OpenOutputFile opens path for writing. When noClobber is true, the file is
+// created exclusively (O_EXCL) so an existing destination, including a symlink,
+// is left unchanged. When noClobber is false, behavior matches os.Create.
+func OpenOutputFile(path string, noClobber bool) (*os.File, error) {
+	if !noClobber {
+		return os.Create(path)
+	}
+	return os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
+}
