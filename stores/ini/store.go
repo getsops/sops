@@ -26,7 +26,12 @@ func (store *Store) Name() string {
 }
 
 func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
-	iniFile := ini.Empty(ini.LoadOptions{AllowNonUniqueSections: true})
+	iniFile := ini.Empty(ini.LoadOptions{
+		AllowNonUniqueSections: true,
+		AllowShadows:           true,
+		// Keep identical repeated values too; they are separate INI entries.
+		AllowDuplicateShadowValues: true,
+	})
 	iniFile.DeleteSection(ini.DefaultSection)
 	for _, branch := range branches {
 		for _, item := range branch {
@@ -85,7 +90,11 @@ func (store Store) iniFromTreeBranches(branches sops.TreeBranches) ([]byte, erro
 }
 
 func (store Store) treeBranchesFromIni(in []byte) (sops.TreeBranches, error) {
-	iniFile, err := ini.LoadSources(ini.LoadOptions{AllowNonUniqueSections: true}, in)
+	iniFile, err := ini.LoadSources(ini.LoadOptions{
+		AllowNonUniqueSections:     true,
+		AllowShadows:               true,
+		AllowDuplicateShadowValues: true,
+	}, in)
 	if err != nil {
 		return nil, err
 	}
@@ -116,8 +125,10 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 	}
 
 	for _, key := range section.Keys() {
-		item := sops.TreeItem{Key: key.Name(), Value: key.Value()}
-		items = append(items, item)
+		for _, value := range key.ValueWithShadows() {
+			item := sops.TreeItem{Key: key.Name(), Value: value}
+			items = append(items, item)
+		}
 		if key.Comment != "" {
 			items = append(items, sops.TreeItem{
 				Key: sops.Comment{
