@@ -575,6 +575,50 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Nil(t, got)
 		assert.Len(t, unusedLocations, 7)
 	})
+
+	t.Run("empty cmd", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeKeyCmdEnv, "")
+
+		key := &MasterKey{}
+		got, unusedLocations, errs := key.loadIdentities()
+		assert.Len(t, errs, 1)
+		assert.Error(t, errs[0])
+		assert.ErrorContains(t, errs[0], "command is empty")
+		assert.Nil(t, got)
+		assert.Len(t, unusedLocations, 7)
+	})
+}
+
+func TestGetOutputFromCmd(t *testing.T) {
+	t.Run("backslashes in double quotes", func(t *testing.T) {
+		out, err := getOutputFromCmd(`printf %s "C:\Users\sops\keys.txt"`, nil)
+		assert.NoError(t, err)
+		assert.Equal(t, `C:\Users\sops\keys.txt`, string(out))
+	})
+
+	t.Run("env vars", func(t *testing.T) {
+		out, err := getOutputFromCmd(`sh -c 'printf %s "$FOO"'`, []string{"FOO=bar baz"})
+		assert.NoError(t, err)
+		assert.Equal(t, "bar baz", string(out))
+	})
+
+	t.Run("unterminated quote", func(t *testing.T) {
+		out, err := getOutputFromCmd(`printf %s 'foo`, nil)
+		assert.ErrorContains(t, err, "failed to parse command")
+		assert.Nil(t, out)
+	})
+
+	for _, cmdString := range []string{"", "   "} {
+		t.Run(fmt.Sprintf("empty %q", cmdString), func(t *testing.T) {
+			out, err := getOutputFromCmd(cmdString, nil)
+			assert.ErrorContains(t, err, "command is empty")
+			assert.Nil(t, out)
+		})
+	}
 }
 
 // overwriteUserConfigDir sets the user config directory and the user home directory

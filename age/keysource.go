@@ -16,11 +16,11 @@ import (
 	"filippo.io/age/agessh"
 	"filippo.io/age/armor"
 	"filippo.io/age/plugin"
+	"github.com/kballard/go-shellquote"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 
 	"github.com/getsops/sops/v3/logging"
-	"github.com/google/shlex"
 )
 
 const (
@@ -300,9 +300,12 @@ func (key *MasterKey) TypeToIdentifier() string {
 func getOutputFromCmd(cmdString string, envVars []string) ([]byte, error) {
 	var out []byte
 
-	args, err := shlex.Split(cmdString)
+	args, err := shellquote.Split(cmdString)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse command %s: %w", cmdString, err)
+	}
+	if len(args) == 0 {
+		return nil, errors.New("failed to parse command: command is empty")
 	}
 	cmd := exec.Command(args[0], args[1:]...)
 	if envVars != nil {
