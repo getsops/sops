@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+Project changes:
+
+* Add `toolchain go1.27.3` directive to go.mod for vulnerbility fix.
+
 ## 3.13.3
 
 Improvements:
