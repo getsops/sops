@@ -199,6 +199,22 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 	}
 }
 
+// indexInSlice returns the position in slice of the item at index when
+// comments are not counted, or len(slice) if there is no such item.
+func indexInSlice(slice []interface{}, index int) int {
+	n := 0
+	for i, value := range slice {
+		if _, ok := value.(Comment); ok {
+			continue
+		}
+		if n == index {
+			return i
+		}
+		n++
+	}
+	return len(slice)
+}
+
 func set(branch interface{}, path []interface{}, value interface{}) (interface{}, bool) {
 	switch branch := branch.(type) {
 	case TreeBranch:
@@ -221,7 +237,7 @@ func set(branch interface{}, path []interface{}, value interface{}) (interface{}
 		}
 		return branch, true
 	case []interface{}:
-		position := path[0].(int)
+		position := indexInSlice(branch, path[0].(int))
 		var changed bool
 		if len(path) == 1 {
 			if position >= len(branch) {
@@ -269,7 +285,7 @@ func unset(branch interface{}, path []interface{}) (interface{}, error) {
 		}
 		return nil, &SopsKeyNotFound{Msg: "Key not found: %s", Key: path[0]}
 	case []interface{}:
-		position := path[0].(int)
+		position := indexInSlice(branch, path[0].(int))
 		if position >= len(branch) {
 			return nil, &SopsKeyNotFound{Msg: "Index %d out of bounds", Key: path[0]}
 		}
@@ -327,10 +343,14 @@ func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
 			if reflect.ValueOf(current).Kind() != reflect.Slice {
 				return nil, fmt.Errorf("component [%d] is integer, but tree part is not a slice", component)
 			}
-			if reflect.ValueOf(current).Len() <= component {
+			position := component
+			if slice, ok := current.([]interface{}); ok {
+				position = indexInSlice(slice, component)
+			}
+			if reflect.ValueOf(current).Len() <= position {
 				return nil, fmt.Errorf("component [%d] accesses out of bounds", component)
 			}
-			current = reflect.ValueOf(current).Index(component).Interface()
+			current = reflect.ValueOf(current).Index(position).Interface()
 		}
 	}
 	return current, nil

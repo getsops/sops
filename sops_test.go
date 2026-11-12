@@ -892,6 +892,43 @@ func TestTruncateTree(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
+func TestArrayPathsSkipComments(t *testing.T) {
+	values := func() []interface{} {
+		return []interface{}{
+			Comment{Value: " a"}, Comment{Value: " b"}, "one",
+			Comment{Value: " c", Inline: true}, []interface{}{"two"}, Comment{Value: " d"},
+		}
+	}
+	branch := func() TreeBranch { return TreeBranch{{Key: "foo", Value: values()}} }
+	with := func(v []interface{}) TreeBranch { return TreeBranch{{Key: "foo", Value: v}} }
+
+	result, err := branch().Truncate([]interface{}{"foo", 1, 0})
+	assert.NoError(t, err)
+	assert.Equal(t, "two", result)
+	_, err = branch().Truncate([]interface{}{"foo", 2})
+	assert.ErrorContains(t, err, "accesses out of bounds")
+
+	expected := values()
+	expected[2] = "uno"
+	set, changed := branch().Set([]interface{}{"foo", 0}, "uno")
+	assert.True(t, changed)
+	assert.Equal(t, with(expected), set)
+	set, changed = branch().Set([]interface{}{"foo", 2}, "tres")
+	assert.True(t, changed)
+	assert.Equal(t, with(append(values(), "tres")), set)
+
+	unset, err := branch().Unset([]interface{}{"foo", 0})
+	assert.NoError(t, err)
+	assert.Equal(t, with(append(values()[:2], values()[3:]...)), unset)
+	expected = values()
+	expected[4] = []interface{}{}
+	unset, err = branch().Unset([]interface{}{"foo", 1, 0})
+	assert.NoError(t, err)
+	assert.Equal(t, with(expected), unset)
+	_, err = branch().Unset([]interface{}{"foo", 2})
+	assert.ErrorContains(t, err, "Index 2 out of bounds")
+}
+
 func TestTruncateTreeNotFound(t *testing.T) {
 	tree := TreeBranch{
 		TreeItem{
