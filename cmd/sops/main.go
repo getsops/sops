@@ -2417,15 +2417,24 @@ func parseTreePath(arg string) ([]interface{}, error) {
 			return nil, fmt.Errorf("component %s doesn't end with ]", component)
 		}
 		component = component[:len(component)-1]
+		if component == "" {
+			return nil, fmt.Errorf("empty path component")
+		}
 		if component[0] == byte('"') || component[0] == byte('\'') {
 			// The component is a string
+			if len(component) < 2 {
+				return nil, fmt.Errorf("component %s has an unterminated string", component)
+			}
 			component = component[1 : len(component)-1]
 			path = append(path, component)
 		} else {
-			// The component must be a number
+			// The component must be a non-negative number
 			i, err := strconv.Atoi(component)
 			if err != nil {
 				return nil, err
+			}
+			if i < 0 {
+				return nil, fmt.Errorf("negative index %d is not supported", i)
 			}
 			path = append(path, i)
 		}
