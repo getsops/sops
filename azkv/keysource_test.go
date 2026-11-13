@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -229,5 +230,47 @@ func TestMasterKey_getTokenCredential(t *testing.T) {
 		got, err := key.getTokenCredential()
 		assert.NoError(t, err)
 		assert.IsType(t, &azidentity.DefaultAzureCredential{}, got)
+	})
+}
+
+func TestShouldSkipChallengeResourceVerificationFromEnv(t *testing.T) {
+	t.Run("unset", func(t *testing.T) {
+		t.Setenv(SopsAzureKeyvaultSkipUriVerificationEnv, "")
+		assert.False(t, shouldSkipChallengeResourceVerificationFromEnv())
+	})
+
+	t.Run("true", func(t *testing.T) {
+		t.Setenv(SopsAzureKeyvaultSkipUriVerificationEnv, "true")
+		assert.True(t, shouldSkipChallengeResourceVerificationFromEnv())
+	})
+
+	t.Run("false", func(t *testing.T) {
+		t.Setenv(SopsAzureKeyvaultSkipUriVerificationEnv, "false")
+		assert.False(t, shouldSkipChallengeResourceVerificationFromEnv())
+	})
+
+	t.Run("invalid", func(t *testing.T) {
+		t.Setenv(SopsAzureKeyvaultSkipUriVerificationEnv, "not-a-bool")
+		assert.False(t, shouldSkipChallengeResourceVerificationFromEnv())
+	})
+}
+
+func TestMasterKey_effectiveClientOptions(t *testing.T) {
+	t.Run("uses explicit client options first", func(t *testing.T) {
+		t.Setenv(SopsAzureKeyvaultSkipUriVerificationEnv, "true")
+		mk := &MasterKey{clientOptions: &azkeys.ClientOptions{DisableChallengeResourceVerification: false}}
+		opts := mk.effectiveClientOptions()
+		if assert.NotNil(t, opts) {
+			assert.False(t, opts.DisableChallengeResourceVerification)
+		}
+	})
+
+	t.Run("uses env var when no explicit options", func(t *testing.T) {
+		t.Setenv(SopsAzureKeyvaultSkipUriVerificationEnv, "1")
+		mk := &MasterKey{}
+		opts := mk.effectiveClientOptions()
+		if assert.NotNil(t, opts) {
+			assert.True(t, opts.DisableChallengeResourceVerification)
+		}
 	})
 }
