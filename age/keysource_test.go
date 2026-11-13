@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"filippo.io/age"
+	"filippo.io/age/plugin"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -143,6 +145,20 @@ func TestMasterKeyFromRecipient(t *testing.T) {
 	t.Run("invalid recipient", func(t *testing.T) {
 		got, err := MasterKeyFromRecipient("invalid")
 		assert.Error(t, err)
+		assert.Nil(t, got)
+	})
+
+	t.Run("identity reference", func(t *testing.T) {
+		ref := IdentityReferencePrefix + SopsAgeKeyUserConfigPath
+		got, err := MasterKeyFromRecipient("  " + ref + "  ")
+		assert.NoError(t, err)
+		assert.EqualValues(t, ref, got.Recipient)
+		assert.Nil(t, got.parsedRecipient)
+	})
+
+	t.Run("invalid identity reference", func(t *testing.T) {
+		got, err := MasterKeyFromRecipient(IdentityReferencePrefix + "/some/file")
+		assert.ErrorContains(t, err, "unknown age identity source")
 		assert.Nil(t, got)
 	})
 }
@@ -371,7 +387,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockIdentity)
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 6)
@@ -385,7 +401,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockIdentity+"\n"+mockOtherIdentity)
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
 		assert.Len(t, unusedLocations, 6)
@@ -402,7 +418,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 6)
@@ -421,7 +437,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
 		assert.NoError(t, os.WriteFile(keyPath, []byte(mockIdentity), 0o644))
 
-		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
+		got, _, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 7)
@@ -441,7 +457,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeSshPrivateKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 6)
@@ -451,7 +467,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
 
-		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
+		got, _, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Nil(t, got)
 		assert.Len(t, unusedLocations, 8)
@@ -474,7 +490,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.NoError(t, os.WriteFile(keyPath2, []byte(mockOtherIdentity), 0o644))
 		t.Setenv(SopsAgeKeyFileEnv, keyPath2)
 
-		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
+		got, _, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
 		assert.Len(t, unusedLocations, 6)
@@ -488,7 +504,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, "invalid")
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 1)
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], fmt.Sprintf("failed to parse '%s' age identities", SopsAgeKeyEnv))
@@ -504,7 +520,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeSshPrivateKeyCmdEnv, "echo '"+mockSshIdentity+"'")
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 6)
@@ -518,7 +534,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeSshPrivateKeyCmdEnv, "meow")
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 1)
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], "failed to execute command meow")
@@ -534,7 +550,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, "echo '"+mockIdentity+"'")
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 6)
@@ -548,13 +564,13 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, fmt.Sprintf("bash -c 'if [[ $SOPS_AGE_RECIPIENT = %s ]]; then echo %s; fi'", mockRecipient, mockIdentity))
 
 		key := &MasterKey{Recipient: mockRecipient}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 		assert.Len(t, unusedLocations, 6)
 
 		key = &MasterKey{Recipient: mockRecipient + "abc"}
-		got, unusedLocations, errs = key.loadIdentities()
+		got, _, unusedLocations, errs = key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 0)
 		assert.Len(t, unusedLocations, 7)
@@ -568,7 +584,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, "meow")
 
 		key := &MasterKey{}
-		got, unusedLocations, errs := key.loadIdentities()
+		got, _, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 1)
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], "failed to execute command meow")
@@ -653,5 +669,134 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to create reader for decrypting sops data key with age")
 		assert.Nil(t, got)
+	})
+}
+
+func TestMain(m *testing.M) {
+	// Act as the age plugin when exec'd through the symlink from setupTestPlugin.
+	if filepath.Base(os.Args[0]) == "age-plugin-sopstest" {
+		p, _ := plugin.New("sopstest")
+		p.HandleIdentityAsRecipient(func(data []byte) (age.Recipient, error) {
+			return testPluginKey(data), nil
+		})
+		p.HandleIdentity(func(data []byte) (age.Identity, error) {
+			return testPluginKey(data), nil
+		})
+		os.Exit(p.Main())
+	}
+	os.Exit(m.Run())
+}
+
+// testPluginKey wraps file keys in the clear, tagged with the identity data.
+type testPluginKey []byte
+
+func (k testPluginKey) Wrap(fileKey []byte) ([]*age.Stanza, error) {
+	return []*age.Stanza{{Type: "sopstest", Args: []string{string(k)}, Body: fileKey}}, nil
+}
+
+func (k testPluginKey) Unwrap(stanzas []*age.Stanza) ([]byte, error) {
+	for _, s := range stanzas {
+		if s.Type == "sopstest" && len(s.Args) == 1 && s.Args[0] == string(k) {
+			return s.Body, nil
+		}
+	}
+	return nil, age.ErrIncorrectIdentity
+}
+
+// setupTestPlugin puts the test binary on PATH as age-plugin-sopstest.
+func setupTestPlugin(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("plugin symlink is not supported on Windows")
+	}
+	exe, err := os.Executable()
+	assert.NoError(t, err)
+	dir := t.TempDir()
+	assert.NoError(t, os.Symlink(exe, filepath.Join(dir, "age-plugin-sopstest")))
+	t.Setenv("PATH", dir)
+	overwriteUserConfigDir(t, t.TempDir())
+}
+
+func TestMasterKey_IdentityReference(t *testing.T) {
+	setupTestPlugin(t)
+	alice := plugin.EncodeIdentity("sopstest", []byte("alice"))
+	bob := plugin.EncodeIdentity("sopstest", []byte("bob"))
+	carol := plugin.EncodeIdentity("sopstest", []byte("carol"))
+	data := []byte("some secret data")
+
+	decrypt := func(t *testing.T, enc string, identities ...string) error {
+		var ids ParsedIdentities
+		assert.NoError(t, ids.Import(identities...))
+		key := &MasterKey{EncryptedKey: enc}
+		ids.ApplyToMasterKey(key)
+		got, err := key.Decrypt()
+		if err == nil {
+			assert.Equal(t, data, got)
+		}
+		return err
+	}
+
+	t.Run("encrypts to every identity from the source", func(t *testing.T) {
+		t.Setenv(SopsAgeKeyEnv, strings.Join([]string{mockIdentity, alice, bob}, "\n"))
+		keyFile := filepath.Join(t.TempDir(), "keys.txt")
+		assert.NoError(t, os.WriteFile(keyFile, []byte(carol), 0o600))
+		t.Setenv(SopsAgeKeyFileEnv, keyFile)
+
+		key, err := MasterKeyFromRecipient(IdentityReferencePrefix + SopsAgeKeyEnv)
+		assert.NoError(t, err)
+		assert.NoError(t, key.Encrypt(data))
+		assert.NotEmpty(t, key.EncryptedKey)
+
+		assert.NoError(t, decrypt(t, key.EncryptedKey, alice))
+		assert.NoError(t, decrypt(t, key.EncryptedKey, bob))
+		assert.NoError(t, decrypt(t, key.EncryptedKey, mockIdentity))
+		assert.Error(t, decrypt(t, key.EncryptedKey, carol))
+	})
+
+	t.Run("encrypts to hybrid identities", func(t *testing.T) {
+		t.Setenv(SopsAgeKeyEnv, mockHybridIdentity)
+		key, err := MasterKeyFromRecipient(IdentityReferencePrefix + SopsAgeKeyEnv)
+		assert.NoError(t, err)
+		assert.NoError(t, key.Encrypt(data))
+		assert.NoError(t, decrypt(t, key.EncryptedKey, mockHybridIdentity))
+	})
+
+	t.Run("decrypts with identities from any source", func(t *testing.T) {
+		t.Setenv(SopsAgeKeyEnv, alice)
+		key, err := MasterKeyFromRecipient(IdentityReferencePrefix + SopsAgeKeyEnv)
+		assert.NoError(t, err)
+		assert.NoError(t, key.Encrypt(data))
+
+		os.Unsetenv(SopsAgeKeyEnv)
+		keyFile := filepath.Join(t.TempDir(), "keys.txt")
+		assert.NoError(t, os.WriteFile(keyFile, []byte(mockIdentity+"\n"+alice), 0o600))
+		t.Setenv(SopsAgeKeyFileEnv, keyFile)
+		decryptKey := &MasterKey{Recipient: key.Recipient, EncryptedKey: key.EncryptedKey}
+		got, err := decryptKey.Decrypt()
+		assert.NoError(t, err)
+		assert.Equal(t, data, got)
+	})
+
+	t.Run("decryption error names the source", func(t *testing.T) {
+		t.Setenv(SopsAgeKeyEnv, alice)
+		key, err := MasterKeyFromRecipient(IdentityReferencePrefix + SopsAgeKeyEnv)
+		assert.NoError(t, err)
+		assert.NoError(t, key.Encrypt(data))
+
+		t.Setenv(SopsAgeKeyEnv, bob)
+		decryptKey := &MasterKey{Recipient: key.Recipient, EncryptedKey: key.EncryptedKey}
+		_, err = decryptKey.Decrypt()
+		assert.ErrorContains(t, err, "encrypted to the age identities from "+SopsAgeKeyEnv)
+	})
+
+	t.Run("no identity in source", func(t *testing.T) {
+		t.Setenv(SopsAgeKeyEnv, "")
+		keyFile := filepath.Join(t.TempDir(), "keys.txt")
+		assert.NoError(t, os.WriteFile(keyFile, []byte(alice), 0o600))
+		t.Setenv(SopsAgeKeyFileEnv, keyFile)
+
+		key, err := MasterKeyFromRecipient(IdentityReferencePrefix + SopsAgeKeyEnv)
+		assert.NoError(t, err)
+		assert.ErrorContains(t, key.Encrypt(data), "no age identities loaded from "+SopsAgeKeyEnv)
+		assert.Empty(t, key.EncryptedKey)
 	})
 }
