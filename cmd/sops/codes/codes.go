@@ -19,6 +19,7 @@ const (
 	MacMismatch                            int = 51
 	MacNotFound                            int = 52
 	ConfigFileNotFound                     int = 61
+	NoRulesMatched                         int = 62
 	KeyboardInterrupt                      int = 85
 	InvalidTreePathFormat                  int = 91
 	NeedAtLeastOneDocument                 int = 92
