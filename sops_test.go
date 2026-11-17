@@ -2,16 +2,20 @@ package sops
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/pgp"
+	"google.golang.org/grpc"
 )
 
 type reverseCipher struct{}
@@ -1604,5 +1608,64 @@ func TestSortKeyGroupIndices(t *testing.T) {
 		expected := []int{2, 1, 0}
 		indices := sortKeyGroupIndices(group, []string{"dummy1", "age", "dummy2", "pgp", "dummy3"})
 		assert.Equal(t, expected, indices)
+	})
+}
+
+type contextRecordingKeyServiceClient struct {
+	encryptCtx context.Context
+	decryptCtx context.Context
+}
+
+func (c *contextRecordingKeyServiceClient) Encrypt(ctx context.Context, _ *keyservice.EncryptRequest, _ ...grpc.CallOption) (*keyservice.EncryptResponse, error) {
+	c.encryptCtx = ctx
+	return &keyservice.EncryptResponse{Ciphertext: []byte("encrypted")}, nil
+}
+
+func (c *contextRecordingKeyServiceClient) Decrypt(ctx context.Context, _ *keyservice.DecryptRequest, _ ...grpc.CallOption) (*keyservice.DecryptResponse, error) {
+	c.decryptCtx = ctx
+	return &keyservice.DecryptResponse{Plaintext: []byte("decrypted")}, nil
+}
+
+func TestKeyServicesContextPropagation(t *testing.T) {
+	type ctxKey struct{}
+	const ctxValue = "context-value"
+	ctx := context.WithValue(context.Background(), ctxKey{}, ctxValue)
+
+	newMetadata := func() Metadata {
+		return Metadata{
+			KeyGroups: []KeyGroup{{&age.MasterKey{Recipient: "age1lzd99uklcjnc0e7d860axevet2cz99ce9pq6tzuzd05l5nr28ams36nvun"}}},
+		}
+	}
+
+	t.Run("GetDataKeyWithKeyServicesContext", func(t *testing.T) {
+		client := &contextRecordingKeyServiceClient{}
+		metadata := newMetadata()
+
+		key, err := metadata.GetDataKeyWithKeyServicesContext(ctx, []keyservice.KeyServiceClient{client}, nil)
+
+		require.NoError(t, err)
+		assert.Equal(t, []byte("decrypted"), key)
+		assert.Equal(t, ctxValue, client.decryptCtx.Value(ctxKey{}))
+	})
+
+	t.Run("UpdateMasterKeysWithKeyServicesContext", func(t *testing.T) {
+		client := &contextRecordingKeyServiceClient{}
+		metadata := newMetadata()
+
+		errs := metadata.UpdateMasterKeysWithKeyServicesContext(ctx, []byte("data-key"), []keyservice.KeyServiceClient{client})
+
+		assert.Empty(t, errs)
+		assert.Equal(t, ctxValue, client.encryptCtx.Value(ctxKey{}))
+	})
+
+	t.Run("GenerateDataKeyWithKeyServicesContext", func(t *testing.T) {
+		client := &contextRecordingKeyServiceClient{}
+		tree := &Tree{Metadata: newMetadata()}
+
+		key, errs := tree.GenerateDataKeyWithKeyServicesContext(ctx, []keyservice.KeyServiceClient{client})
+
+		assert.Empty(t, errs)
+		assert.NotEmpty(t, key)
+		assert.Equal(t, ctxValue, client.encryptCtx.Value(ctxKey{}))
 	})
 }
