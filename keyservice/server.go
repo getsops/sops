@@ -30,58 +30,58 @@ func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) 
 	return []byte(pgpKey.EncryptedKey), nil
 }
 
-func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithKms(ctx context.Context, key *KmsKey, plaintext []byte) ([]byte, error) {
 	kmsKey := kmsKeyToMasterKey(key)
-	err := kmsKey.Encrypt(plaintext)
+	err := kmsKey.EncryptContext(ctx, plaintext)
 	if err != nil {
 		return nil, err
 	}
 	return []byte(kmsKey.EncryptedKey), nil
 }
 
-func (ks *Server) encryptWithGcpKms(key *GcpKmsKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithGcpKms(ctx context.Context, key *GcpKmsKey, plaintext []byte) ([]byte, error) {
 	gcpKmsKey := gcpkms.MasterKey{
 		ResourceID: key.ResourceId,
 	}
-	err := gcpKmsKey.Encrypt(plaintext)
+	err := gcpKmsKey.EncryptContext(ctx, plaintext)
 	if err != nil {
 		return nil, err
 	}
 	return []byte(gcpKmsKey.EncryptedKey), nil
 }
 
-func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithAzureKeyVault(ctx context.Context, key *AzureKeyVaultKey, plaintext []byte) ([]byte, error) {
 	azkvKey := azkv.MasterKey{
 		VaultURL: key.VaultUrl,
 		Name:     key.Name,
 		Version:  key.Version,
 	}
-	err := azkvKey.Encrypt(plaintext)
+	err := azkvKey.EncryptContext(ctx, plaintext)
 	if err != nil {
 		return nil, err
 	}
 	return []byte(azkvKey.EncryptedKey), nil
 }
 
-func (ks *Server) encryptWithHckms(key *HckmsKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithHckms(ctx context.Context, key *HckmsKey, plaintext []byte) ([]byte, error) {
 	hckmsKey, err := hckms.NewMasterKey(key.KeyId)
 	if err != nil {
 		return nil, err
 	}
-	err = hckmsKey.Encrypt(plaintext)
+	err = hckmsKey.EncryptContext(ctx, plaintext)
 	if err != nil {
 		return nil, err
 	}
 	return []byte(hckmsKey.EncryptedKey), nil
 }
 
-func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
+func (ks *Server) encryptWithVault(ctx context.Context, key *VaultKey, plaintext []byte) ([]byte, error) {
 	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
 		EnginePath:   key.EnginePath,
 		KeyName:      key.KeyName,
 	}
-	err := vaultKey.Encrypt(plaintext)
+	err := vaultKey.EncryptContext(ctx, plaintext)
 	if err != nil {
 		return nil, err
 	}
@@ -107,54 +107,54 @@ func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error)
 	return []byte(plaintext), err
 }
 
-func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithKms(ctx context.Context, key *KmsKey, ciphertext []byte) ([]byte, error) {
 	kmsKey := kmsKeyToMasterKey(key)
 	kmsKey.EncryptedKey = string(ciphertext)
-	plaintext, err := kmsKey.Decrypt()
+	plaintext, err := kmsKey.DecryptContext(ctx)
 	return []byte(plaintext), err
 }
 
-func (ks *Server) decryptWithGcpKms(key *GcpKmsKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithGcpKms(ctx context.Context, key *GcpKmsKey, ciphertext []byte) ([]byte, error) {
 	gcpKmsKey := gcpkms.MasterKey{
 		ResourceID: key.ResourceId,
 	}
 	gcpKmsKey.EncryptedKey = string(ciphertext)
-	plaintext, err := gcpKmsKey.Decrypt()
+	plaintext, err := gcpKmsKey.DecryptContext(ctx)
 	return []byte(plaintext), err
 }
 
-func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithAzureKeyVault(ctx context.Context, key *AzureKeyVaultKey, ciphertext []byte) ([]byte, error) {
 	azkvKey := azkv.MasterKey{
 		VaultURL: key.VaultUrl,
 		Name:     key.Name,
 		Version:  key.Version,
 	}
 	azkvKey.EncryptedKey = string(ciphertext)
-	plaintext, err := azkvKey.Decrypt()
+	plaintext, err := azkvKey.DecryptContext(ctx)
 	return []byte(plaintext), err
 }
 
-func (ks *Server) decryptWithHckms(key *HckmsKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithHckms(ctx context.Context, key *HckmsKey, ciphertext []byte) ([]byte, error) {
 	hckmsKey, err := hckms.NewMasterKey(key.KeyId)
 	if err != nil {
 		return nil, err
 	}
 	hckmsKey.EncryptedKey = string(ciphertext)
-	plaintext, err := hckmsKey.Decrypt()
+	plaintext, err := hckmsKey.DecryptContext(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return plaintext, nil
 }
 
-func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, error) {
+func (ks *Server) decryptWithVault(ctx context.Context, key *VaultKey, ciphertext []byte) ([]byte, error) {
 	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
 		EnginePath:   key.EnginePath,
 		KeyName:      key.KeyName,
 	}
 	vaultKey.EncryptedKey = string(ciphertext)
-	plaintext, err := vaultKey.Decrypt()
+	plaintext, err := vaultKey.DecryptContext(ctx)
 	return []byte(plaintext), err
 }
 
@@ -183,7 +183,7 @@ func (ks Server) Encrypt(ctx context.Context,
 			Ciphertext: ciphertext,
 		}
 	case *Key_KmsKey:
-		ciphertext, err := ks.encryptWithKms(k.KmsKey, req.Plaintext)
+		ciphertext, err := ks.encryptWithKms(ctx, k.KmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -191,7 +191,7 @@ func (ks Server) Encrypt(ctx context.Context,
 			Ciphertext: ciphertext,
 		}
 	case *Key_GcpKmsKey:
-		ciphertext, err := ks.encryptWithGcpKms(k.GcpKmsKey, req.Plaintext)
+		ciphertext, err := ks.encryptWithGcpKms(ctx, k.GcpKmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -199,7 +199,7 @@ func (ks Server) Encrypt(ctx context.Context,
 			Ciphertext: ciphertext,
 		}
 	case *Key_AzureKeyvaultKey:
-		ciphertext, err := ks.encryptWithAzureKeyVault(k.AzureKeyvaultKey, req.Plaintext)
+		ciphertext, err := ks.encryptWithAzureKeyVault(ctx, k.AzureKeyvaultKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -207,7 +207,7 @@ func (ks Server) Encrypt(ctx context.Context,
 			Ciphertext: ciphertext,
 		}
 	case *Key_VaultKey:
-		ciphertext, err := ks.encryptWithVault(k.VaultKey, req.Plaintext)
+		ciphertext, err := ks.encryptWithVault(ctx, k.VaultKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -223,7 +223,7 @@ func (ks Server) Encrypt(ctx context.Context,
 			Ciphertext: ciphertext,
 		}
 	case *Key_HckmsKey:
-		ciphertext, err := ks.encryptWithHckms(k.HckmsKey, req.Plaintext)
+		ciphertext, err := ks.encryptWithHckms(ctx, k.HckmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -295,7 +295,7 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case *Key_KmsKey:
-		plaintext, err := ks.decryptWithKms(k.KmsKey, req.Ciphertext)
+		plaintext, err := ks.decryptWithKms(ctx, k.KmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
@@ -303,7 +303,7 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case *Key_GcpKmsKey:
-		plaintext, err := ks.decryptWithGcpKms(k.GcpKmsKey, req.Ciphertext)
+		plaintext, err := ks.decryptWithGcpKms(ctx, k.GcpKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
@@ -311,7 +311,7 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case *Key_AzureKeyvaultKey:
-		plaintext, err := ks.decryptWithAzureKeyVault(k.AzureKeyvaultKey, req.Ciphertext)
+		plaintext, err := ks.decryptWithAzureKeyVault(ctx, k.AzureKeyvaultKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
@@ -319,7 +319,7 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case *Key_VaultKey:
-		plaintext, err := ks.decryptWithVault(k.VaultKey, req.Ciphertext)
+		plaintext, err := ks.decryptWithVault(ctx, k.VaultKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
@@ -335,7 +335,7 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case *Key_HckmsKey:
-		plaintext, err := ks.decryptWithHckms(k.HckmsKey, req.Ciphertext)
+		plaintext, err := ks.decryptWithHckms(ctx, k.HckmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
