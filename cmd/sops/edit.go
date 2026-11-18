@@ -28,6 +28,7 @@ type editOpts struct {
 	OutputStore     common.Store
 	InputPath       string
 	IgnoreMAC       bool
+	AwsProfile      string
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
 	ShowMasterKeys  bool
@@ -44,6 +45,7 @@ type runEditorUntilOkOpts struct {
 	InputStore     sops.Store
 	OutputStore    common.Store
 	ShowMasterKeys bool
+	AwsProfile     string
 	Tree           *sops.Tree
 }
 
@@ -79,6 +81,7 @@ func edit(opts editOpts) ([]byte, error) {
 		InputStore:  opts.InputStore,
 		InputPath:   opts.InputPath,
 		IgnoreMAC:   opts.IgnoreMAC,
+		AwsProfile:  opts.AwsProfile,
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {
@@ -199,6 +202,7 @@ func editTreeImpl(tmpfile *os.File, tmpfileName string, opts editOpts, tree *sop
 		OriginalHash:   origHash,
 		TmpFileName:    tmpfileName,
 		ShowMasterKeys: opts.ShowMasterKeys,
+		AwsProfile:     opts.AwsProfile,
 		Tree:           tree})
 	if err != nil {
 		return createError(err)
@@ -267,6 +271,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				waitForKeyPress()
 				continue
 			}
+			// The reloaded keys have lost the AWS profile override
+			common.SetAWSProfile(t.Metadata.KeyGroups, opts.AwsProfile)
 			// Replace the whole tree, because otherwise newBranches would
 			// contain the SOPS metadata
 			opts.Tree = &t

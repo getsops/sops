@@ -17,6 +17,7 @@ type rotateOpts struct {
 	OutputStore      sops.Store
 	InputPath        string
 	IgnoreMAC        bool
+	AwsProfile       string
 	AddMasterKeys    []keys.MasterKey
 	RemoveMasterKeys []keys.MasterKey
 	KeyServices      []keyservice.KeyServiceClient
@@ -29,6 +30,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 		InputStore:      opts.InputStore,
 		InputPath:       opts.InputPath,
 		IgnoreMAC:       opts.IgnoreMAC,
+		AwsProfile:      opts.AwsProfile,
 		KeyServices:     opts.KeyServices,
 		DecryptionOrder: opts.DecryptionOrder,
 	})

@@ -208,6 +208,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -236,6 +240,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					AwsProfile:      c.String("aws-profile"),
 				}
 
 				if c.Bool("background") {
@@ -322,6 +327,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -354,6 +363,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					AwsProfile:      c.String("aws-profile"),
 				}
 
 				output, err := decrypt(opts)
@@ -404,6 +414,10 @@ func main() {
 					Name:   "decryption-order",
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
+				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -456,6 +470,7 @@ func main() {
 							Interactive:     !c.Bool("yes"),
 							OmitExtensions:  c.Bool("omit-extensions"),
 							Recursive:       c.Bool("recursive"),
+							AwsProfile:      c.String("aws-profile"),
 						})
 						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 							return cliErr
@@ -572,7 +587,7 @@ func main() {
 						},
 						cli.StringFlag{
 							Name:  "aws-profile",
-							Usage: "The AWS profile to use for requests to AWS",
+							Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 						},
 						cli.StringSliceFlag{
 							Name:  "gcp-kms",
@@ -669,6 +684,7 @@ func main() {
 							Group:          group,
 							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
 							KeyServices:    keyservices(c),
+							AwsProfile:     c.String("aws-profile"),
 						})
 					},
 				},
@@ -687,6 +703,10 @@ func main() {
 						cli.IntFlag{
 							Name:  "shamir-secret-sharing-threshold",
 							Usage: "the number of master keys required to retrieve the data key with shamir",
+						},
+						cli.StringFlag{
+							Name:  "aws-profile",
+							Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 						},
 					}, keyserviceFlags...),
 					ArgsUsage: `[index]`,
@@ -716,6 +736,7 @@ func main() {
 							Group:          uint(group),
 							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
 							KeyServices:    keyservices(c),
+							AwsProfile:     c.String("aws-profile"),
 						})
 					},
 				},
@@ -733,6 +754,10 @@ func main() {
 				cli.StringFlag{
 					Name:  "input-type",
 					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -755,6 +780,7 @@ func main() {
 						InputPath:       path,
 						ShamirThreshold: c.Int("shamir-secret-sharing-threshold"),
 						KeyServices:     keyservices(c),
+						AwsProfile:      c.String("aws-profile"),
 						Interactive:     !c.Bool("yes"),
 						ConfigPath:      configPath,
 						InputType:       c.String("input-type"),
@@ -820,6 +846,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -884,6 +914,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					AwsProfile:      c.String("aws-profile"),
 				})
 				if err != nil {
 					return toExitError(err)
@@ -938,7 +969,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "aws-profile",
-					Usage: "The AWS profile to use for requests to AWS",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 				},
 				cli.StringFlag{
 					Name:   "gcp-kms",
@@ -1200,6 +1231,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1297,7 +1332,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "aws-profile",
-					Usage: "The AWS profile to use for requests to AWS",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 				},
 				cli.StringFlag{
 					Name:   "gcp-kms",
@@ -1413,6 +1448,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					AwsProfile:      c.String("aws-profile"),
 					ShowMasterKeys:  c.Bool("show-master-keys"),
 				}
 				if fileExists {
@@ -1488,6 +1524,10 @@ func main() {
 					Name:  "idempotent",
 					Usage: "do nothing if the given index already has the given value",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1559,6 +1599,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					AwsProfile:      c.String("aws-profile"),
 					Value:           value,
 					TreePath:        path,
 				})
@@ -1616,6 +1657,10 @@ func main() {
 					Name:  "idempotent",
 					Usage: "do nothing if the given index does not exist",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1656,6 +1701,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					AwsProfile:      c.String("aws-profile"),
 					TreePath:        path,
 				})
 				if err != nil {
@@ -1710,7 +1756,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "aws-profile",
-			Usage: "The AWS profile to use for requests to AWS",
+			Usage: "AWS profile to use for all AWS KMS requests; overrides any aws_profile stored in the file or .sops.yaml",
 		},
 		cli.StringFlag{
 			Name:   "gcp-kms",
@@ -2010,6 +2056,7 @@ func main() {
 				KeyServices:     svcs,
 				DecryptionOrder: order,
 				IgnoreMAC:       c.Bool("ignore-mac"),
+				AwsProfile:      c.String("aws-profile"),
 			})
 		}
 		if isRotateMode {
@@ -2041,6 +2088,7 @@ func main() {
 				KeyServices:     svcs,
 				DecryptionOrder: order,
 				IgnoreMAC:       c.Bool("ignore-mac"),
+				AwsProfile:      c.String("aws-profile"),
 				Value:           value,
 				TreePath:        path,
 			})
@@ -2057,6 +2105,7 @@ func main() {
 				KeyServices:     svcs,
 				DecryptionOrder: order,
 				IgnoreMAC:       c.Bool("ignore-mac"),
+				AwsProfile:      c.String("aws-profile"),
 				ShowMasterKeys:  c.Bool("show-master-keys"),
 			}
 			if fileExists {
@@ -2303,6 +2352,7 @@ func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, out
 		KeyServices:      svcs,
 		DecryptionOrder:  decryptionOrder,
 		IgnoreMAC:        c.Bool("ignore-mac"),
+		AwsProfile:       c.String("aws-profile"),
 		AddMasterKeys:    addMasterKeys,
 		RemoveMasterKeys: rmMasterKeys,
 	}, nil
@@ -2510,6 +2560,7 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 			}
 			return nil, fmt.Errorf("%s", errMsg)
 		}
+		common.PersistAWSProfile(conf.KeyGroups, c.String("aws-profile"))
 		return conf.KeyGroups, err
 	}
 	var group sops.KeyGroup

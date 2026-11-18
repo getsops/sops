@@ -37,6 +37,7 @@ type Opts struct {
 	OmitExtensions  bool
 	Recursive       bool
 	RootPath        string
+	AwsProfile      string
 }
 
 // Run publish operation
@@ -73,6 +74,7 @@ func Run(opts Opts) error {
 	if err != nil {
 		return err
 	}
+	common.SetAWSProfile(tree.Metadata.KeyGroups, opts.AwsProfile)
 
 	data := map[string]interface{}{}
 
