@@ -2,12 +2,15 @@ package age
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
 
+	"github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -60,6 +63,27 @@ em9PWmRMMTY4aytYTnVZN04yeER5Z2E3TWxWT3JTZWR2ekUKp/HZLy4MzQqoszGk
 +P0hSPPNhOhvFwv4AqCw1+A+WyeHGQPq
 -----END AGE ENCRYPTED FILE-----`
 )
+
+func captureAgeLogs(t *testing.T) *test.Hook {
+	t.Helper()
+
+	originalHooks := log.Hooks
+	originalLevel := log.GetLevel()
+	originalOutput := log.Out
+
+	log.Hooks = make(logrus.LevelHooks)
+	hook := test.NewLocal(log)
+	log.SetLevel(logrus.InfoLevel)
+	log.SetOutput(io.Discard)
+
+	t.Cleanup(func() {
+		log.Hooks = originalHooks
+		log.SetLevel(originalLevel)
+		log.SetOutput(originalOutput)
+	})
+
+	return hook
+}
 
 func TestMasterKeysFromRecipients(t *testing.T) {
 	const otherRecipient = "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep"
@@ -179,12 +203,44 @@ func TestMasterKey_Encrypt(t *testing.T) {
 		assert.NotEmpty(t, key.EncryptedKey)
 	})
 
+	t.Run("logs recipient on success", func(t *testing.T) {
+		key := &MasterKey{
+			Recipient: mockRecipient,
+		}
+		hook := captureAgeLogs(t)
+
+		assert.NoError(t, key.Encrypt([]byte(mockEncryptedKeyPlain)))
+		assert.NotEmpty(t, key.EncryptedKey)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Encryption succeeded", entries[0].Message)
+			assert.Equal(t, mockRecipient, entries[0].Data["recipient"])
+		}
+	})
+
 	t.Run("recipient ssh", func(t *testing.T) {
 		key := &MasterKey{
 			Recipient: mockSshRecipient,
 		}
 		assert.NoError(t, key.Encrypt([]byte(mockEncryptedKeyPlain)))
 		assert.NotEmpty(t, key.EncryptedKey)
+	})
+
+	t.Run("logs ssh recipient on success", func(t *testing.T) {
+		key := &MasterKey{
+			Recipient: mockSshRecipient,
+		}
+		hook := captureAgeLogs(t)
+
+		assert.NoError(t, key.Encrypt([]byte(mockEncryptedKeyPlain)))
+		assert.NotEmpty(t, key.EncryptedKey)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Encryption succeeded", entries[0].Message)
+			assert.Equal(t, mockSshRecipient, entries[0].Data["recipient"])
+		}
 	})
 
 	t.Run("parsed recipient", func(t *testing.T) {
@@ -211,6 +267,24 @@ func TestMasterKey_Encrypt(t *testing.T) {
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to parse input, unknown recipient type:")
 		assert.Empty(t, key.EncryptedKey)
+	})
+
+	t.Run("logs recipient on invalid recipient failure", func(t *testing.T) {
+		key := &MasterKey{
+			Recipient: "invalid",
+		}
+		hook := captureAgeLogs(t)
+
+		err := key.Encrypt([]byte(mockEncryptedKeyPlain))
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "failed to parse input, unknown recipient type:")
+		assert.Empty(t, key.EncryptedKey)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Encryption failed", entries[0].Message)
+			assert.Equal(t, "invalid", entries[0].Data["recipient"])
+		}
 	})
 
 	t.Run("parsed recipient and invalid recipient", func(t *testing.T) {
@@ -252,6 +326,81 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		got, err := key.Decrypt()
 		assert.NoError(t, err)
 		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+	})
+
+	t.Run("logs recipient on success", func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: mockEncryptedKey, Recipient: mockRecipient}
+		var ids ParsedIdentities
+		assert.NoError(t, ids.Import(mockIdentity))
+		ids.ApplyToMasterKey(key)
+		hook := captureAgeLogs(t)
+
+		got, err := key.Decrypt()
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Decryption succeeded", entries[0].Message)
+			assert.Equal(t, mockRecipient, entries[0].Data["recipient"])
+		}
+	})
+
+	t.Run("logs ssh recipient on success", func(t *testing.T) {
+		identity, err := parseSSHIdentityFromPrivateKeyCmdOutput([]byte(mockSshIdentity))
+		assert.NoError(t, err)
+		key := &MasterKey{
+			EncryptedKey:     mockEncryptedSshKey,
+			Recipient:        mockSshRecipient,
+			parsedIdentities: ParsedIdentities{identity},
+		}
+		hook := captureAgeLogs(t)
+
+		got, err := key.Decrypt()
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Decryption succeeded", entries[0].Message)
+			assert.Equal(t, mockSshRecipient, entries[0].Data["recipient"])
+		}
+	})
+
+	t.Run("logs recipient on failure", func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: "invalid", Recipient: mockRecipient}
+		var ids ParsedIdentities
+		assert.NoError(t, ids.Import(mockIdentity))
+		ids.ApplyToMasterKey(key)
+		hook := captureAgeLogs(t)
+
+		got, err := key.Decrypt()
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "failed to create reader for decrypting sops data key with age")
+		assert.Nil(t, got)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Decryption failed", entries[0].Message)
+			assert.Equal(t, mockRecipient, entries[0].Data["recipient"])
+		}
+	})
+
+	t.Run("logs recipient on identity load failure", func(t *testing.T) {
+		overwriteUserConfigDir(t, t.TempDir())
+		key := &MasterKey{EncryptedKey: mockEncryptedKey, Recipient: mockRecipient}
+		hook := captureAgeLogs(t)
+
+		got, err := key.Decrypt()
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "failed to load age identities")
+		assert.Nil(t, got)
+
+		entries := hook.AllEntries()
+		if assert.Len(t, entries, 1) {
+			assert.Equal(t, "Decryption failed", entries[0].Message)
+			assert.Equal(t, mockRecipient, entries[0].Data["recipient"])
+		}
 	})
 
 	t.Run("loaded identities", func(t *testing.T) {
@@ -577,9 +726,35 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 	})
 }
 
+func clearAgeIdentityEnv(t *testing.T) {
+	t.Helper()
+
+	for _, name := range []string{
+		SopsAgeKeyEnv,
+		SopsAgeKeyFileEnv,
+		SopsAgeKeyCmdEnv,
+		SopsAgeSshPrivateKeyCmdEnv,
+		SopsAgeSshPrivateKeyFileEnv,
+	} {
+		name := name
+		value, ok := os.LookupEnv(name)
+		assert.NoError(t, os.Unsetenv(name))
+		t.Cleanup(func() {
+			if ok {
+				assert.NoError(t, os.Setenv(name, value))
+			} else {
+				assert.NoError(t, os.Unsetenv(name))
+			}
+		})
+	}
+}
+
 // overwriteUserConfigDir sets the user config directory and the user home directory
-// based on the os.UserConfigDir logic.
+// based on the os.UserConfigDir logic. It also clears AGE identity environment
+// variables so tests only load identities from sources they explicitly set.
 func overwriteUserConfigDir(t *testing.T, path string) {
+	clearAgeIdentityEnv(t)
+
 	switch runtime.GOOS {
 	case "windows":
 		t.Setenv("AppData", path)
@@ -607,10 +782,12 @@ func TestUserConfigDir(t *testing.T) {
 
 func TestMasterKey_Identities_Passphrase(t *testing.T) {
 	t.Run(SopsAgeKeyEnv, func(t *testing.T) {
+		overwriteUserConfigDir(t, t.TempDir())
 		key := &MasterKey{EncryptedKey: mockEncryptedKey}
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
-		//blocks calling gpg-agent
+		// blocks calling gpg-agent so tests use testOnlyAgePassword
 		os.Unsetenv("XDG_RUNTIME_DIR")
+		t.Setenv("GPG_AGENT_INFO", "")
 		testOnlyAgePassword = mockIdentityPassphrase
 		got, err := key.Decrypt()
 		testOnlyAgePassword = ""
@@ -629,8 +806,9 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 
 		key := &MasterKey{EncryptedKey: mockEncryptedKey}
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
-		//blocks calling gpg-agent
+		// blocks calling gpg-agent so tests use testOnlyAgePassword
 		os.Unsetenv("XDG_RUNTIME_DIR")
+		t.Setenv("GPG_AGENT_INFO", "")
 		testOnlyAgePassword = mockIdentityPassphrase
 
 		got, err := key.Decrypt()
@@ -641,10 +819,12 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 	})
 
 	t.Run("invalid encrypted key", func(t *testing.T) {
+		overwriteUserConfigDir(t, t.TempDir())
 		key := &MasterKey{EncryptedKey: "invalid"}
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
-		//blocks calling gpg-agent
+		// blocks calling gpg-agent so tests use testOnlyAgePassword
 		os.Unsetenv("XDG_RUNTIME_DIR")
+		t.Setenv("GPG_AGENT_INFO", "")
 		testOnlyAgePassword = mockIdentityPassphrase
 
 		got, err := key.Decrypt()
