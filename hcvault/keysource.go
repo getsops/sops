@@ -1,12 +1,10 @@
 package hcvault
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -17,6 +15,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/vault/api"
+	"github.com/getsops/sops/v3/fsio"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 
@@ -107,6 +106,9 @@ var (
 	// defaultTokenFile is the name of the file in the user's home directory
 	// where a Vault token is expected to be stored.
 	defaultTokenFile = ".vault-token"
+	// SopsVaultTokenFileEnv can be set as an environment variable pointing to a
+	// vault token file.
+	SopsVaultTokenFileEnv = "SOPS_VAULT_TOKEN_FILE"
 )
 
 // Token used for authenticating towards a Vault server.
@@ -435,26 +437,33 @@ func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 // exists. It returns an error if the file exists but cannot be read from.
 // If the file does not exist, it returns an empty string.
 func userVaultToken() (string, error) {
-	homePath, err := homedir.Dir()
-	if err != nil {
-		return "", fmt.Errorf("error getting user's home directory: %w", err)
-	}
-	tokenPath := filepath.Join(homePath, defaultTokenFile)
+	var tokenPath string
+	isEnvTokenSet := false
 
-	f, err := os.Open(tokenPath)
+	if tokenPathEnv, ok := os.LookupEnv(SopsVaultTokenFileEnv); ok && tokenPathEnv != "" {
+		tokenPath = tokenPathEnv
+		isEnvTokenSet = true
+	} else {
+		homePath, err := homedir.Dir()
+		if err != nil {
+			return "", fmt.Errorf("error getting user's home directory: %w", err)
+		}
+		tokenPath = filepath.Join(homePath, defaultTokenFile)
+	}
+
+
+
+	b, err := fsio.Read(tokenPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
+			if isEnvTokenSet {
+				return "", fmt.Errorf("token file specified in %s does not exist: %w", SopsVaultTokenFileEnv, err)
+			}
 			return "", nil
 		}
 		return "", err
 	}
-	defer f.Close()
-
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, f); err != nil {
-		return "", err
-	}
-	return strings.TrimSpace(buf.String()), nil
+	return strings.TrimSpace(string(b)), nil
 }
 
 // engineAndKeyFromPath returns the engine path and key name from the full
