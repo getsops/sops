@@ -29,6 +29,7 @@ import (
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
 	filestatuscmd "github.com/getsops/sops/v3/cmd/sops/subcommand/filestatus"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/groups"
+	initcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/init"
 	keyservicecmd "github.com/getsops/sops/v3/cmd/sops/subcommand/keyservice"
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
@@ -161,6 +162,37 @@ func main() {
    For more information, see the README at https://github.com/getsops/sops`
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
+		{
+			Name:  "init",
+			Usage: "generate .sops.yaml config",
+			Flags: append([]cli.Flag{
+				cli.StringFlag{
+					Name:  "dir, d",
+					Usage: "directory path to save .sops.yaml",
+				},
+				cli.BoolFlag{
+					Name:  "verbose, v",
+					Usage: "enable verbose outputs",
+				},
+			}),
+			Action: func(c *cli.Context) error {
+				configFilePath, err := os.Getwd()
+				if err != nil {
+					return common.NewExitError(fmt.Errorf("error: err"), codes.ErrorGeneric)
+				}
+
+				if c.String("dir") != "" {
+					configFilePath = c.String("dir")
+				}
+
+				initCommandArgs := initcmd.InitCommandArgs{
+					ConfigFilePath: configFilePath,
+					IsVerbose:      c.Bool("verbose"),
+				}
+
+				return initcmd.Init(initCommandArgs)
+			},
+		},
 		{
 			Name:  "completion",
 			Usage: "Generate shell completion scripts",
