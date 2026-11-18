@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"testing"
 
 	"github.com/getsops/sops/v3/keys"
@@ -42,6 +43,25 @@ func TestFindConfigFileCurrentDir(t *testing.T) {
 	filepath, err := FindConfigFile(".")
 	assert.Nil(t, err)
 	assert.Equal(t, expectedPath, filepath)
+}
+
+func TestFindConfigFileFromFilePath(t *testing.T) {
+	orig := fs
+	t.Cleanup(func() { fs = orig })
+	expectedPath := filepath.Join("a", ".sops.yaml")
+	fs = mockFS{stat: func(name string) (os.FileInfo, error) {
+		if name == expectedPath {
+			return nil, nil
+		}
+		return nil, &os.PathError{}
+	}}
+	found, err := FindConfigFile(filepath.Join("a", "b", "c", "secret.yaml"))
+	assert.Nil(t, err)
+	assert.Equal(t, expectedPath, found)
+
+	// the search starts at the file's directory, so a config next to the cwd is not found
+	_, err = FindConfigFile(filepath.Join("x", "secret.yaml"))
+	assert.NotNil(t, err)
 }
 
 var sampleConfig = []byte(`
