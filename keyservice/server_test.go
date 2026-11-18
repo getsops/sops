@@ -1,6 +1,7 @@
 package keyservice
 
 import (
+	"github.com/getsops/sops/v3/azkv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -76,6 +77,75 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 			assert.Equalf(t, c.expectedArn, masterKey.Arn, "Expected ARN to be '%s', but found '%s'", c.expectedArn, masterKey.Arn)
 			assert.Equalf(t, c.expectedRole, masterKey.Role, "Expected Role to be '%s', but found '%s'", c.expectedRole, masterKey.Role)
 			assert.Equalf(t, c.expectedAwsProfile, masterKey.AwsProfile, "Expected AWS profile to be '%s', but found '%s'", c.expectedAwsProfile, masterKey.AwsProfile)
+		})
+	}
+}
+
+// Azure KV tests for env-driven skip URI validation affecting client options.
+func TestAzureKeyVaultClientOptionsAppliedOnEncryptDecrypt(t *testing.T) {
+	// ensure we don't perform network calls
+	testHookSkipAzureNetwork = true
+	t.Cleanup(func() {
+		testHookSkipAzureNetwork = false
+		testHookCaptureAzureKey = nil
+	})
+
+	for _, tt := range []struct {
+		name            string
+		envValue        string
+		expectOptionSet bool
+	}{
+		{name: "encrypt sets option when env true", envValue: "true", expectOptionSet: true},
+		{name: "encrypt leaves option nil when env false", envValue: "false", expectOptionSet: false},
+		{name: "encrypt leaves option nil when env invalid", envValue: "not-a-bool", expectOptionSet: false},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv(azkv.SopsAzureKeyvaultSkipUriVerificationEnv, tt.envValue)
+
+			captured := []*azkv.MasterKey{}
+			testHookCaptureAzureKey = func(mk *azkv.MasterKey) { captured = append(captured, mk) }
+			server := &Server{}
+			key := &AzureKeyVaultKey{VaultUrl: "https://vault.example", Name: "keyname", Version: "v1"}
+			_, err := server.encryptWithAzureKeyVault(key, []byte("secret"))
+			require.NoError(t, err)
+			require.Len(t, captured, 1)
+
+			co := captured[0].EffectiveClientOptions()
+			if tt.expectOptionSet {
+				require.NotNil(t, co)
+				assert.True(t, co.DisableChallengeResourceVerification)
+			} else {
+				assert.Nil(t, co)
+			}
+		})
+	}
+
+	for _, tt := range []struct {
+		name            string
+		envValue        string
+		expectOptionSet bool
+	}{
+		{name: "decrypt sets option when env true", envValue: "1", expectOptionSet: true},
+		{name: "decrypt leaves option nil when env false", envValue: "0", expectOptionSet: false},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv(azkv.SopsAzureKeyvaultSkipUriVerificationEnv, tt.envValue)
+
+			captured := []*azkv.MasterKey{}
+			testHookCaptureAzureKey = func(mk *azkv.MasterKey) { captured = append(captured, mk) }
+			server := &Server{}
+			key := &AzureKeyVaultKey{VaultUrl: "https://vault.example", Name: "keyname", Version: "v1"}
+			_, err := server.decryptWithAzureKeyVault(key, []byte("c2VjcmV0"))
+			require.NoError(t, err)
+			require.Len(t, captured, 1)
+
+			co := captured[0].EffectiveClientOptions()
+			if tt.expectOptionSet {
+				require.NotNil(t, co)
+				assert.True(t, co.DisableChallengeResourceVerification)
+			} else {
+				assert.Nil(t, co)
+			}
 		})
 	}
 }
