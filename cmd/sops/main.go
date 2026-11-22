@@ -2313,6 +2313,8 @@ func toExitError(err error) error {
 		return cliErr
 	} else if execErr, ok := err.(*osExec.ExitError); ok && execErr != nil {
 		return cli.NewExitError(err, execErr.ExitCode())
+	} else if sigErr, ok := err.(*exec.SignalExitError); ok && sigErr != nil {
+		return cli.NewExitError(sigErr, sigErr.ExitCode())
 	} else if err != nil {
 		return cli.NewExitError(err, codes.ErrorGeneric)
 	}

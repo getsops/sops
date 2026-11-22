@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+Bugfixes:
+
+* `exec-file` and `exec-env` now forward `SIGINT`, `SIGTERM`, `SIGHUP` and
+  `SIGQUIT` to the spawned child process (and its whole process group) and
+  exit with the child's exit code — `128+signal` when the child is killed by
+  a signal — instead of terminating immediately and orphaning the child
+  without running its signal handlers
+  ([#840](https://github.com/getsops/sops/issues/840)).
+
 ## 3.13.3
 
 Improvements:
