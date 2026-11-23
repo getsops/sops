@@ -1563,6 +1563,133 @@ echo -E "${bar}"
     }
 
     #[test]
+    fn exec_env_multiple_files() {
+        let first_file_path = prepare_temp_file(
+            "test_exec_env_multiple_files_1.yaml",
+            r#"foo: from first
+shared: from first
+"#
+            .as_bytes(),
+        );
+        let second_file_path = prepare_temp_file(
+            "test_exec_env_multiple_files_2.yaml",
+            r#"bar: from second
+shared: from second
+"#
+            .as_bytes(),
+        );
+        for file_path in [&first_file_path, &second_file_path] {
+            assert!(
+                Command::new(SOPS_BINARY_PATH)
+                    .arg("encrypt")
+                    .arg("-i")
+                    .arg(file_path)
+                    .output()
+                    .expect("Error running sops")
+                    .status
+                    .success(),
+                "sops didn't exit successfully"
+            );
+        }
+        let print_vars = prepare_temp_file(
+            "print_vars_multiple_files.sh",
+            r#"#!/bin/bash
+echo -E "${foo}|${bar}|${shared}"
+"#
+            .as_bytes(),
+        );
+
+        // Values from all files are present; on a key collision the later file wins.
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-env")
+            .arg(first_file_path.clone())
+            .arg(second_file_path.clone())
+            .arg(format!("/bin/bash {}", print_vars))
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            "from first|from second|from second\n"
+        );
+
+        // The order of the files decides which value wins.
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-env")
+            .arg(second_file_path.clone())
+            .arg(first_file_path.clone())
+            .arg(format!("/bin/bash {}", print_vars))
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            "from first|from second|from first\n"
+        );
+
+        // If a file cannot be used, the command does not run. With several
+        // files, the error starts with the name of the file; with one file,
+        // the message is unchanged. The config applies to all files, so an
+        // error in it does not get a file name.
+        let plain_file_path = prepare_temp_file(
+            "test_exec_env_multiple_files_plain.yaml",
+            "baz: not encrypted\n".as_bytes(),
+        );
+        let bad_config_path = prepare_temp_file(
+            "test_exec_env_multiple_files_config.yaml",
+            "creation_rules: [\n".as_bytes(),
+        );
+        for (args, expected_stderr) in [
+            (
+                vec!["exec-env", &first_file_path, &plain_file_path],
+                format!("{}: sops metadata not found\n", plain_file_path),
+            ),
+            (
+                vec!["exec-env", &plain_file_path],
+                "sops metadata not found\n".to_string(),
+            ),
+            (
+                vec![
+                    "--config",
+                    &bad_config_path,
+                    "exec-env",
+                    &first_file_path,
+                    &second_file_path,
+                ],
+                "error loading config: ".to_string(),
+            ),
+        ] {
+            let output = Command::new(SOPS_BINARY_PATH)
+                .args(&args)
+                .arg(format!("/bin/bash {}", print_vars))
+                .output()
+                .expect("Error running sops");
+            println!(
+                "stdout: {}, stderr: {}",
+                String::from_utf8_lossy(&output.stdout),
+                String::from_utf8_lossy(&output.stderr)
+            );
+            assert!(!output.status.success(), "sops succeeded: {:?}", args);
+            assert_eq!(String::from_utf8_lossy(&output.stdout), "");
+            assert!(
+                String::from_utf8_lossy(&output.stderr).starts_with(&expected_stderr),
+                "stderr does not start with {:?}",
+                expected_stderr
+            );
+        }
+    }
+
+    #[test]
     fn exec_file() {
         let file_path = prepare_temp_file(
             "test_exec_file.yaml",
