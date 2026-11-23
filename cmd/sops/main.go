@@ -3,6 +3,7 @@ package main // import "github.com/getsops/sops/v3/cmd/sops"
 import (
 	"context"
 	encodingjson "encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -1950,12 +1951,23 @@ func main() {
 		// Load configuration here for backwards compatibility (error out in case of bad config files),
 		// but only when not just decrypting (https://github.com/getsops/sops/issues/868)
 		needsCreationRule := isEncryptMode || isRotateMode || isSetMode || isEditMode
+		// Captured before the `config` local below shadows the `config` package name.
+		errNoMatchingCreationRules := config.ErrNoMatchingCreationRules
 		var config *config.Config
 		if needsCreationRule {
 			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 			config, err = loadConfig(c, fileNameOverride, kmsEncryptionContext)
 			if err != nil {
-				return toExitError(err)
+				// A config file exists but none of its creation rules match this file.
+				// That's only fatal if we have no other way to get an encryption key:
+				// keyGroups() sources keys straight from CLI flags without consulting
+				// the config at all, so a non-matching config shouldn't block encrypt/
+				// rotate/set/edit when the caller supplied a key explicitly.
+				if errors.Is(err, errNoMatchingCreationRules) && hasExplicitKeyFlags(c) {
+					config, err = nil, nil
+				} else {
+					return toExitError(err)
+				}
 			}
 		}
 
@@ -2129,7 +2141,16 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	if optionalConfig == nil {
 		optionalConfig, err = loadConfig(c, fileName, nil)
 		if err != nil {
-			return encryptConfig{}, toExitError(err)
+			// A config file exists but none of its creation rules match this file.
+			// That's only fatal if we have no other way to get an encryption key:
+			// keyGroups() below already sources keys straight from these same CLI
+			// flags without consulting the config at all, so a non-matching config
+			// shouldn't block encryption when the caller supplied a key explicitly.
+			if errors.Is(err, config.ErrNoMatchingCreationRules) && hasExplicitKeyFlags(c) {
+				optionalConfig, err = nil, nil
+			} else {
+				return encryptConfig{}, toExitError(err)
+			}
 		}
 	}
 	if optionalConfig != nil {
@@ -2433,6 +2454,14 @@ func parseTreePath(arg string) ([]interface{}, error) {
 	return path, nil
 }
 
+// hasExplicitKeyFlags reports whether the user supplied at least one master-key source
+// directly on the command line, rather than relying on a config file to provide one.
+func hasExplicitKeyFlags(c *cli.Context) bool {
+	return c.String("kms") != "" || c.String("pgp") != "" || c.String("gcp-kms") != "" ||
+		c.String("hckms") != "" || c.String("azure-kv") != "" || c.String("hc-vault-transit") != "" ||
+		c.String("age") != ""
+}
+
 func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
@@ -2496,7 +2525,7 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("hckms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+	if !hasExplicitKeyFlags(c) {
 		conf := optionalConfig
 		var err error
 		if conf == nil {
@@ -2552,6 +2581,12 @@ func shamirThreshold(c *cli.Context, file string, optionalConfig *config.Config)
 	conf := optionalConfig
 	if conf == nil {
 		conf, err = loadConfig(c, file, nil)
+		if errors.Is(err, config.ErrNoMatchingCreationRules) && hasExplicitKeyFlags(c) {
+			// A non-matching config doesn't block encryption when a key was supplied
+			// explicitly (see the identical exemption in getEncryptConfig); the caller
+			// is not relying on the config for anything else this function returns.
+			conf, err = nil, nil
+		}
 	}
 	if conf == nil {
 		// This takes care of the following two case:
