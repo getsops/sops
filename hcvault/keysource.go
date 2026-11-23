@@ -1,12 +1,10 @@
 package hcvault
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -17,6 +15,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/vault/api"
+	"github.com/getsops/sops/v3/fsio"
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 
@@ -441,20 +440,14 @@ func userVaultToken() (string, error) {
 	}
 	tokenPath := filepath.Join(homePath, defaultTokenFile)
 
-	f, err := os.Open(tokenPath)
+	b, err := fsio.Read(tokenPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return "", nil
 		}
 		return "", err
 	}
-	defer f.Close()
-
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, f); err != nil {
-		return "", err
-	}
-	return strings.TrimSpace(buf.String()), nil
+	return strings.TrimSpace(string(b)), nil
 }
 
 // engineAndKeyFromPath returns the engine path and key name from the full
