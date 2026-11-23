@@ -2,6 +2,7 @@ package keyservice
 
 import (
 	"fmt"
+	"encoding/json"
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
@@ -10,6 +11,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/plugin"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -182,6 +184,12 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_PluginKey:
+		ciphertext, err := ks.encryptWithPlugin(k.PluginKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{Ciphertext: ciphertext}
 	case *Key_KmsKey:
 		ciphertext, err := ks.encryptWithKms(k.KmsKey, req.Plaintext)
 		if err != nil {
@@ -310,6 +318,12 @@ func (ks Server) Decrypt(ctx context.Context,
 		response = &DecryptResponse{
 			Plaintext: plaintext,
 		}
+	case *Key_PluginKey:
+		plaintext, err := ks.decryptWithPlugin(k.PluginKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{Plaintext: plaintext}
 	case *Key_AzureKeyvaultKey:
 		plaintext, err := ks.decryptWithAzureKeyVault(k.AzureKeyvaultKey, req.Ciphertext)
 		if err != nil {
@@ -354,6 +368,34 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	}
 	return response, nil
+}
+
+func (ks *Server) encryptWithPlugin(key *PluginKey, plaintext []byte) ([]byte, error) {
+	var config map[string]any
+	_ = json.Unmarshal([]byte(key.Config), &config)
+
+	pluginKey := plugin.NewMasterKey(key.BinaryName, config, key.Timeout, key.InstanceId)
+	pluginKey.Timeout = key.Timeout
+
+	err := pluginKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+
+	return []byte(pluginKey.EncryptedKey), nil
+}
+
+func (ks *Server) decryptWithPlugin(key *PluginKey, ciphertext []byte) ([]byte, error) {
+	var config map[string]any
+	_ = json.Unmarshal([]byte(key.Config), &config)
+
+	pluginKey := plugin.NewMasterKey(key.BinaryName, config, key.Timeout, key.InstanceId)
+	pluginKey.Timeout = key.Timeout
+
+	pluginKey.EncryptedKey = string(ciphertext)
+
+	plaintext, err := pluginKey.Decrypt()
+	return plaintext, err
 }
 
 func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {
