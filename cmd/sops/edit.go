@@ -268,8 +268,10 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				continue
 			}
 			// Replace the whole tree, because otherwise newBranches would
-			// contain the SOPS metadata
-			opts.Tree = &t
+			// contain the SOPS metadata. The caller's tree has to be updated
+			// in place, since the caller encrypts and emits that tree.
+			t.FilePath = opts.Tree.FilePath
+			*opts.Tree = t
 		} else {
 			if userErr, _ := validateFileForEncryption(opts.OutputStore, newBranches); userErr != nil {
 				log.WithField(
@@ -279,8 +281,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				waitForKeyPress()
 				continue
 			}
+			opts.Tree.Branches = newBranches
 		}
-		opts.Tree.Branches = newBranches
 		needVersionUpdated, err := version.AIsNewerThanB(version.Version, opts.Tree.Metadata.Version)
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version.Version, err), codes.FailedToCompareVersions)
