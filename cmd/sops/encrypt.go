@@ -70,8 +70,10 @@ func validateFileForEncryption(outputStore sops.Store, branches []sops.TreeBranc
 	if len(branches) < 1 {
 		return &needAtLeastOneDocument{}, codes.NeedAtLeastOneDocument
 	}
-	if outputStore.HasSopsTopLevelKey(branches[0]) {
-		return &fileAlreadyEncryptedError{}, codes.FileAlreadyEncrypted
+	for _, branch := range branches {
+		if outputStore.HasSopsTopLevelKey(branch) {
+			return &fileAlreadyEncryptedError{}, codes.FileAlreadyEncrypted
+		}
 	}
 	return nil, 0
 }
