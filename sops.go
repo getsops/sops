@@ -670,12 +670,18 @@ func (tree Tree) GenerateDataKey() ([]byte, []error) {
 
 // GenerateDataKeyWithKeyServices generates a new random data key and encrypts it with all MasterKeys.
 func (tree *Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, []error) {
+	return tree.GenerateDataKeyWithKeyServicesContext(context.Background(), svcs)
+}
+
+// GenerateDataKeyWithKeyServicesContext generates a new random data key and encrypts it with all MasterKeys,
+// using the provided context for key service calls.
+func (tree *Tree) GenerateDataKeyWithKeyServicesContext(ctx context.Context, svcs []keyservice.KeyServiceClient) ([]byte, []error) {
 	newKey := make([]byte, 32)
 	_, err := rand.Read(newKey)
 	if err != nil {
 		return nil, []error{fmt.Errorf("Could not generate random key: %s", err)}
 	}
-	return newKey, tree.Metadata.UpdateMasterKeysWithKeyServices(newKey, svcs)
+	return newKey, tree.Metadata.UpdateMasterKeysWithKeyServicesContext(ctx, newKey, svcs)
 }
 
 // Metadata holds information about a file encrypted by sops
@@ -770,6 +776,12 @@ func (m *Metadata) MasterKeyCount() int {
 
 // UpdateMasterKeysWithKeyServices encrypts the data key with all master keys using the provided key services
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
+	return m.UpdateMasterKeysWithKeyServicesContext(context.Background(), dataKey, svcs)
+}
+
+// UpdateMasterKeysWithKeyServicesContext encrypts the data key with all master keys using the provided
+// key services, using the provided context for key service calls.
+func (m *Metadata) UpdateMasterKeysWithKeyServicesContext(ctx context.Context, dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
 	if len(svcs) == 0 {
 		return []error{
 			fmt.Errorf("no key services provided, cannot update master keys"),
@@ -816,7 +828,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			var keyErrs []error
 			encrypted := false
 			for _, svc := range svcs {
-				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
+				rsp, err := svc.Encrypt(ctx, &keyservice.EncryptRequest{
 					Key:       &svcKey,
 					Plaintext: part,
 				})
@@ -848,6 +860,13 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
 func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
+	return m.GetDataKeyWithKeyServicesContext(context.Background(), svcs, decryptionOrder)
+}
+
+// GetDataKeyWithKeyServicesContext retrieves the data key, asking KeyServices to decrypt it with each
+// MasterKey in the Metadata's KeySources until one of them succeeds, using the provided context for
+// key service calls.
+func (m *Metadata) GetDataKeyWithKeyServicesContext(ctx context.Context, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
@@ -857,7 +876,7 @@ func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient,
 	}
 	var parts [][]byte
 	for i, group := range m.KeyGroups {
-		part, err := decryptKeyGroup(group, svcs, decryptionOrder)
+		part, err := decryptKeyGroup(ctx, group, svcs, decryptionOrder)
 		if err == nil {
 			parts = append(parts, part)
 		}
@@ -887,14 +906,14 @@ func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient,
 // decryptKeyGroup tries to decrypt the contents of the provided KeyGroup with
 // any of the MasterKeys in the KeyGroup with any of the provided key services,
 // returning as soon as one key service succeeds.
-func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
+func decryptKeyGroup(ctx context.Context, group KeyGroup, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	var keyErrs []error
 	// Sort MasterKeys in the group so we try them in specific order
 	// Use sorted indices to avoid group slice modification
 	indices := sortKeyGroupIndices(group, decryptionOrder)
 	for _, indexVal := range indices {
 		key := group[indexVal]
-		part, err := decryptKey(key, svcs)
+		part, err := decryptKey(ctx, key, svcs)
 		if err != nil {
 			keyErrs = append(keyErrs, err)
 		} else {
@@ -937,7 +956,7 @@ func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
 
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
 // of the key services, returning as soon as one key service succeeds.
-func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func decryptKey(ctx context.Context, key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	svcKey := keyservice.KeyFromMasterKey(key)
 	var part []byte
 	decryptErr := decryptKeyError{
@@ -951,7 +970,7 @@ func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte,
 		if part == nil {
 			var rsp *keyservice.DecryptResponse
 			rsp, err = svc.Decrypt(
-				context.Background(),
+				ctx,
 				&keyservice.DecryptRequest{
 					Ciphertext: key.EncryptedDataKey(),
 					Key:        &svcKey,
