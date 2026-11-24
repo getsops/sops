@@ -25,11 +25,24 @@ type KeyProvider interface {
 ```
 
 `WrapKeyResponse.EncryptedDataKey` is opaque to SOPS. Optional `Metadata` is
-stored alongside it and passed to later `Wrap` and `Unwrap` calls. This lets a
-provider reuse public, per-key material when rewrapping a data key. The config
-and metadata values are JSON objects. The plugin receives the plaintext SOPS
-data key and runs with the SOPS process's user permissions; plugins are trusted
-code, not a security sandbox.
+stored alongside it and passed to later `Wrap` and `Unwrap` calls. The first
+`Wrap` receives an empty metadata object; each successful `Wrap` replaces the
+stored metadata. This lets a provider reuse public, per-key material when
+rewrapping a data key.
+
+The host starts a fresh plugin process for each `Wrap` or `Unwrap` call.
+Providers must not rely on process-local state between calls; use per-key
+metadata or an external state store. The config and metadata values are JSON
+objects. SOPS passes plugin config through unchanged and does not resolve paths
+inside it; relative paths are interpreted by the plugin relative to its working
+directory. The plugin handshake uses stdout, so send provider logs to stderr.
+Implementations should honor request context cancellation.
+
+The gRPC service is versioned as `sops.plugin.v1`. Evolve its protobuf messages
+additively; breaking protocol changes should use a new service version.
+
+The plugin receives the plaintext SOPS data key and runs with the SOPS
+process's user permissions; plugins are trusted code, not a security sandbox.
 
 ## Configure a plugin
 

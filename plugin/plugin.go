@@ -28,13 +28,15 @@ var pluginNamePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]*$`)
 // WrapKeyRequest contains the SOPS data key, public configuration, and
 // metadata from any previous wrapping operation.
 type WrapKeyRequest struct {
-	Config   map[string]interface{}
+	Config map[string]interface{}
+	// Metadata is empty on the first wrap and contains the previous response's
+	// metadata when rewrapping an existing key.
 	Metadata map[string]interface{}
 	DataKey  []byte
 }
 
 // WrapKeyResponse contains the provider's opaque wrapped data key and
-// optional per-encryption metadata.
+// metadata that replaces the previous metadata for this key.
 type WrapKeyResponse struct {
 	EncryptedDataKey []byte
 	Metadata         map[string]interface{}
@@ -55,7 +57,9 @@ type UnwrapKeyResponse struct {
 
 // KeyProvider is implemented by a SOPS plugin process.
 type KeyProvider interface {
+	// Wrap should honor context cancellation while wrapping the data key.
 	Wrap(context.Context, WrapKeyRequest) (WrapKeyResponse, error)
+	// Unwrap should honor context cancellation while unwrapping the data key.
 	Unwrap(context.Context, UnwrapKeyRequest) (UnwrapKeyResponse, error)
 }
 
