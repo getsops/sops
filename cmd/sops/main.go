@@ -799,6 +799,10 @@ func main() {
 					Name:  "output",
 					Usage: "Save the output after decryption to the file specified",
 				},
+				cli.BoolFlag{
+					Name:  "no-clobber",
+					Usage: "fail if the --output file already exists instead of overwriting it",
+				},
 				cli.StringFlag{
 					Name:  "input-type",
 					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
@@ -832,6 +836,9 @@ func main() {
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+				}
+				if err := common.CheckNoClobberFlags(c.Bool("no-clobber"), c.String("output") != "", c.Bool("in-place")); err != nil {
+					return err
 				}
 				var fileName string
 				var err error
@@ -907,7 +914,7 @@ func main() {
 
 				outputFile := os.Stdout
 				if c.String("output") != "" {
-					file, err := os.Create(c.String("output"))
+					file, err := common.OpenOutputFile(c.String("output"), c.Bool("no-clobber"))
 					if err != nil {
 						return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 					}
@@ -930,6 +937,10 @@ func main() {
 				cli.StringFlag{
 					Name:  "output",
 					Usage: "Save the output after encryption to the file specified",
+				},
+				cli.BoolFlag{
+					Name:  "no-clobber",
+					Usage: "fail if the --output file already exists instead of overwriting it",
 				},
 				cli.StringFlag{
 					Name:   "kms, k",
@@ -1032,6 +1043,9 @@ func main() {
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
+				if err := common.CheckNoClobberFlags(c.Bool("no-clobber"), c.String("output") != "", c.Bool("in-place")); err != nil {
+					return err
+				}
 				var fileName string
 				var err error
 				if !readFromStdin {
@@ -1099,7 +1113,7 @@ func main() {
 
 				outputFile := os.Stdout
 				if c.String("output") != "" {
-					file, err := os.Create(c.String("output"))
+					file, err := common.OpenOutputFile(c.String("output"), c.Bool("no-clobber"))
 					if err != nil {
 						return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 					}
@@ -1122,6 +1136,10 @@ func main() {
 				cli.StringFlag{
 					Name:  "output",
 					Usage: "Save the output after decryption to the file specified",
+				},
+				cli.BoolFlag{
+					Name:  "no-clobber",
+					Usage: "fail if the --output file already exists instead of overwriting it",
 				},
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1212,6 +1230,9 @@ func main() {
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
+				if err := common.CheckNoClobberFlags(c.Bool("no-clobber"), c.String("output") != "", c.Bool("in-place")); err != nil {
+					return err
+				}
 				fileName, err := filepath.Abs(c.Args()[0])
 				if err != nil {
 					return toExitError(err)
@@ -1274,7 +1295,7 @@ func main() {
 
 				outputFile := os.Stdout
 				if c.String("output") != "" {
-					file, err := os.Create(c.String("output"))
+					file, err := common.OpenOutputFile(c.String("output"), c.Bool("no-clobber"))
 					if err != nil {
 						return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 					}
@@ -1879,6 +1900,10 @@ func main() {
 			Name:  "output",
 			Usage: "Save the output after encryption or decryption to the file specified",
 		},
+		cli.BoolFlag{
+			Name:  "no-clobber",
+			Usage: "fail if the --output file already exists instead of overwriting it",
+		},
 		cli.StringFlag{
 			Name:  "filename-override",
 			Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
@@ -1906,6 +1931,9 @@ func main() {
 		warnMoreThanOnePositionalArgument(c)
 		if c.Bool("in-place") && c.String("output") != "" {
 			return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+		}
+		if err := common.CheckNoClobberFlags(c.Bool("no-clobber"), c.String("output") != "", c.Bool("in-place")); err != nil {
+			return err
 		}
 		fileName, err := filepath.Abs(c.Args()[0])
 		if err != nil {
@@ -2101,7 +2129,7 @@ func main() {
 
 		outputFile := os.Stdout
 		if c.String("output") != "" {
-			file, err := os.Create(c.String("output"))
+			file, err := common.OpenOutputFile(c.String("output"), c.Bool("no-clobber"))
 			if err != nil {
 				return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 			}
