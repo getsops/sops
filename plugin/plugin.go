@@ -25,11 +25,12 @@ const (
 
 var pluginNamePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]*$`)
 
-// WrapKeyRequest contains the SOPS data key and public configuration for a
-// provider.
+// WrapKeyRequest contains the SOPS data key, public configuration, and
+// metadata from any previous wrapping operation.
 type WrapKeyRequest struct {
-	Config  map[string]interface{}
-	DataKey []byte
+	Config   map[string]interface{}
+	Metadata map[string]interface{}
+	DataKey  []byte
 }
 
 // WrapKeyResponse contains the provider's opaque wrapped data key and
@@ -81,6 +82,9 @@ func WrapKey(ctx context.Context, name string, request WrapKeyRequest) (WrapKeyR
 	}
 	if _, err := encodeObject(request.Config); err != nil {
 		return WrapKeyResponse{}, fmt.Errorf("invalid plugin configuration: %w", err)
+	}
+	if _, err := encodeObject(request.Metadata); err != nil {
+		return WrapKeyResponse{}, fmt.Errorf("invalid plugin metadata: %w", err)
 	}
 	provider, close, err := start(ctx, name)
 	if err != nil {

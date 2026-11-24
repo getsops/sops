@@ -33,17 +33,25 @@ func (s *grpcServer) Wrap(ctx context.Context, request *protocol.WrapKeyRequest)
 	if err != nil {
 		return nil, fmt.Errorf("decode plugin configuration: %w", err)
 	}
-	response, err := s.provider.Wrap(ctx, WrapKeyRequest{Config: config, DataKey: request.DataKey})
+	requestMetadata, err := decodeObject(request.MetadataJson)
+	if err != nil {
+		return nil, fmt.Errorf("decode plugin metadata: %w", err)
+	}
+	response, err := s.provider.Wrap(ctx, WrapKeyRequest{
+		Config:   config,
+		Metadata: requestMetadata,
+		DataKey:  request.DataKey,
+	})
 	if err != nil {
 		return nil, err
 	}
-	metadata, err := encodeObject(response.Metadata)
+	responseMetadata, err := encodeObject(response.Metadata)
 	if err != nil {
 		return nil, fmt.Errorf("encode plugin metadata: %w", err)
 	}
 	return &protocol.WrapKeyResponse{
 		EncryptedDataKey: response.EncryptedDataKey,
-		MetadataJson:     metadata,
+		MetadataJson:     responseMetadata,
 	}, nil
 }
 
@@ -76,20 +84,25 @@ func (c *grpcClient) Wrap(ctx context.Context, request WrapKeyRequest) (WrapKeyR
 	if err != nil {
 		return WrapKeyResponse{}, err
 	}
+	requestMetadata, err := encodeObject(request.Metadata)
+	if err != nil {
+		return WrapKeyResponse{}, err
+	}
 	response, err := c.client.Wrap(ctx, &protocol.WrapKeyRequest{
-		ConfigJson: config,
-		DataKey:    request.DataKey,
+		ConfigJson:   config,
+		DataKey:      request.DataKey,
+		MetadataJson: requestMetadata,
 	})
 	if err != nil {
 		return WrapKeyResponse{}, err
 	}
-	metadata, err := decodeObject(response.MetadataJson)
+	responseMetadata, err := decodeObject(response.MetadataJson)
 	if err != nil {
 		return WrapKeyResponse{}, fmt.Errorf("decode plugin metadata: %w", err)
 	}
 	return WrapKeyResponse{
 		EncryptedDataKey: response.EncryptedDataKey,
-		Metadata:         metadata,
+		Metadata:         responseMetadata,
 	}, nil
 }
 

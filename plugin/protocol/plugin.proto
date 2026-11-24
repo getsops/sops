@@ -7,6 +7,7 @@ option go_package = "github.com/getsops/sops/v3/plugin/protocol;protocol";
 message WrapKeyRequest {
   bytes config_json = 1;
   bytes data_key = 2;
+  bytes metadata_json = 3;
 }
 
 message WrapKeyResponse {

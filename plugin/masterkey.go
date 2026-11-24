@@ -43,8 +43,9 @@ func NewMasterKey(name string, config map[string]interface{}) (*MasterKey, error
 
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	response, err := WrapKey(context.Background(), key.Name, WrapKeyRequest{
-		Config:  key.Config,
-		DataKey: dataKey,
+		Config:   key.Config,
+		Metadata: key.ProviderMetadata,
+		DataKey:  dataKey,
 	})
 	if err != nil {
 		return err

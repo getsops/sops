@@ -25,10 +25,11 @@ type KeyProvider interface {
 ```
 
 `WrapKeyResponse.EncryptedDataKey` is opaque to SOPS. Optional `Metadata` is
-stored alongside it and passed back to `Unwrap`. The config and metadata values
-are JSON objects. The plugin receives the plaintext SOPS data key and runs with
-the SOPS process's user permissions; plugins are trusted code, not a security
-sandbox.
+stored alongside it and passed to later `Wrap` and `Unwrap` calls. This lets a
+provider reuse public, per-key material when rewrapping a data key. The config
+and metadata values are JSON objects. The plugin receives the plaintext SOPS
+data key and runs with the SOPS process's user permissions; plugins are trusted
+code, not a security sandbox.
 
 ## Configure a plugin
 

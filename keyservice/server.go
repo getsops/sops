@@ -107,18 +107,23 @@ func (ks *Server) encryptWithPlugin(ctx context.Context, key *PluginKey, plainte
 	if err != nil {
 		return nil, nil, fmt.Errorf("decode plugin %q configuration: %w", key.Name, err)
 	}
+	metadata, err := decodePluginObject(key.MetadataJson)
+	if err != nil {
+		return nil, nil, fmt.Errorf("decode plugin %q metadata: %w", key.Name, err)
+	}
 	response, err := sopsplugin.WrapKey(ctx, key.Name, sopsplugin.WrapKeyRequest{
-		Config:  config,
-		DataKey: plaintext,
+		Config:   config,
+		Metadata: metadata,
+		DataKey:  plaintext,
 	})
 	if err != nil {
 		return nil, nil, err
 	}
-	metadata, err := json.Marshal(response.Metadata)
+	responseMetadata, err := json.Marshal(response.Metadata)
 	if err != nil {
 		return nil, nil, fmt.Errorf("encode plugin %q metadata: %w", key.Name, err)
 	}
-	return response.EncryptedDataKey, metadata, nil
+	return response.EncryptedDataKey, responseMetadata, nil
 }
 
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
