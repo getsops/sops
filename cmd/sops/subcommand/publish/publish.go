@@ -49,6 +49,10 @@ func Run(opts Opts) error {
 
 	conf, err := config.LoadDestinationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
+		if opts.Recursive && errors.Is(err, config.ErrNoMatchingDestination) {
+			fmt.Printf("Skipping %s: no matching destination rule\n", path)
+			return nil
+		}
 		return err
 	}
 	if conf.Destination == nil {
