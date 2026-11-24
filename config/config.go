@@ -5,6 +5,7 @@ package config //import "github.com/getsops/sops/v3/config"
 
 import (
 	"fmt"
+	"github.com/getsops/sops/v3/tencentkms"
 	"os"
 	"path"
 	"path/filepath"
@@ -130,14 +131,19 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup   `yaml:"merge"`
-	KMS     []kmsKey     `yaml:"kms"`
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	HCKms   []hckmsKey   `yaml:"hckms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string     `yaml:"pgp"`
+	Merge      []keyGroup      `yaml:"merge"`
+	KMS        []kmsKey        `yaml:"kms"`
+	GCPKMS     []gcpKmsKey     `yaml:"gcp_kms"`
+	HCKms      []hckmsKey      `yaml:"hckms"`
+	AzureKV    []azureKVKey    `yaml:"azure_keyvault"`
+	Vault      []string        `yaml:"hc_vault"`
+	Age        []string        `yaml:"age"`
+	PGP        []string        `yaml:"pgp"`
+	TencentKMS []tencentKMSKey `yaml:"tencent_kms"`
+}
+
+type tencentKMSKey struct {
+	KeyID string `yaml:"key_id"`
 }
 
 type gcpKmsKey struct {
@@ -185,6 +191,7 @@ type creationRule struct {
 	HCKms                   []string    `yaml:"hckms"`
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
+	TencentKMS              interface{} `yaml:"tencent_kms"`          // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
@@ -219,6 +226,10 @@ func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
 
 func (c *creationRule) GetVaultURIs() ([]string, error) {
 	return parseKeyField(c.VaultURI, "hc_vault_transit_uri")
+}
+
+func (c *creationRule) GetTencentKMSKeys() ([]string, error) {
+	return parseKeyField(c.TencentKMS, "tencent_kms")
 }
 
 // Utility function to handle both string and []string
@@ -357,6 +368,9 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			return nil, err
 		}
 	}
+	for _, k := range group.TencentKMS {
+		keyGroup = append(keyGroup, tencentkms.NewMasterKeyFromKeyID(k.KeyID))
+	}
 	return deduplicateKeygroup(keyGroup), nil
 }
 
@@ -443,6 +457,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range vaultKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		tencentkmsKeys, err := getKeysWithValidation(cRule.GetTencentKMSKeys, "tencent_kms")
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range tencentkms.MasterKeysFromKeyIDString(strings.Join(tencentkmsKeys, ",")) {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
