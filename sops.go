@@ -57,6 +57,7 @@ import (
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/pgp"
+	sopsplugin "github.com/getsops/sops/v3/plugin"
 	"github.com/getsops/sops/v3/shamir"
 )
 
@@ -812,7 +813,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			}
 		}
 		for _, key := range group {
-			svcKey := keyservice.KeyFromMasterKey(key)
+			svcKey, err := keyservice.KeyFromMasterKeyWithError(key)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("failed to convert master key %q for key service: %w", key.ToString(), err))
+				continue
+			}
 			var keyErrs []error
 			encrypted := false
 			for _, svc := range svcs {
@@ -824,7 +829,16 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 					keyErrs = append(keyErrs, fmt.Errorf("failed to encrypt new data key with master key %q: %w", key.ToString(), err))
 					continue
 				}
+				if pluginKey, ok := key.(*sopsplugin.MasterKey); ok {
+					if err := pluginKey.SetProviderMetadataJSON(rsp.PluginMetadata); err != nil {
+						keyErrs = append(keyErrs, fmt.Errorf("key service returned invalid metadata for master key %q: %w", key.ToString(), err))
+						continue
+					}
+				}
 				key.SetEncryptedDataKey(rsp.Ciphertext)
+				if pluginKey, ok := key.(*sopsplugin.MasterKey); ok {
+					pluginKey.CreationDate = time.Now()
+				}
 				encrypted = true
 				// Only need to encrypt the key successfully with one service
 				break
@@ -938,7 +952,10 @@ func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
 // of the key services, returning as soon as one key service succeeds.
 func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	svcKey := keyservice.KeyFromMasterKey(key)
+	svcKey, err := keyservice.KeyFromMasterKeyWithError(key)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert master key %q for key service: %w", key.ToString(), err)
+	}
 	var part []byte
 	decryptErr := decryptKeyError{
 		keyName: key.ToString(),

@@ -1,6 +1,7 @@
 package keyservice
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/getsops/sops/v3/age"
@@ -10,6 +11,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	sopsplugin "github.com/getsops/sops/v3/plugin"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -100,6 +102,25 @@ func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) 
 	return []byte(ageKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithPlugin(ctx context.Context, key *PluginKey, plaintext []byte) ([]byte, []byte, error) {
+	config, err := decodePluginObject(key.ConfigJson)
+	if err != nil {
+		return nil, nil, fmt.Errorf("decode plugin %q configuration: %w", key.Name, err)
+	}
+	response, err := sopsplugin.WrapKey(ctx, key.Name, sopsplugin.WrapKeyRequest{
+		Config:  config,
+		DataKey: plaintext,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	metadata, err := json.Marshal(response.Metadata)
+	if err != nil {
+		return nil, nil, fmt.Errorf("encode plugin %q metadata: %w", key.Name, err)
+	}
+	return response.EncryptedDataKey, metadata, nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -167,6 +188,40 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 	return []byte(plaintext), err
 }
 
+func (ks *Server) decryptWithPlugin(ctx context.Context, key *PluginKey, ciphertext []byte) ([]byte, error) {
+	config, err := decodePluginObject(key.ConfigJson)
+	if err != nil {
+		return nil, fmt.Errorf("decode plugin %q configuration: %w", key.Name, err)
+	}
+	metadata, err := decodePluginObject(key.MetadataJson)
+	if err != nil {
+		return nil, fmt.Errorf("decode plugin %q metadata: %w", key.Name, err)
+	}
+	response, err := sopsplugin.UnwrapKey(ctx, key.Name, sopsplugin.UnwrapKeyRequest{
+		Config:           config,
+		Metadata:         metadata,
+		EncryptedDataKey: ciphertext,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return response.DataKey, nil
+}
+
+func decodePluginObject(data []byte) (map[string]interface{}, error) {
+	if len(data) == 0 {
+		return map[string]interface{}{}, nil
+	}
+	var object map[string]interface{}
+	if err := json.Unmarshal(data, &object); err != nil {
+		return nil, err
+	}
+	if object == nil {
+		return nil, fmt.Errorf("expected a JSON object")
+	}
+	return object, nil
+}
+
 // Encrypt takes an encrypt request and encrypts the provided plaintext with the provided key, returning the encrypted
 // result
 func (ks Server) Encrypt(ctx context.Context,
@@ -230,6 +285,15 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_PluginKey:
+		ciphertext, metadata, err := ks.encryptWithPlugin(ctx, k.PluginKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext:     ciphertext,
+			PluginMetadata: metadata,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -258,6 +322,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	case *Key_HckmsKey:
 		return fmt.Sprintf("HuaweiCloud KMS key with ID %s", k.HckmsKey.KeyId)
+	case *Key_PluginKey:
+		return fmt.Sprintf("SOPS plugin %q", k.PluginKey.Name)
 	default:
 		return "Unknown key type"
 	}
@@ -336,6 +402,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_HckmsKey:
 		plaintext, err := ks.decryptWithHckms(k.HckmsKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_PluginKey:
+		plaintext, err := ks.decryptWithPlugin(ctx, k.PluginKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

@@ -41,6 +41,7 @@ import (
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/pgp"
+	sopsplugin "github.com/getsops/sops/v3/plugin"
 	"github.com/getsops/sops/v3/stores"
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
@@ -91,7 +92,7 @@ func main() {
 		},
 	}
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, HuaweiCloud KMS, Azure Key Vault, age, and GPG support"
+	app.Usage = "sops - encrypted file editor with built-in providers and external Go key-provider plugins"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
 	app.Authors = []cli.Author{
@@ -594,6 +595,10 @@ func main() {
 							Name:  "age",
 							Usage: "the age recipient the new group should contain. Can be specified more than once",
 						},
+						cli.StringFlag{
+							Name:  "plugin",
+							Usage: "plugin provider configuration as a JSON object or array",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -614,6 +619,10 @@ func main() {
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
+						pluginKeys, err := parsePluginKeys(c.String("plugin"))
+						if err != nil {
+							return toExitError(err)
+						}
 						if c.NArg() != 0 {
 							return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
 						}
@@ -653,6 +662,7 @@ func main() {
 								group = append(group, key)
 							}
 						}
+						group = append(group, pluginKeys...)
 						inputStore, err := inputStore(c, c.String("file"))
 						if err != nil {
 							return toExitError(err)
@@ -971,6 +981,10 @@ func main() {
 					EnvVar: "SOPS_AGE_RECIPIENTS",
 				},
 				cli.StringFlag{
+					Name:  "plugin",
+					Usage: "plugin provider configuration as a JSON object or array",
+				},
+				cli.StringFlag{
 					Name:  "input-type",
 					Usage: "currently json, yaml, dotenv, ini and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
@@ -1192,6 +1206,14 @@ func main() {
 					Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
 				},
 				cli.StringFlag{
+					Name:  "add-plugin",
+					Usage: "add plugin provider configuration as a JSON object or array",
+				},
+				cli.StringFlag{
+					Name:  "rm-plugin",
+					Usage: "remove plugin provider configuration as a JSON object or array",
+				},
+				cli.StringFlag{
 					Name:  "filename-override",
 					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
 				},
@@ -1328,6 +1350,10 @@ func main() {
 					Name:   "age, a",
 					Usage:  "comma separated list of age recipients",
 					EnvVar: "SOPS_AGE_RECIPIENTS",
+				},
+				cli.StringFlag{
+					Name:  "plugin",
+					Usage: "plugin provider configuration as a JSON object or array",
 				},
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1742,6 +1768,10 @@ func main() {
 			Usage:  "comma separated list of age recipients",
 			EnvVar: "SOPS_AGE_RECIPIENTS",
 		},
+		cli.StringFlag{
+			Name:  "plugin",
+			Usage: "plugin provider configuration as a JSON object or array",
+		},
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -1817,6 +1847,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-pgp",
 			Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-plugin",
+			Usage: "add plugin provider configuration as a JSON object or array",
+		},
+		cli.StringFlag{
+			Name:  "rm-plugin",
+			Usage: "remove plugin provider configuration as a JSON object or array",
 		},
 		cli.BoolFlag{
 			Name:  "ignore-mac",
@@ -1912,8 +1950,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" || c.String("add-plugin") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" || c.String("rm-plugin") != "" {
 				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
@@ -2243,7 +2281,45 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	}, nil
 }
 
-func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, hckmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+func parsePluginKeys(value string) ([]keys.MasterKey, error) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return nil, nil
+	}
+	type pluginConfig struct {
+		Name   string                 `json:"name"`
+		Config map[string]interface{} `json:"config"`
+	}
+	var configs []pluginConfig
+	switch value[0] {
+	case '{':
+		var config pluginConfig
+		if err := encodingjson.Unmarshal([]byte(value), &config); err != nil {
+			return nil, fmt.Errorf("parse --plugin JSON: %w", err)
+		}
+		configs = append(configs, config)
+	case '[':
+		if err := encodingjson.Unmarshal([]byte(value), &configs); err != nil {
+			return nil, fmt.Errorf("parse --plugin JSON array: %w", err)
+		}
+	default:
+		return nil, fmt.Errorf("parse --plugin JSON: expected an object or array")
+	}
+	if len(configs) == 0 {
+		return nil, fmt.Errorf("parse --plugin JSON: at least one plugin must be provided")
+	}
+	var masterKeys []keys.MasterKey
+	for _, config := range configs {
+		key, err := sopsplugin.NewMasterKey(config.Name, config.Config)
+		if err != nil {
+			return nil, err
+		}
+		masterKeys = append(masterKeys, key)
+	}
+	return masterKeys, nil
+}
+
+func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, hckmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string, pluginOptionName string) ([]keys.MasterKey, error) {
 	var masterKeys []keys.MasterKey
 	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
 		masterKeys = append(masterKeys, k)
@@ -2282,16 +2358,21 @@ func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsO
 	for _, k := range ageKeys {
 		masterKeys = append(masterKeys, k)
 	}
+	pluginKeys, err := parsePluginKeys(c.String(pluginOptionName))
+	if err != nil {
+		return nil, err
+	}
+	masterKeys = append(masterKeys, pluginKeys...)
 	return masterKeys, nil
 }
 
 func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-hckms", "add-azure-kv", "add-hc-vault-transit", "add-age")
+	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-hckms", "add-azure-kv", "add-hc-vault-transit", "add-age", "add-plugin")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-hckms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
+	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-hckms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age", "rm-plugin")
 	if err != nil {
 		return rotateOpts{}, err
 	}
@@ -2441,6 +2522,7 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 	var hcVaultMkKeys []keys.MasterKey
 	var hckmsMkKeys []keys.MasterKey
 	var ageMasterKeys []keys.MasterKey
+	var pluginMasterKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -2496,7 +2578,11 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("hckms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+	pluginMasterKeys, err := parsePluginKeys(c.String("plugin"))
+	if err != nil {
+		return nil, err
+	}
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("hckms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" && c.String("plugin") == "" {
 		conf := optionalConfig
 		var err error
 		if conf == nil {
@@ -2520,6 +2606,7 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
 	group = append(group, ageMasterKeys...)
+	group = append(group, pluginMasterKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }

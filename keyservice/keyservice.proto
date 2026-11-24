@@ -11,6 +11,7 @@ message Key {
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
 		HckmsKey hckms_key = 7;
+		PluginKey plugin_key = 8;
 	}
 }
 
@@ -49,6 +50,12 @@ message HckmsKey {
 	string key_id = 1;
 }
 
+message PluginKey {
+	string name = 1;
+	bytes config_json = 2;
+	bytes metadata_json = 3;
+}
+
 message EncryptRequest {
 	Key key = 1;
 	bytes plaintext = 2;
@@ -56,6 +63,7 @@ message EncryptRequest {
 
 message EncryptResponse {
 	bytes ciphertext = 1;
+	bytes plugin_metadata = 2;
 }
 
 message DecryptRequest {

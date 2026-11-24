@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sops.plugin.v1;
+
+option go_package = "github.com/getsops/sops/v3/plugin/protocol;protocol";
+
+message WrapKeyRequest {
+  bytes config_json = 1;
+  bytes data_key = 2;
+}
+
+message WrapKeyResponse {
+  bytes encrypted_data_key = 1;
+  bytes metadata_json = 2;
+}
+
+message UnwrapKeyRequest {
+  bytes config_json = 1;
+  bytes metadata_json = 2;
+  bytes encrypted_data_key = 3;
+}
+
+message UnwrapKeyResponse {
+  bytes data_key = 1;
+}
+
+service KeyProvider {
+  rpc Wrap(WrapKeyRequest) returns (WrapKeyResponse);
+  rpc Unwrap(UnwrapKeyRequest) returns (UnwrapKeyResponse);
+}

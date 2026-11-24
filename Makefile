@@ -80,11 +80,11 @@ showcoverage: test
 	$(GO) tool cover -html=profile.out
 
 .PHONY: generate
-generate: install-protoc-go install-protoc-go-grpc keyservice/keyservice.pb.go
+generate: install-protoc-go install-protoc-go-grpc keyservice/keyservice.pb.go plugin/protocol/plugin.pb.go
 	$(GO) generate
 
 %.pb.go: %.proto
-	protoc --plugin gen-go=$(PROTOC_GO) --plugin gen-go-grpc=$(PLUGIN_GO_GRPC) --go-grpc_opt=require_unimplemented_servers=false --go-grpc_out=. --go_out=. $<
+	protoc --plugin=protoc-gen-go=$(PROTOC_GO) --plugin=protoc-gen-go-grpc=$(PROTOC_GO_GRPC) --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative,require_unimplemented_servers=false --go-grpc_out=. --go_out=. $<
 
 .PHONY: functional-tests
 functional-tests:
