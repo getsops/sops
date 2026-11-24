@@ -45,7 +45,7 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 			first := 0
 			if len(itemTree) > 0 {
 				if sectionComment, ok := itemTree[0].Key.(sops.Comment); ok {
-					section.Comment = sectionComment.Value
+					section.Comment = iniComment(sectionComment.Value)
 					first = 1
 				}
 			}
@@ -55,7 +55,7 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 				keyVal := itemTree[i]
 				if comment, ok := keyVal.Key.(sops.Comment); ok {
 					if lastItem != nil {
-						lastItem.Comment = comment.Value
+						lastItem.Comment = iniComment(comment.Value)
 					}
 				} else {
 					lastItem, err = section.NewKey(keyVal.Key.(string), stores.ValToString(keyVal.Value))
@@ -69,6 +69,21 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 	var buffer bytes.Buffer
 	iniFile.WriteTo(&buffer)
 	return buffer.Bytes(), nil
+}
+
+// iniComment prepares a comment for the INI library. When writing, the
+// library looks at the first character of every comment line, and panics if a
+// line is empty. Such lines show up for example when a comment block starts
+// with a line that only consists of comment characters, like ';;;;;', since
+// stripCommentChar removes all of them.
+func iniComment(comment string) string {
+	lines := strings.Split(comment, ini.LineBreak)
+	for i, line := range lines {
+		if line == "" {
+			lines[i] = ";"
+		}
+	}
+	return strings.Join(lines, ini.LineBreak)
 }
 
 func (store Store) stripCommentChar(comment string) string {

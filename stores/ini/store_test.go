@@ -182,3 +182,31 @@ func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	_, err := store.LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
 }
+
+// https://github.com/getsops/sops/issues/766
+func TestEmitPlainFileWithEmptyCommentLines(t *testing.T) {
+	in := `;;;;;;;;;;;;;;;;;
+; block comment ;
+;;;;;;;;;;;;;;;;;
+[foo]
+;
+; key comment
+foo = 1
+bar = 2
+`
+	store := Store{}
+	branches, err := store.LoadPlainFile([]byte(in))
+	assert.Nil(t, err)
+
+	out, err := store.EmitPlainFile(branches)
+	assert.Nil(t, err)
+	// The library writes "; " for the lines that were empty.
+	assert.Equal(t, "; \n; block comment ;\n; ;;;;;;;;;;;;;;;;\n[foo]\n; \n; key comment\nfoo = 1\nbar = 2\n", string(out))
+
+	// Reading and writing the output again does not change it.
+	again, err := store.LoadPlainFile(out)
+	assert.Nil(t, err)
+	outAgain, err := store.EmitPlainFile(again)
+	assert.Nil(t, err)
+	assert.Equal(t, string(out), string(outAgain))
+}
