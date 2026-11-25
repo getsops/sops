@@ -1,8 +1,12 @@
 package keyservice
 
 import (
+	"bytes"
+	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io"
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
@@ -12,7 +16,6 @@ import (
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
 	sopsplugin "github.com/getsops/sops/v3/plugin"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -20,7 +23,22 @@ import (
 // Server is a key service server that uses SOPS MasterKeys to fulfill requests
 type Server struct {
 	// Prompt indicates whether the server should prompt before decrypting or encrypting data
-	Prompt bool
+	Prompt        bool
+	PluginRuntime *sopsplugin.Runtime
+}
+
+// NewServer creates a key-service server with a plugin runtime scoped to the
+// server lifetime.
+func NewServer(ctx context.Context) *Server {
+	return &Server{PluginRuntime: sopsplugin.NewRuntime(ctx)}
+}
+
+// Close stops the plugin processes owned by the server.
+func (ks *Server) Close() error {
+	if ks == nil || ks.PluginRuntime == nil {
+		return nil
+	}
+	return ks.PluginRuntime.Close()
 }
 
 func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
@@ -111,11 +129,17 @@ func (ks *Server) encryptWithPlugin(ctx context.Context, key *PluginKey, plainte
 	if err != nil {
 		return nil, nil, fmt.Errorf("decode plugin %q metadata: %w", key.Name, err)
 	}
-	response, err := sopsplugin.WrapKey(ctx, key.Name, sopsplugin.WrapKeyRequest{
+	request := sopsplugin.WrapKeyRequest{
 		Config:   config,
 		Metadata: metadata,
 		DataKey:  plaintext,
-	})
+	}
+	var response sopsplugin.WrapKeyResponse
+	if ks.PluginRuntime == nil {
+		response, err = sopsplugin.WrapKey(ctx, key.Name, request)
+	} else {
+		response, err = ks.PluginRuntime.WrapKey(ctx, key.Name, request)
+	}
 	if err != nil {
 		return nil, nil, err
 	}
@@ -202,11 +226,17 @@ func (ks *Server) decryptWithPlugin(ctx context.Context, key *PluginKey, ciphert
 	if err != nil {
 		return nil, fmt.Errorf("decode plugin %q metadata: %w", key.Name, err)
 	}
-	response, err := sopsplugin.UnwrapKey(ctx, key.Name, sopsplugin.UnwrapKeyRequest{
+	request := sopsplugin.UnwrapKeyRequest{
 		Config:           config,
 		Metadata:         metadata,
 		EncryptedDataKey: ciphertext,
-	})
+	}
+	var response sopsplugin.UnwrapKeyResponse
+	if ks.PluginRuntime == nil {
+		response, err = sopsplugin.UnwrapKey(ctx, key.Name, request)
+	} else {
+		response, err = ks.PluginRuntime.UnwrapKey(ctx, key.Name, request)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +248,16 @@ func decodePluginObject(data []byte) (map[string]interface{}, error) {
 		return map[string]interface{}{}, nil
 	}
 	var object map[string]interface{}
-	if err := json.Unmarshal(data, &object); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := decoder.Decode(&object); err != nil {
+		return nil, err
+	}
+	var trailing interface{}
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return nil, fmt.Errorf("unexpected trailing JSON value")
+		}
 		return nil, err
 	}
 	if object == nil {
@@ -328,7 +367,8 @@ func keyToString(key *Key) string {
 	case *Key_HckmsKey:
 		return fmt.Sprintf("HuaweiCloud KMS key with ID %s", k.HckmsKey.KeyId)
 	case *Key_PluginKey:
-		return fmt.Sprintf("SOPS plugin %q", k.PluginKey.Name)
+		configHash := sha256.Sum256(k.PluginKey.ConfigJson)
+		return fmt.Sprintf("SOPS plugin %q (%x)", k.PluginKey.Name, configHash[:6])
 	default:
 		return "Unknown key type"
 	}

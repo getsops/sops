@@ -1,6 +1,7 @@
 package common
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -69,6 +70,8 @@ var storeConstructors = map[Format]storeConstructor{
 
 // DecryptTreeOpts are the options needed to decrypt a tree
 type DecryptTreeOpts struct {
+	// Context is used for key-service requests. A nil context uses Background.
+	Context context.Context
 	// Tree is the tree to be decrypted
 	Tree *sops.Tree
 	// KeyServices are the key services to be used for decryption of the data key
@@ -83,7 +86,11 @@ type DecryptTreeOpts struct {
 
 // DecryptTree decrypts the tree passed in through the DecryptTreeOpts and additionally returns the decrypted data key
 func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
-	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
+	ctx := opts.Context
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServicesContext(ctx, opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return nil, NewExitError(err, codes.CouldNotRetrieveKey)
 	}
@@ -239,6 +246,7 @@ func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex in
 
 // GenericDecryptOpts represents decryption options and config
 type GenericDecryptOpts struct {
+	Context         context.Context
 	Cipher          sops.Cipher
 	InputStore      sops.Store
 	InputPath       string
@@ -302,6 +310,7 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	// If there is another key, then we should be able to just decrypt
 	// without having to try different variations of the encryption context.
 	dataKey, err := DecryptTree(DecryptTreeOpts{
+		Context:     opts.Context,
 		Cipher:      opts.Cipher,
 		IgnoreMac:   opts.IgnoreMAC,
 		Tree:        tree,

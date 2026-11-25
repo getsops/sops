@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
@@ -42,7 +43,12 @@ func NewMasterKey(name string, config map[string]interface{}) (*MasterKey, error
 }
 
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	response, err := WrapKey(context.Background(), key.Name, WrapKeyRequest{
+	return key.EncryptWithContext(context.Background(), dataKey)
+}
+
+// EncryptWithContext wraps dataKey using the supplied request context.
+func (key *MasterKey) EncryptWithContext(ctx context.Context, dataKey []byte) error {
+	response, err := WrapKey(ctx, key.Name, WrapKeyRequest{
 		Config:   key.Config,
 		Metadata: key.ProviderMetadata,
 		DataKey:  dataKey,
@@ -72,7 +78,12 @@ func (key *MasterKey) SetEncryptedDataKey(dataKey []byte) {
 }
 
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	response, err := UnwrapKey(context.Background(), key.Name, UnwrapKeyRequest{
+	return key.DecryptWithContext(context.Background())
+}
+
+// DecryptWithContext unwraps the stored data key using the supplied context.
+func (key *MasterKey) DecryptWithContext(ctx context.Context) ([]byte, error) {
+	response, err := UnwrapKey(ctx, key.Name, UnwrapKeyRequest{
 		Config:           key.Config,
 		Metadata:         key.ProviderMetadata,
 		EncryptedDataKey: key.EncryptedKey,
@@ -122,7 +133,9 @@ func (key *MasterKey) SetProviderMetadataJSON(data []byte) error {
 		return nil
 	}
 	var metadata map[string]interface{}
-	if err := json.Unmarshal(data, &metadata); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := decodeJSONValue(decoder, &metadata); err != nil {
 		return err
 	}
 	if metadata == nil {

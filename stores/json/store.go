@@ -101,7 +101,7 @@ func (store BinaryStore) EmitExample() []byte {
 	return []byte("Welcome to SOPS! Edit this file as you please!")
 }
 
-func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error) {
+func (store Store) sliceFromJSONDecoder(dec *json.Decoder, preserveNumbers bool) ([]interface{}, error) {
 	var slice []interface{}
 	for {
 		t, err := dec.Token()
@@ -111,25 +111,32 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 		if delim, ok := t.(json.Delim); ok && delim.String() == "]" {
 			return slice, nil
 		} else if ok && delim.String() == "{" {
-			item, err := store.treeBranchFromJSONDecoder(dec)
+			item, err := store.treeBranchFromJSONDecoder(dec, preserveNumbers, false)
 			if err != nil {
 				return slice, err
 			}
 			slice = append(slice, item)
 		} else if ok && delim.String() == "[" {
-			item, err := store.sliceFromJSONDecoder(dec)
+			item, err := store.sliceFromJSONDecoder(dec, preserveNumbers)
 			if err != nil {
 				return slice, err
 			}
 			slice = append(slice, item)
 		} else {
-			v, err := normalizeJSONNumber(t)
+			v, err := normalizeJSONNumberUnlessPreserved(t, preserveNumbers)
 			if err != nil {
 				return slice, err
 			}
 			slice = append(slice, v)
 		}
 	}
+}
+
+func normalizeJSONNumberUnlessPreserved(value interface{}, preserve bool) (interface{}, error) {
+	if preserve {
+		return value, nil
+	}
+	return normalizeJSONNumber(value)
 }
 
 // normalizeJSONNumber converts a json.Number scalar (produced because the
@@ -153,7 +160,7 @@ func normalizeJSONNumber(t interface{}) (interface{}, error) {
 
 var errEndOfObject = fmt.Errorf("End of object")
 
-func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, error) {
+func (store Store) treeItemFromJSONDecoder(dec *json.Decoder, preserveNumbers, root bool) (sops.TreeItem, error) {
 	var item sops.TreeItem
 	key, err := dec.Token()
 	if err != nil && err != io.EOF {
@@ -170,23 +177,24 @@ func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, er
 	if err != nil {
 		return item, err
 	}
+	valuePreserveNumbers := preserveNumbers || (root && item.Key == stores.SopsMetadataKey)
 	if delim, ok := value.(json.Delim); ok {
 		if delim.String() == "[" {
-			v, err := store.sliceFromJSONDecoder(dec)
+			v, err := store.sliceFromJSONDecoder(dec, valuePreserveNumbers)
 			if err != nil {
 				return item, err
 			}
 			item.Value = v
 		}
 		if delim.String() == "{" {
-			v, err := store.treeBranchFromJSONDecoder(dec)
+			v, err := store.treeBranchFromJSONDecoder(dec, valuePreserveNumbers, false)
 			if err != nil {
 				return item, err
 			}
 			item.Value = v
 		}
 	} else {
-		v, err := normalizeJSONNumber(value)
+		v, err := normalizeJSONNumberUnlessPreserved(value, valuePreserveNumbers)
 		if err != nil {
 			return item, err
 		}
@@ -196,10 +204,10 @@ func (store Store) treeItemFromJSONDecoder(dec *json.Decoder) (sops.TreeItem, er
 
 }
 
-func (store Store) treeBranchFromJSONDecoder(dec *json.Decoder) (sops.TreeBranch, error) {
+func (store Store) treeBranchFromJSONDecoder(dec *json.Decoder, preserveNumbers, root bool) (sops.TreeBranch, error) {
 	var tree sops.TreeBranch
 	for {
-		item, err := store.treeItemFromJSONDecoder(dec)
+		item, err := store.treeItemFromJSONDecoder(dec, preserveNumbers, root)
 		if err == io.EOF {
 			return tree, nil
 		}
@@ -298,7 +306,7 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 		}
 		return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got %#v of type %T instead", v, v)
 	}
-	return store.treeBranchFromJSONDecoder(dec)
+	return store.treeBranchFromJSONDecoder(dec, false, true)
 }
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {

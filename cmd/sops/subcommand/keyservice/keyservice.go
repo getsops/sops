@@ -1,6 +1,7 @@
 package keyservice
 
 import (
+	"context"
 	"net"
 	"os"
 	"os/signal"
@@ -33,20 +34,28 @@ func Run(opts Opts) error {
 		return err
 	}
 	defer lis.Close()
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer cancel()
 	grpcServer := grpc.NewServer()
-	keyservice.RegisterKeyServiceServer(grpcServer, keyservice.Server{
-		Prompt: opts.Prompt,
-	})
+	server := keyservice.NewServer(ctx)
+	server.Prompt = opts.Prompt
+	defer server.Close()
+	keyservice.RegisterKeyServiceServer(grpcServer, server)
 	log.Infof("Listening on %s://%s", opts.Network, opts.Address)
 
-	// Close socket if we get killed
-	sigc := make(chan os.Signal, 1)
-	signal.Notify(sigc, os.Interrupt, os.Kill, syscall.SIGTERM)
-	go func(c chan os.Signal) {
-		sig := <-c
-		log.Infof("Caught signal %s: shutting down.", sig)
-		lis.Close()
-		os.Exit(0)
-	}(sigc)
-	return grpcServer.Serve(lis)
+	serveDone := make(chan struct{})
+	go func() {
+		select {
+		case <-ctx.Done():
+			log.Info("Shutdown requested; stopping key service.")
+			grpcServer.GracefulStop()
+		case <-serveDone:
+		}
+	}()
+	err = grpcServer.Serve(lis)
+	close(serveDone)
+	if err == grpc.ErrServerStopped {
+		return nil
+	}
+	return err
 }

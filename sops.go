@@ -37,6 +37,7 @@ ordering.
 package sops // import "github.com/getsops/sops/v3"
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
@@ -48,9 +49,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
-
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/audit"
 	"github.com/getsops/sops/v3/keys"
@@ -59,6 +57,7 @@ import (
 	"github.com/getsops/sops/v3/pgp"
 	sopsplugin "github.com/getsops/sops/v3/plugin"
 	"github.com/getsops/sops/v3/shamir"
+	"github.com/sirupsen/logrus"
 )
 
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
@@ -661,7 +660,7 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 
 // GenerateDataKey generates a new random data key and encrypts it with all MasterKeys.
 func (tree Tree) GenerateDataKey() ([]byte, []error) {
-	newKey := make([]byte, 32)
+	newKey := make([]byte, keys.DataKeySize)
 	_, err := rand.Read(newKey)
 	if err != nil {
 		return nil, []error{fmt.Errorf("Could not generate random key: %s", err)}
@@ -671,12 +670,21 @@ func (tree Tree) GenerateDataKey() ([]byte, []error) {
 
 // GenerateDataKeyWithKeyServices generates a new random data key and encrypts it with all MasterKeys.
 func (tree *Tree) GenerateDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, []error) {
-	newKey := make([]byte, 32)
+	return tree.GenerateDataKeyWithKeyServicesContext(context.Background(), svcs)
+}
+
+// GenerateDataKeyWithKeyServicesContext generates a random data key and
+// encrypts it with all master keys using ctx for key-service requests.
+func (tree *Tree) GenerateDataKeyWithKeyServicesContext(ctx context.Context, svcs []keyservice.KeyServiceClient) ([]byte, []error) {
+	if ctx == nil {
+		return nil, []error{fmt.Errorf("context cannot be nil")}
+	}
+	newKey := make([]byte, keys.DataKeySize)
 	_, err := rand.Read(newKey)
 	if err != nil {
 		return nil, []error{fmt.Errorf("Could not generate random key: %s", err)}
 	}
-	return newKey, tree.Metadata.UpdateMasterKeysWithKeyServices(newKey, svcs)
+	return newKey, tree.Metadata.UpdateMasterKeysWithKeyServicesContext(ctx, newKey, svcs)
 }
 
 // Metadata holds information about a file encrypted by sops
@@ -771,6 +779,18 @@ func (m *Metadata) MasterKeyCount() int {
 
 // UpdateMasterKeysWithKeyServices encrypts the data key with all master keys using the provided key services
 func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
+	return m.UpdateMasterKeysWithKeyServicesContext(context.Background(), dataKey, svcs)
+}
+
+// UpdateMasterKeysWithKeyServicesContext encrypts the data key with all master
+// keys using ctx for key-service requests.
+func (m *Metadata) UpdateMasterKeysWithKeyServicesContext(ctx context.Context, dataKey []byte, svcs []keyservice.KeyServiceClient) (errs []error) {
+	if ctx == nil {
+		return []error{fmt.Errorf("context cannot be nil")}
+	}
+	if err := ctx.Err(); err != nil {
+		return []error{err}
+	}
 	if len(svcs) == 0 {
 		return []error{
 			fmt.Errorf("no key services provided, cannot update master keys"),
@@ -821,7 +841,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			var keyErrs []error
 			encrypted := false
 			for _, svc := range svcs {
-				rsp, err := svc.Encrypt(context.Background(), &keyservice.EncryptRequest{
+				rsp, err := svc.Encrypt(ctx, &keyservice.EncryptRequest{
 					Key:       &svcKey,
 					Plaintext: part,
 				})
@@ -854,14 +874,23 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 
 // UpdateMasterKeys encrypts the data key with all master keys
 func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
-	return m.UpdateMasterKeysWithKeyServices(dataKey, []keyservice.KeyServiceClient{
-		keyservice.NewLocalClient(),
-	})
+	client := keyservice.NewLocalClient()
+	defer client.Close()
+	return m.UpdateMasterKeysWithKeyServicesContext(context.Background(), dataKey, []keyservice.KeyServiceClient{client})
 }
 
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
 func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
+	return m.GetDataKeyWithKeyServicesContext(context.Background(), svcs, decryptionOrder)
+}
+
+// GetDataKeyWithKeyServicesContext retrieves the data key using ctx for
+// key-service requests.
+func (m *Metadata) GetDataKeyWithKeyServicesContext(ctx context.Context, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
+	if ctx == nil {
+		return nil, fmt.Errorf("context cannot be nil")
+	}
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
@@ -871,7 +900,13 @@ func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient,
 	}
 	var parts [][]byte
 	for i, group := range m.KeyGroups {
-		part, err := decryptKeyGroup(group, svcs, decryptionOrder)
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		part, err := decryptKeyGroup(ctx, group, svcs, decryptionOrder)
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
 		if err == nil {
 			parts = append(parts, part)
 		}
@@ -901,14 +936,14 @@ func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient,
 // decryptKeyGroup tries to decrypt the contents of the provided KeyGroup with
 // any of the MasterKeys in the KeyGroup with any of the provided key services,
 // returning as soon as one key service succeeds.
-func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
+func decryptKeyGroup(ctx context.Context, group KeyGroup, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	var keyErrs []error
 	// Sort MasterKeys in the group so we try them in specific order
 	// Use sorted indices to avoid group slice modification
 	indices := sortKeyGroupIndices(group, decryptionOrder)
 	for _, indexVal := range indices {
 		key := group[indexVal]
-		part, err := decryptKey(key, svcs)
+		part, err := decryptKey(ctx, key, svcs)
 		if err != nil {
 			keyErrs = append(keyErrs, err)
 		} else {
@@ -951,7 +986,7 @@ func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
 
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
 // of the key services, returning as soon as one key service succeeds.
-func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func decryptKey(ctx context.Context, key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	svcKey, err := keyservice.KeyFromMasterKeyWithError(key)
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert master key %q for key service: %w", key.ToString(), err)
@@ -968,7 +1003,7 @@ func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte,
 		if part == nil {
 			var rsp *keyservice.DecryptResponse
 			rsp, err = svc.Decrypt(
-				context.Background(),
+				ctx,
 				&keyservice.DecryptRequest{
 					Ciphertext: key.EncryptedDataKey(),
 					Key:        &svcKey,
@@ -988,9 +1023,15 @@ func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte,
 // GetDataKey retrieves the data key from the first MasterKey in the Metadata's KeySources that's able to return it,
 // using the local KeyService
 func (m Metadata) GetDataKey() ([]byte, error) {
-	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
-		keyservice.NewLocalClient(),
-	}, nil)
+	return m.GetDataKeyWithContext(context.Background())
+}
+
+// GetDataKeyWithContext retrieves the data key using the local key service and
+// ctx for plugin-backed key operations.
+func (m Metadata) GetDataKeyWithContext(ctx context.Context) ([]byte, error) {
+	client := keyservice.NewLocalClient()
+	defer client.Close()
+	return m.GetDataKeyWithKeyServicesContext(ctx, []keyservice.KeyServiceClient{client}, nil)
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.

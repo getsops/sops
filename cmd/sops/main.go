@@ -3,16 +3,19 @@ package main // import "github.com/getsops/sops/v3/cmd/sops"
 import (
 	"context"
 	encodingjson "encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/url"
 	"os"
 	osExec "os/exec"
+	"os/signal"
 	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
@@ -56,8 +59,54 @@ var (
 	showedConfigFileWarning bool
 )
 
+type commandResources struct {
+	ctx             context.Context
+	cancel          context.CancelFunc
+	closers         []io.Closer
+	localKeyService *keyservice.LocalClient
+}
+
+const commandResourcesMetadataKey = "sops.command_resources"
+
 func init() {
 	log = logging.NewLogger("CMD")
+}
+
+func commandContext(c *cli.Context) context.Context {
+	if c != nil && c.App != nil {
+		if resources, ok := c.App.Metadata[commandResourcesMetadataKey].(*commandResources); ok {
+			return resources.ctx
+		}
+	}
+	return context.Background()
+}
+
+func addCommandResource(c *cli.Context, closer io.Closer) {
+	if c == nil || c.App == nil || closer == nil {
+		return
+	}
+	if resources, ok := c.App.Metadata[commandResourcesMetadataKey].(*commandResources); ok {
+		resources.closers = append(resources.closers, closer)
+	}
+}
+
+func closeCommandResources(c *cli.Context) error {
+	if c == nil || c.App == nil {
+		return nil
+	}
+	resources, ok := c.App.Metadata[commandResourcesMetadataKey].(*commandResources)
+	if !ok {
+		return nil
+	}
+	delete(c.App.Metadata, commandResourcesMetadataKey)
+	resources.cancel()
+	var closeErrors []error
+	for index := len(resources.closers) - 1; index >= 0; index-- {
+		if err := resources.closers[index].Close(); err != nil {
+			closeErrors = append(closeErrors, err)
+		}
+	}
+	return errors.Join(closeErrors...)
 }
 
 func warnMoreThanOnePositionalArgument(c *cli.Context) {
@@ -95,6 +144,17 @@ func main() {
 	app.Usage = "sops - encrypted file editor with built-in providers and external Go key-provider plugins"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
+	app.Before = func(c *cli.Context) error {
+		if c.App.Metadata == nil {
+			c.App.Metadata = make(map[string]interface{})
+		}
+		ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		c.App.Metadata[commandResourcesMetadataKey] = &commandResources{ctx: ctx, cancel: cancel}
+		return nil
+	}
+	app.After = func(c *cli.Context) error {
+		return closeCommandResources(c)
+	}
 	app.Authors = []cli.Author{
 		{Name: "CNCF Maintainers"},
 	}
@@ -2294,12 +2354,12 @@ func parsePluginKeys(value string) ([]keys.MasterKey, error) {
 	switch value[0] {
 	case '{':
 		var config pluginConfig
-		if err := encodingjson.Unmarshal([]byte(value), &config); err != nil {
+		if err := decodeJSONWithNumbers(strings.NewReader(value), &config); err != nil {
 			return nil, fmt.Errorf("parse --plugin JSON: %w", err)
 		}
 		configs = append(configs, config)
 	case '[':
-		if err := encodingjson.Unmarshal([]byte(value), &configs); err != nil {
+		if err := decodeJSONWithNumbers(strings.NewReader(value), &configs); err != nil {
 			return nil, fmt.Errorf("parse --plugin JSON array: %w", err)
 		}
 	default:
@@ -2317,6 +2377,22 @@ func parsePluginKeys(value string) ([]keys.MasterKey, error) {
 		masterKeys = append(masterKeys, key)
 	}
 	return masterKeys, nil
+}
+
+func decodeJSONWithNumbers(input io.Reader, destination interface{}) error {
+	decoder := encodingjson.NewDecoder(input)
+	decoder.UseNumber()
+	if err := decoder.Decode(destination); err != nil {
+		return err
+	}
+	var trailing interface{}
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("unexpected trailing JSON value")
+		}
+		return err
+	}
+	return nil
 }
 
 func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, hckmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string, pluginOptionName string) ([]keys.MasterKey, error) {
@@ -2401,8 +2477,23 @@ func toExitError(err error) error {
 }
 
 func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
+	ctx := commandContext(c)
+	var resources *commandResources
+	if c != nil && c.App != nil {
+		resources, _ = c.App.Metadata[commandResourcesMetadataKey].(*commandResources)
+	}
 	if c.Bool("enable-local-keyservice") {
-		svcs = append(svcs, keyservice.NewLocalClient())
+		var localClient keyservice.LocalClient
+		if resources != nil && resources.localKeyService != nil {
+			localClient = *resources.localKeyService
+		} else {
+			localClient = keyservice.NewLocalClientWithContext(ctx)
+			if resources != nil {
+				resources.localKeyService = &localClient
+				addCommandResource(c, localClient)
+			}
+		}
+		svcs = append(svcs, keyservice.WithContext(localClient, ctx))
 	}
 	uris := c.StringSlice("keyservice")
 	for _, uri := range uris {
@@ -2436,7 +2527,8 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
-		svcs = append(svcs, keyservice.NewKeyServiceClient(conn))
+		addCommandResource(c, conn)
+		svcs = append(svcs, keyservice.WithContext(keyservice.NewKeyServiceClient(conn), ctx))
 	}
 	return
 }

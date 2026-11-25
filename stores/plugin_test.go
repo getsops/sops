@@ -1,11 +1,16 @@
-package stores
+package stores_test
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	sopsplugin "github.com/getsops/sops/v3/plugin"
+	"github.com/getsops/sops/v3/stores"
+	jsonstore "github.com/getsops/sops/v3/stores/json"
+	yamlstore "github.com/getsops/sops/v3/stores/yaml"
 	"github.com/stretchr/testify/require"
 )
 
@@ -41,14 +46,14 @@ func TestPluginMetadataRoundTripAcrossLayouts(t *testing.T) {
 					KeyGroups:    test.groups,
 				},
 			}
-			for _, flatten := range []MetadataFlatten{
-				MetadataFlattenNone,
-				MetadataFlattenBelowTop,
-				MetadataFlattenFull,
+			for _, flatten := range []stores.MetadataFlatten{
+				stores.MetadataFlattenNone,
+				stores.MetadataFlattenBelowTop,
+				stores.MetadataFlattenFull,
 			} {
-				branches, err := SerializeMetadata(original, MetadataOpts{Flatten: flatten})
+				branches, err := stores.SerializeMetadata(original, stores.MetadataOpts{Flatten: flatten})
 				require.NoError(t, err)
-				_, decoded, err := ExtractMetadata(branches, MetadataOpts{Flatten: flatten})
+				_, decoded, err := stores.ExtractMetadata(branches, stores.MetadataOpts{Flatten: flatten})
 				require.NoError(t, err)
 				require.Len(t, decoded.KeyGroups, len(test.groups))
 				for groupIndex, expectedGroup := range test.groups {
@@ -65,6 +70,66 @@ func TestPluginMetadataRoundTripAcrossLayouts(t *testing.T) {
 					}
 				}
 			}
+		})
+	}
+}
+
+func TestPluginConfigAndVersionedMetadataKeepLargeNumbersAcrossStores(t *testing.T) {
+	const largeInteger = "9007199254740993"
+	const preciseDecimal = "0.12345678901234567890123456789"
+	key, err := sopsplugin.NewMasterKey("number-test", map[string]interface{}{
+		"key_version":   json.Number(largeInteger),
+		"precise_value": json.Number(preciseDecimal),
+	})
+	require.NoError(t, err)
+	key.ProviderMetadata = map[string]interface{}{
+		"metadata_version": json.Number(largeInteger),
+		"precise_value":    json.Number(preciseDecimal),
+	}
+	key.EncryptedKey = []byte{1, 2, 3}
+	key.CreationDate = time.Unix(1_700_000_000, 0).UTC()
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{sops.TreeBranch{{Key: "secret", Value: "encrypted"}}},
+		Metadata: sops.Metadata{
+			LastModified: time.Unix(1_700_000_100, 0).UTC(),
+			Version:      "3.0.0",
+			KeyGroups:    []sops.KeyGroup{{key}},
+		},
+	}
+
+	for _, test := range []struct {
+		name  string
+		store interface {
+			EmitEncryptedFile(sops.Tree) ([]byte, error)
+			LoadEncryptedFile([]byte) (sops.Tree, error)
+		}
+	}{
+		{name: "JSON", store: jsonstore.NewStore(&config.JSONStoreConfig{Indent: -1})},
+		{name: "YAML", store: yamlstore.NewStore(&config.YAMLStoreConfig{})},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			encoded, err := test.store.EmitEncryptedFile(tree)
+			require.NoError(t, err)
+			decoded, err := test.store.LoadEncryptedFile(encoded)
+			require.NoError(t, err)
+			pluginKey, ok := decoded.Metadata.KeyGroups[0][0].(*sopsplugin.MasterKey)
+			require.True(t, ok)
+
+			var decodedConfig struct {
+				KeyVersion   int64       `json:"key_version"`
+				PreciseValue json.Number `json:"precise_value"`
+			}
+			require.NoError(t, sopsplugin.DecodeConfig(pluginKey.Config, &decodedConfig))
+			require.Equal(t, int64(9007199254740993), decodedConfig.KeyVersion)
+			require.Equal(t, json.Number(preciseDecimal), decodedConfig.PreciseValue)
+
+			var decodedMetadata struct {
+				MetadataVersion int64       `json:"metadata_version"`
+				PreciseValue    json.Number `json:"precise_value"`
+			}
+			require.NoError(t, sopsplugin.DecodeMetadata(pluginKey.ProviderMetadata, &decodedMetadata))
+			require.Equal(t, int64(9007199254740993), decodedMetadata.MetadataVersion)
+			require.Equal(t, json.Number(preciseDecimal), decodedMetadata.PreciseValue)
 		})
 	}
 }
