@@ -15,6 +15,7 @@ type setOpts struct {
 	OutputStore     sops.Store
 	InputPath       string
 	IgnoreMAC       bool
+	AwsProfile      string
 	TreePath        []interface{}
 	Value           interface{}
 	KeyServices     []keyservice.KeyServiceClient
@@ -29,6 +30,7 @@ func set(opts setOpts) ([]byte, bool, error) {
 		InputStore:  opts.InputStore,
 		InputPath:   opts.InputPath,
 		IgnoreMAC:   opts.IgnoreMAC,
+		AwsProfile:  opts.AwsProfile,
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {
