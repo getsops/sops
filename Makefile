@@ -14,11 +14,10 @@ GITHUB_REPOSITORY   ?= github.com/getsops/sops
 STATICCHECK         := $(BIN_DIR)/staticcheck
 STATICCHECK_VERSION := latest
 
-SYFT                := $(BIN_DIR)/syft
-SYFT_VERSION        ?= v0.87.0
+SYFT_VERSION        ?= v1.6.0
 
 GORELEASER          := $(BIN_DIR)/goreleaser
-GORELEASER_VERSION  ?= v1.20.0
+GORELEASER_VERSION  ?= v2.0.1
 
 PROTOC_GO           := $(BIN_DIR)/protoc-gen-go
 PROTOC_GO_VERSION   ?= v1.35.2
@@ -112,11 +111,11 @@ install-staticcheck:
 
 .PHONY: install-goreleaser
 install-goreleaser:
-	$(call go-install-tool,$(GORELEASER),github.com/goreleaser/goreleaser@$(GORELEASER_VERSION),$(GORELEASER_VERSION))
+	$(call go-install-tool,$(GORELEASER),github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION),$(GORELEASER_VERSION))
 
 .PHONY: install-syft
 install-syft:
-	$(call go-install-tool,$(SYFT),github.com/anchore/syft/cmd/syft@$(SYFT_VERSION),$(SYFT_VERSION))
+	curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- $(SYFT_VERSION)
 
 .PHONY: install-protoc-go
 install-protoc-go:
