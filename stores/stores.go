@@ -10,6 +10,7 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strconv"
 	"strings"
@@ -23,6 +24,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	sopsplugin "github.com/getsops/sops/v3/plugin"
 )
 
 const (
@@ -43,6 +45,7 @@ type metadata struct {
 	AzureKeyVaultKeys         []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
 	VaultKeys                 []vaultkey  `mapstructure:"hc_vault,omitempty,deep"`
 	AgeKeys                   []agekey    `mapstructure:"age,omitempty,deep"`
+	PluginKeys                []pluginkey `mapstructure:"plugins,omitempty,deep"`
 	LastModified              string      `mapstructure:"lastmodified"`
 	MessageAuthenticationCode string      `mapstructure:"mac"`
 	PGPKeys                   []pgpkey    `mapstructure:"pgp,omitempty,deep"`
@@ -64,6 +67,7 @@ type keygroup struct {
 	AzureKeyVaultKeys []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
 	VaultKeys         []vaultkey  `mapstructure:"hc_vault,deep"`
 	AgeKeys           []agekey    `mapstructure:"age,deep"`
+	PluginKeys        []pluginkey `mapstructure:"plugins,omitempty,deep"`
 }
 
 type pgpkey struct {
@@ -114,6 +118,15 @@ type hckmskey struct {
 	EncryptedDataKey string `mapstructure:"enc"`
 }
 
+// Config and Metadata also accept the versioned JSON encoding used by flat stores.
+type pluginkey struct {
+	Name             string      `mapstructure:"name"`
+	Config           interface{} `mapstructure:"config,deep"`
+	Metadata         interface{} `mapstructure:"metadata,omitempty,deep"`
+	CreatedAt        string      `mapstructure:"created_at"`
+	EncryptedDataKey string      `mapstructure:"enc"`
+}
+
 // metadataFromInternal converts an internal SOPS metadata representation to a
 // representation appropriate for storage.
 func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
@@ -138,6 +151,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
+		m.PluginKeys = pluginKeysFromGroup(group)
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
 			m.KeyGroups = append(m.KeyGroups, keygroup{
@@ -148,6 +162,7 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
+				PluginKeys:        pluginKeysFromGroup(group),
 			})
 		}
 	}
@@ -252,6 +267,21 @@ func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
 				KeyID:            key.KeyID,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
 				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
+func pluginKeysFromGroup(group sops.KeyGroup) (pluginKeys []pluginkey) {
+	for _, key := range group {
+		if pluginKey, ok := key.(*sopsplugin.MasterKey); ok {
+			pluginKeys = append(pluginKeys, pluginkey{
+				Name:             pluginKey.Name,
+				Config:           pluginKey.Config,
+				Metadata:         pluginKey.ProviderMetadata,
+				CreatedAt:        pluginKey.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: base64.StdEncoding.EncodeToString(pluginKey.EncryptedKey),
 			})
 		}
 	}
@@ -368,11 +398,16 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.PluginKeys) > 0 {
 		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
 		if err != nil {
 			return nil, err
 		}
+		pluginKeys, err := pluginKeysToInternal(m.PluginKeys)
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, pluginKeys...)
 		internalGroups = append(internalGroups, internalGroup)
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
@@ -381,12 +416,50 @@ func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 			if err != nil {
 				return nil, err
 			}
+			pluginKeys, err := pluginKeysToInternal(group.PluginKeys)
+			if err != nil {
+				return nil, err
+			}
+			internalGroup = append(internalGroup, pluginKeys...)
 			internalGroups = append(internalGroups, internalGroup)
 		}
 		return internalGroups, nil
 	} else {
 		return nil, fmt.Errorf("No keys found in file")
 	}
+}
+
+func pluginKeysToInternal(pluginKeys []pluginkey) (sops.KeyGroup, error) {
+	var group sops.KeyGroup
+	for _, storedKey := range pluginKeys {
+		creationDate, err := time.Parse(time.RFC3339, storedKey.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		encryptedKey, err := base64.StdEncoding.DecodeString(storedKey.EncryptedDataKey)
+		if err != nil {
+			return nil, fmt.Errorf("decode encrypted data key for plugin %q: %w", storedKey.Name, err)
+		}
+		config, err := decodePluginMap(storedKey.Config)
+		if err != nil {
+			return nil, fmt.Errorf("decode config for plugin %q: %w", storedKey.Name, err)
+		}
+		pluginKey, err := sopsplugin.NewMasterKey(storedKey.Name, config)
+		if err != nil {
+			return nil, err
+		}
+		metadata, err := decodePluginMap(storedKey.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("decode metadata for plugin %q: %w", storedKey.Name, err)
+		}
+		if metadata != nil {
+			pluginKey.ProviderMetadata = metadata
+		}
+		pluginKey.EncryptedKey = encryptedKey
+		pluginKey.CreationDate = creationDate
+		group = append(group, pluginKey)
+	}
+	return group, nil
 }
 
 func (kmsKey *kmskey) toInternal() (*kms.MasterKey, error) {

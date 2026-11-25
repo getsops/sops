@@ -2,6 +2,7 @@ package yaml //import "github.com/getsops/sops/v3/stores/yaml"
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -75,7 +76,7 @@ func (store Store) appendCommentToMapWithInline(comment string, branch sops.Tree
 	return branch
 }
 
-func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (interface{}, error) {
+func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled, preserveNumbers bool) (interface{}, error) {
 	switch node.Kind {
 	case yaml.DocumentNode:
 		panic("documents should never be passed here")
@@ -88,7 +89,7 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 		for _, item := range node.Content {
 			result = store.appendCommentToList(item.HeadComment, result)
 			result = store.appendInlineCommentToList(item.LineComment, result)
-			val, err := store.nodeToTreeValue(item, true)
+			val, err := store.nodeToTreeValue(item, true, preserveNumbers)
 			if err != nil {
 				return nil, err
 			}
@@ -101,18 +102,22 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 		return result, nil
 	case yaml.MappingNode:
 		branch := make(sops.TreeBranch, 0)
-		return store.appendYamlNodeToTreeBranch(node, branch, commentsWereHandled)
+		return store.appendYamlNodeToTreeBranch(node, branch, commentsWereHandled, preserveNumbers, false)
 	case yaml.ScalarNode:
+		if preserveNumbers && (node.ShortTag() == "!!int" || node.ShortTag() == "!!float") && json.Valid([]byte(node.Value)) {
+			// Preserve numeric lexemes in SOPS metadata for JSON-backed plugin fields.
+			return json.Number(node.Value), nil
+		}
 		var result interface{}
 		node.Decode(&result)
 		return result, nil
 	case yaml.AliasNode:
-		return store.nodeToTreeValue(node.Alias, false)
+		return store.nodeToTreeValue(node.Alias, false, preserveNumbers)
 	}
 	return nil, nil
 }
 
-func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeBranch, commentsWereHandled bool) (sops.TreeBranch, error) {
+func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeBranch, commentsWereHandled, preserveNumbers, root bool) (sops.TreeBranch, error) {
 	var err error
 	if !commentsWereHandled {
 		branch = store.appendCommentToMap(node.HeadComment, branch)
@@ -121,7 +126,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 	switch node.Kind {
 	case yaml.DocumentNode:
 		for _, item := range node.Content {
-			branch, err = store.appendYamlNodeToTreeBranch(item, branch, false)
+			branch, err = store.appendYamlNodeToTreeBranch(item, branch, false, preserveNumbers, true)
 			if err != nil {
 				return nil, err
 			}
@@ -141,7 +146,9 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 			}
 			var keyValue interface{}
 			key.Decode(&keyValue)
-			valueTV, err := store.nodeToTreeValue(value, handleValueComments)
+			keyString, isString := keyValue.(string)
+			valuePreserveNumbers := preserveNumbers || (root && isString && keyString == stores.SopsMetadataKey)
+			valueTV, err := store.nodeToTreeValue(value, handleValueComments, valuePreserveNumbers)
 			if err != nil {
 				return nil, err
 			}
@@ -161,7 +168,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 		}
 		return nil, fmt.Errorf("YAML documents that are values are not supported")
 	case yaml.AliasNode:
-		branch, err = store.appendYamlNodeToTreeBranch(node.Alias, branch, false)
+		branch, err = store.appendYamlNodeToTreeBranch(node.Alias, branch, false, preserveNumbers, root)
 		if err != nil {
 			// This should never happen since node.Alias was already successfully decoded before
 			return nil, err
@@ -175,7 +182,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 
 func (store Store) yamlDocumentNodeToTreeBranch(in yaml.Node) (sops.TreeBranch, error) {
 	branch := make(sops.TreeBranch, 0)
-	return store.appendYamlNodeToTreeBranch(&in, branch, false)
+	return store.appendYamlNodeToTreeBranch(&in, branch, false, false, false)
 }
 
 func (store *Store) addCommentsHead(node *yaml.Node, comments []string) []string {
@@ -216,6 +223,16 @@ func (store *Store) addCommentsLine(node *yaml.Node, comments []string) []string
 
 func (store *Store) treeValueToNode(in interface{}) *yaml.Node {
 	switch in := in.(type) {
+	case json.Number:
+		tag := "!!int"
+		if strings.ContainsAny(string(in), ".eE") {
+			tag = "!!float"
+		}
+		return &yaml.Node{
+			Kind:  yaml.ScalarNode,
+			Tag:   tag,
+			Value: string(in),
+		}
 	case sops.TreeBranch:
 		var mapping = &yaml.Node{}
 		mapping.Kind = yaml.MappingNode

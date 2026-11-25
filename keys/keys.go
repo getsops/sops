@@ -1,5 +1,8 @@
 package keys
 
+// DataKeySize is the size in bytes of a SOPS data key.
+const DataKeySize = 32
+
 // MasterKey provides a way of securing the key used to encrypt the Tree by encrypting and decrypting said key.
 type MasterKey interface {
 	Encrypt(dataKey []byte) error

@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/getsops/sops/v3/keys"
+	sopsplugin "github.com/getsops/sops/v3/plugin"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -655,6 +656,53 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 	assert.Equal(t, "foo+123|baz:bam|bar", conf.KeyGroups[0][5].ToString())
 	assert.Equal(t, "qux", conf.KeyGroups[1][0].ToString())
 	assert.Equal(t, "baz||foo", conf.KeyGroups[1][1].ToString())
+}
+
+func TestPluginCreationRuleAndKeyGroup(t *testing.T) {
+	var conf configFile
+	err := conf.load([]byte(`
+creation_rules:
+  - path_regex: flat
+    plugins:
+      - name: wrap
+        config:
+          key_id: flat-key
+  - path_regex: grouped
+    key_groups:
+      - plugins:
+          - name: unwrap
+            config:
+              key_id: grouped-key
+`))
+	assert.NoError(t, err)
+
+	for _, test := range []struct {
+		index int
+		name  string
+		keyID string
+	}{
+		{index: 0, name: "wrap", keyID: "flat-key"},
+		{index: 1, name: "unwrap", keyID: "grouped-key"},
+	} {
+		config, err := configFromRule(&conf.CreationRules[test.index], nil)
+		if !assert.NoError(t, err) || !assert.Len(t, config.KeyGroups, 1) || !assert.Len(t, config.KeyGroups[0], 1) {
+			continue
+		}
+		pluginKey, ok := config.KeyGroups[0][0].(*sopsplugin.MasterKey)
+		if !assert.True(t, ok) {
+			continue
+		}
+		assert.Equal(t, test.name, pluginKey.Name)
+		assert.Equal(t, test.keyID, pluginKey.Config["key_id"])
+	}
+}
+
+func TestPluginCreationRuleRejectsInvalidPluginName(t *testing.T) {
+	rule := creationRule{
+		Plugins: []pluginKey{{Name: "../plugin"}},
+	}
+	_, err := configFromRule(&rule, nil)
+	assert.ErrorContains(t, err, "invalid plugin name")
 }
 
 func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {
