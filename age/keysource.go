@@ -310,6 +310,13 @@ func getOutputFromCmd(cmdString string, envVars []string) ([]byte, error) {
 	}
 	out, err = cmd.Output()
 	if err != nil {
+		var exitError *exec.ExitError
+		if errors.As(err, &exitError) {
+			stderr := bytes.TrimSpace(exitError.Stderr)
+			if len(stderr) > 0 {
+				return nil, fmt.Errorf("failed to execute command %s: %w: %s", cmdString, err, stderr)
+			}
+		}
 		return nil, fmt.Errorf("failed to execute command %s: %w", cmdString, err)
 	}
 
