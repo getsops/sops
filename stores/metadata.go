@@ -1,7 +1,10 @@
 package stores
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"io"
 	"reflect"
 	"sort"
 	"strings"
@@ -177,6 +180,86 @@ func ExtractMetadata(branches sops.TreeBranches, opts MetadataOpts) (sops.TreeBr
 	return branches, metadata, nil
 }
 
+// The versioned base64 encoding survives flat string stores and their escaping rules.
+const pluginMapEncodingPrefix = "sops-json-v1:"
+
+// encodePluginMaps preserves generic plugin JSON values in flattened stores.
+func encodePluginMaps(metadata *metadata) error {
+	if err := encodePluginKeyMaps(metadata.PluginKeys); err != nil {
+		return err
+	}
+	for _, group := range metadata.KeyGroups {
+		if err := encodePluginKeyMaps(group.PluginKeys); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func encodePluginKeyMaps(keys []pluginkey) error {
+	for i := range keys {
+		config, err := encodePluginMap(keys[i].Config)
+		if err != nil {
+			return err
+		}
+		metadata, err := encodePluginMap(keys[i].Metadata)
+		if err != nil {
+			return err
+		}
+		keys[i].Config = config
+		keys[i].Metadata = metadata
+	}
+	return nil
+}
+
+func encodePluginMap(value interface{}) (interface{}, error) {
+	if value == nil {
+		return nil, nil
+	}
+	object, ok := value.(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("plugin config or metadata has type %T, want a map", value)
+	}
+	encoded, err := json.Marshal(object)
+	if err != nil {
+		return nil, fmt.Errorf("encode plugin map: %w", err)
+	}
+	return pluginMapEncodingPrefix + base64.RawURLEncoding.EncodeToString(encoded), nil
+}
+
+func decodePluginMap(value interface{}) (map[string]interface{}, error) {
+	switch object := value.(type) {
+	case nil:
+		return nil, nil
+	case map[string]interface{}:
+		return object, nil
+	case string:
+		if !strings.HasPrefix(object, pluginMapEncodingPrefix) {
+			return nil, fmt.Errorf("unexpected string value")
+		}
+		data, err := base64.RawURLEncoding.DecodeString(strings.TrimPrefix(object, pluginMapEncodingPrefix))
+		if err != nil {
+			return nil, fmt.Errorf("decode plugin map encoding: %w", err)
+		}
+		decoder := json.NewDecoder(strings.NewReader(string(data)))
+		decoder.UseNumber()
+		var decoded map[string]interface{}
+		if err := decoder.Decode(&decoded); err != nil {
+			return nil, fmt.Errorf("decode plugin map JSON: %w", err)
+		}
+		var trailing interface{}
+		if err := decoder.Decode(&trailing); err != io.EOF {
+			if err == nil {
+				return nil, fmt.Errorf("decode plugin map JSON: trailing value")
+			}
+			return nil, fmt.Errorf("decode plugin map JSON: %w", err)
+		}
+		return decoded, nil
+	default:
+		return nil, fmt.Errorf("plugin map has type %T, want a map", value)
+	}
+}
+
 type mapKey struct {
 	Name string
 	Key  reflect.Value
@@ -267,7 +350,13 @@ func metadataToTreeBranch(md metadata) (sops.TreeBranch, error) {
 
 // SerializeMetadata embeds the metadata of `data` into its tree branches.
 func SerializeMetadata(data sops.Tree, opts MetadataOpts) (sops.TreeBranches, error) {
-	md, err := metadataToTreeBranch(metadataFromInternal(data.Metadata))
+	storageMetadata := metadataFromInternal(data.Metadata)
+	if opts.Flatten != MetadataFlattenNone {
+		if err := encodePluginMaps(&storageMetadata); err != nil {
+			return nil, fmt.Errorf("Error while encoding plugin metadata: %w", err)
+		}
+	}
+	md, err := metadataToTreeBranch(storageMetadata)
 	if err != nil {
 		return nil, fmt.Errorf("Error while serializing metadata: %w", err)
 	}

@@ -9,6 +9,8 @@ import (
 	"github.com/getsops/sops/v3/config"
 	sopsplugin "github.com/getsops/sops/v3/plugin"
 	"github.com/getsops/sops/v3/stores"
+	dotenvstore "github.com/getsops/sops/v3/stores/dotenv"
+	inistore "github.com/getsops/sops/v3/stores/ini"
 	jsonstore "github.com/getsops/sops/v3/stores/json"
 	yamlstore "github.com/getsops/sops/v3/stores/yaml"
 	"github.com/stretchr/testify/require"
@@ -80,11 +82,17 @@ func TestPluginConfigAndVersionedMetadataKeepLargeNumbersAcrossStores(t *testing
 	key, err := sopsplugin.NewMasterKey("number-test", map[string]interface{}{
 		"key_version":   json.Number(largeInteger),
 		"precise_value": json.Number(preciseDecimal),
+		"enabled":       true,
+		"options": map[string]interface{}{
+			"label": "line one\nline two",
+		},
 	})
 	require.NoError(t, err)
 	key.ProviderMetadata = map[string]interface{}{
 		"metadata_version": json.Number(largeInteger),
 		"precise_value":    json.Number(preciseDecimal),
+		"enabled":          false,
+		"note":             "line one\nline two",
 	}
 	key.EncryptedKey = []byte{1, 2, 3}
 	key.CreationDate = time.Unix(1_700_000_000, 0).UTC()
@@ -106,9 +114,17 @@ func TestPluginConfigAndVersionedMetadataKeepLargeNumbersAcrossStores(t *testing
 	}{
 		{name: "JSON", store: jsonstore.NewStore(&config.JSONStoreConfig{Indent: -1})},
 		{name: "YAML", store: yamlstore.NewStore(&config.YAMLStoreConfig{})},
+		{name: "dotenv", store: &dotenvstore.Store{}},
+		{name: "INI", store: &inistore.Store{}},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			encoded, err := test.store.EmitEncryptedFile(tree)
+			input := tree
+			if test.name == "INI" {
+				input.Branches = sops.TreeBranches{sops.TreeBranch{
+					{Key: "DEFAULT", Value: sops.TreeBranch{{Key: "secret", Value: "encrypted"}}},
+				}}
+			}
+			encoded, err := test.store.EmitEncryptedFile(input)
 			require.NoError(t, err)
 			decoded, err := test.store.LoadEncryptedFile(encoded)
 			require.NoError(t, err)
@@ -118,18 +134,28 @@ func TestPluginConfigAndVersionedMetadataKeepLargeNumbersAcrossStores(t *testing
 			var decodedConfig struct {
 				KeyVersion   int64       `json:"key_version"`
 				PreciseValue json.Number `json:"precise_value"`
+				Enabled      bool        `json:"enabled"`
+				Options      struct {
+					Label string `json:"label"`
+				} `json:"options"`
 			}
 			require.NoError(t, sopsplugin.DecodeConfig(pluginKey.Config, &decodedConfig))
 			require.Equal(t, int64(9007199254740993), decodedConfig.KeyVersion)
 			require.Equal(t, json.Number(preciseDecimal), decodedConfig.PreciseValue)
+			require.True(t, decodedConfig.Enabled)
+			require.Equal(t, "line one\nline two", decodedConfig.Options.Label)
 
 			var decodedMetadata struct {
 				MetadataVersion int64       `json:"metadata_version"`
 				PreciseValue    json.Number `json:"precise_value"`
+				Enabled         bool        `json:"enabled"`
+				Note            string      `json:"note"`
 			}
 			require.NoError(t, sopsplugin.DecodeMetadata(pluginKey.ProviderMetadata, &decodedMetadata))
 			require.Equal(t, int64(9007199254740993), decodedMetadata.MetadataVersion)
 			require.Equal(t, json.Number(preciseDecimal), decodedMetadata.PreciseValue)
+			require.False(t, decodedMetadata.Enabled)
+			require.Equal(t, "line one\nline two", decodedMetadata.Note)
 		})
 	}
 }

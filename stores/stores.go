@@ -118,12 +118,13 @@ type hckmskey struct {
 	EncryptedDataKey string `mapstructure:"enc"`
 }
 
+// Config and Metadata also accept the versioned JSON encoding used by flat stores.
 type pluginkey struct {
-	Name             string                 `mapstructure:"name"`
-	Config           map[string]interface{} `mapstructure:"config,deep"`
-	Metadata         map[string]interface{} `mapstructure:"metadata,omitempty,deep"`
-	CreatedAt        string                 `mapstructure:"created_at"`
-	EncryptedDataKey string                 `mapstructure:"enc"`
+	Name             string      `mapstructure:"name"`
+	Config           interface{} `mapstructure:"config,deep"`
+	Metadata         interface{} `mapstructure:"metadata,omitempty,deep"`
+	CreatedAt        string      `mapstructure:"created_at"`
+	EncryptedDataKey string      `mapstructure:"enc"`
 }
 
 // metadataFromInternal converts an internal SOPS metadata representation to a
@@ -439,12 +440,20 @@ func pluginKeysToInternal(pluginKeys []pluginkey) (sops.KeyGroup, error) {
 		if err != nil {
 			return nil, fmt.Errorf("decode encrypted data key for plugin %q: %w", storedKey.Name, err)
 		}
-		pluginKey, err := sopsplugin.NewMasterKey(storedKey.Name, storedKey.Config)
+		config, err := decodePluginMap(storedKey.Config)
+		if err != nil {
+			return nil, fmt.Errorf("decode config for plugin %q: %w", storedKey.Name, err)
+		}
+		pluginKey, err := sopsplugin.NewMasterKey(storedKey.Name, config)
 		if err != nil {
 			return nil, err
 		}
-		if storedKey.Metadata != nil {
-			pluginKey.ProviderMetadata = storedKey.Metadata
+		metadata, err := decodePluginMap(storedKey.Metadata)
+		if err != nil {
+			return nil, fmt.Errorf("decode metadata for plugin %q: %w", storedKey.Name, err)
+		}
+		if metadata != nil {
+			pluginKey.ProviderMetadata = metadata
 		}
 		pluginKey.EncryptedKey = encryptedKey
 		pluginKey.CreationDate = creationDate
