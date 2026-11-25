@@ -16,6 +16,7 @@ import (
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/stores/dotenv"
+	"github.com/getsops/sops/v3/stores/hcl"
 	"github.com/getsops/sops/v3/stores/ini"
 	"github.com/getsops/sops/v3/stores/json"
 	"github.com/getsops/sops/v3/stores/yaml"
@@ -47,6 +48,10 @@ func newDotenvStore(c *config.StoresConfig) Store {
 	return dotenv.NewStore(&c.Dotenv)
 }
 
+func newHclStore(c *config.StoresConfig) Store {
+	return hcl.NewStore(&c.HCL)
+}
+
 func newIniStore(c *config.StoresConfig) Store {
 	return ini.NewStore(&c.INI)
 }
@@ -62,6 +67,7 @@ func newYamlStore(c *config.StoresConfig) Store {
 var storeConstructors = map[Format]storeConstructor{
 	Binary: newBinaryStore,
 	Dotenv: newDotenvStore,
+	Hcl:    newHclStore,
 	Ini:    newIniStore,
 	Json:   newJsonStore,
 	Yaml:   newYamlStore,

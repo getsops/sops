@@ -1737,6 +1737,24 @@ bar: |-
             String::from_utf8_lossy(&output.stdout) == "[foo]\nbar = baz\n",
             "Unexpected decrypted content"
         );
+
+        // HCL
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("res/format.enc.hcl")
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(
+            String::from_utf8_lossy(&output.stdout)
+                == "foo = \"bar\"\n\nbaz \"qux\" {\n  quux = [\n    1,\n    2,\n  ]\n  ref = var.x\n}\n",
+            "Unexpected decrypted content"
+        );
     }
 
     #[test]
