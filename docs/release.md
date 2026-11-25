@@ -23,11 +23,11 @@ This configuration is quite sophisticated, and ensures at least the following:
 - The release includes multiple packages in Debian and RPM formats.
 - For every binary, a corresponding SBOM is generated and published.
 - For all binaries, a checksum file is generated and signed using
-  [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC.
+  [Cosign](https://docs.sigstore.dev/cosign/signing/overview/) with GitHub OIDC.
 - Both Debian and Alpine Docker multi-arch images are built and pushed to GitHub
   Container Registry and Quay.io.
 - The container images are signed using
-  [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC.
+  [Cosign](https://docs.sigstore.dev/cosign/signing/overview/) with GitHub OIDC.
 - [SLSA provenance](https://slsa.dev/provenance/v0.2) metadata is generated for
   release artifacts and container images.
 
