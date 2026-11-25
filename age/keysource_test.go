@@ -606,11 +606,13 @@ func TestUserConfigDir(t *testing.T) {
 }
 
 func TestMasterKey_Identities_Passphrase(t *testing.T) {
+	// Use the test passphrase provider instead of the user's gpg-agent.
+	t.Setenv("GPG_AGENT_INFO", "")
+	t.Setenv("XDG_RUNTIME_DIR", "")
+
 	t.Run(SopsAgeKeyEnv, func(t *testing.T) {
 		key := &MasterKey{EncryptedKey: mockEncryptedKey}
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
-		//blocks calling gpg-agent
-		os.Unsetenv("XDG_RUNTIME_DIR")
 		testOnlyAgePassword = mockIdentityPassphrase
 		got, err := key.Decrypt()
 		testOnlyAgePassword = ""
@@ -629,8 +631,6 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 
 		key := &MasterKey{EncryptedKey: mockEncryptedKey}
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
-		//blocks calling gpg-agent
-		os.Unsetenv("XDG_RUNTIME_DIR")
 		testOnlyAgePassword = mockIdentityPassphrase
 
 		got, err := key.Decrypt()
@@ -643,8 +643,6 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 	t.Run("invalid encrypted key", func(t *testing.T) {
 		key := &MasterKey{EncryptedKey: "invalid"}
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
-		//blocks calling gpg-agent
-		os.Unsetenv("XDG_RUNTIME_DIR")
 		testOnlyAgePassword = mockIdentityPassphrase
 
 		got, err := key.Decrypt()
