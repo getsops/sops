@@ -50,6 +50,12 @@ const (
 	xdgConfigHome = "XDG_CONFIG_HOME"
 	// KeyTypeIdentifier is the string used to identify an age MasterKey.
 	KeyTypeIdentifier = "age"
+	// IdentityReferencePrefix prefixes a recipient naming the source of age
+	// identities: SopsAgeKeyEnv, SopsAgeKeyFileEnv, SopsAgeKeyCmdEnv or
+	// SopsAgeKeyUserConfigPath. Encrypting to it wraps the data key with every
+	// identity loaded from that source, and hints at where the identities
+	// needed for decryption are expected.
+	IdentityReferencePrefix = "age-identity:"
 )
 
 // log is the global logger for any age MasterKey.
@@ -114,10 +120,19 @@ func (e errSet) Error() string {
 	return strings.Join(str, "; ")
 }
 
-// MasterKeyFromRecipient takes a Bech32-encoded age public key, parses it, and
-// returns a new MasterKey.
+// MasterKeyFromRecipient takes a Bech32-encoded age public key, or an age
+// identity reference (see IdentityReferencePrefix), parses it, and returns a
+// new MasterKey.
 func MasterKeyFromRecipient(recipient string) (*MasterKey, error) {
 	recipient = strings.TrimSpace(recipient)
+	if source, ok := strings.CutPrefix(recipient, IdentityReferencePrefix); ok {
+		switch source {
+		case SopsAgeKeyEnv, SopsAgeKeyFileEnv, SopsAgeKeyCmdEnv, SopsAgeKeyUserConfigPath:
+			// Resolved on Encrypt, as it requires the identities to be loaded.
+			return &MasterKey{Recipient: recipient}, nil
+		}
+		return nil, fmt.Errorf("unknown age identity source %q: expected one of %s, %s, %s or %s", source, SopsAgeKeyEnv, SopsAgeKeyFileEnv, SopsAgeKeyCmdEnv, SopsAgeKeyUserConfigPath)
+	}
 	parsedRecipient, err := parseRecipient(recipient)
 	if err != nil {
 		return nil, err
@@ -161,18 +176,15 @@ func (i ParsedIdentities) ApplyToMasterKey(key *MasterKey) {
 // Encrypt takes a SOPS data key, encrypts it with the Recipient, and stores
 // the result in the EncryptedKey field.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	if key.parsedRecipient == nil {
-		parsedRecipient, err := parseRecipient(key.Recipient)
-		if err != nil {
-			log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
-			return err
-		}
-		key.parsedRecipient = parsedRecipient
+	recipients, err := key.recipients()
+	if err != nil {
+		log.WithField("recipient", key.Recipient).Info("Encryption failed")
+		return err
 	}
 
 	var buffer bytes.Buffer
 	aw := armor.NewWriter(&buffer)
-	w, err := age.Encrypt(aw, key.parsedRecipient)
+	w, err := age.Encrypt(aw, recipients...)
 	if err != nil {
 		log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
 		return fmt.Errorf("failed to create writer for encrypting sops data key with age: %w", err)
@@ -193,6 +205,39 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	key.SetEncryptedDataKey(buffer.Bytes())
 	log.WithField("recipient", key.parsedRecipient).Info("Encryption succeeded")
 	return nil
+}
+
+// recipients returns the parsed Recipient, or the recipients of the identities
+// loaded from the source an identity reference names.
+func (key *MasterKey) recipients() ([]age.Recipient, error) {
+	source, ok := strings.CutPrefix(key.Recipient, IdentityReferencePrefix)
+	if !ok {
+		if key.parsedRecipient == nil {
+			parsedRecipient, err := parseRecipient(key.Recipient)
+			if err != nil {
+				return nil, err
+			}
+			key.parsedRecipient = parsedRecipient
+		}
+		return []age.Recipient{key.parsedRecipient}, nil
+	}
+
+	_, bySource, unusedLocations, errs := key.loadIdentities()
+	var recipients []age.Recipient
+	for _, id := range bySource[source] {
+		switch id := id.(type) {
+		case *age.X25519Identity:
+			recipients = append(recipients, id.Recipient())
+		case *age.HybridIdentity:
+			recipients = append(recipients, id.Recipient())
+		case *plugin.Identity:
+			recipients = append(recipients, id.Recipient())
+		}
+	}
+	if len(recipients) == 0 {
+		return nil, formatError(fmt.Sprintf("no age identities loaded from %s", source), nil, errs, unusedLocations)
+	}
+	return recipients, nil
 }
 
 // EncryptIfNeeded encrypts the provided SOPS data key, if it has not been
@@ -241,14 +286,19 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 // Decrypt decrypts the EncryptedKey with the parsed or loaded identities, and
 // returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	var hint string
+	if source, ok := strings.CutPrefix(key.Recipient, IdentityReferencePrefix); ok {
+		hint = fmt.Sprintf(" (encrypted to the age identities from %s)", source)
+	}
+
 	var errs errSet
 	var unusedLocations []string
 	if len(key.parsedIdentities) == 0 {
 		var ids ParsedIdentities
-		ids, unusedLocations, errs = key.loadIdentities()
+		ids, _, unusedLocations, errs = key.loadIdentities()
 		if len(ids) == 0 {
 			log.Info("Decryption failed")
-			return nil, formatError("failed to load age identities", nil, errs, unusedLocations)
+			return nil, formatError("failed to load age identities"+hint, nil, errs, unusedLocations)
 		}
 		ids.ApplyToMasterKey(key)
 	}
@@ -258,7 +308,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	r, err := age.Decrypt(ar, key.parsedIdentities...)
 	if err != nil {
 		log.Info("Decryption failed")
-		return nil, formatError("failed to create reader for decrypting sops data key with age", err, errs, unusedLocations)
+		return nil, formatError("failed to create reader for decrypting sops data key with age"+hint, err, errs, unusedLocations)
 	}
 
 	var b bytes.Buffer
@@ -402,13 +452,16 @@ func getUserConfigDir() (string, error) {
 type identityReader struct {
 	reader                   io.Reader
 	allowMultipleKeysPerLine bool
+	// source names where the identities come from (see IdentityReferencePrefix).
+	source string
 }
 
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
 // found references, and expects at least one configuration to be present.
-func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
+// Besides all identities, it returns the non-SSH identities by their source.
+func (key *MasterKey) loadIdentities() (ParsedIdentities, map[string]ParsedIdentities, []string, errSet) {
 	identities, unusedLocations, errs := key.loadAgeSSHIdentities()
 
 	var readers = make(map[string]identityReader, 0)
@@ -417,6 +470,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		readers[SopsAgeKeyEnv] = identityReader{
 			reader:                   strings.NewReader(ageKey),
 			allowMultipleKeysPerLine: true,
+			source:                   SopsAgeKeyEnv,
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
@@ -431,6 +485,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			readers[SopsAgeKeyFileEnv] = identityReader{
 				reader:                   f,
 				allowMultipleKeysPerLine: false,
+				source:                   SopsAgeKeyFileEnv,
 			}
 		}
 	} else {
@@ -445,6 +500,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			readers[SopsAgeKeyCmdEnv] = identityReader{
 				reader:                   bytes.NewReader(out),
 				allowMultipleKeysPerLine: false,
+				source:                   SopsAgeKeyCmdEnv,
 			}
 		}
 	} else {
@@ -466,22 +522,25 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			readers[ageKeyFilePath] = identityReader{
 				reader:                   f,
 				allowMultipleKeysPerLine: false,
+				source:                   SopsAgeKeyUserConfigPath,
 			}
 		}
 	}
 
+	bySource := make(map[string]ParsedIdentities, len(readers))
 	for location, r := range readers {
 		ids, err := unwrapIdentities(location, r.reader, r.allowMultipleKeysPerLine)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
 			identities = append(identities, ids...)
+			bySource[r.source] = ids
 			if len(ids) == 0 {
 				unusedLocations = append(unusedLocations, location)
 			}
 		}
 	}
-	return identities, unusedLocations, errs
+	return identities, bySource, unusedLocations, errs
 }
 
 // parseRecipient attempts to parse a string containing an encoded age public
