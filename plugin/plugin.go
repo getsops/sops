@@ -179,7 +179,7 @@ func (runtime *Runtime) WrapKey(ctx context.Context, name string, request WrapKe
 	callContext, cancel := withInvocationTimeout(ctx, plugin.invocationTimeout)
 	defer cancel()
 	response, err := wrapWithProvider(callContext, name, plugin.provider, request)
-	if err != nil && callContext.Err() == context.DeadlineExceeded {
+	if err != nil && invocationDeadlineExceeded(callContext) {
 		runtime.evict(name, plugin.client)
 	}
 	return response, err
@@ -249,7 +249,7 @@ func (runtime *Runtime) UnwrapKey(ctx context.Context, name string, request Unwr
 	callContext, cancel := withInvocationTimeout(ctx, plugin.invocationTimeout)
 	defer cancel()
 	response, err := unwrapWithProvider(callContext, name, plugin.provider, request)
-	if err != nil && callContext.Err() == context.DeadlineExceeded {
+	if err != nil && invocationDeadlineExceeded(callContext) {
 		runtime.evict(name, plugin.client)
 	}
 	return response, err
@@ -478,6 +478,14 @@ func withInvocationTimeout(ctx context.Context, timeout time.Duration) (context.
 		return ctx, func() {}
 	}
 	return context.WithTimeout(ctx, timeout)
+}
+
+func invocationDeadlineExceeded(ctx context.Context) bool {
+	if err := ctx.Err(); err != nil {
+		return err == context.DeadlineExceeded
+	}
+	deadline, ok := ctx.Deadline()
+	return ok && !time.Now().Before(deadline)
 }
 
 func pluginConfigPath() (string, error) {
