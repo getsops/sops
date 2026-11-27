@@ -236,6 +236,7 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 
 	secret, err := client.Logical().WriteWithContext(ctx, fullPath, encryptPayload(dataKey))
 	if err != nil {
+		logCRLError(err)
 		log.WithField("Path", fullPath).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key to Vault transit backend '%s': %w", fullPath, err)
 	}
@@ -288,6 +289,7 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 
 	secret, err := client.Logical().WriteWithContext(ctx, fullPath, decryptPayload(key.EncryptedKey))
 	if err != nil {
+		logCRLError(err)
 		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key from Vault transit backend '%s': %w", fullPath, err)
 	}
@@ -396,6 +398,9 @@ func dataKeyFromSecret(secret *api.Secret) ([]byte, error) {
 // and token.
 func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 	cfg := api.DefaultConfig()
+	if cfg.Error != nil {
+		return nil, fmt.Errorf("cannot create default Vault config: %w", cfg.Error)
+	}
 	cfg.Address = address
 
 	allowlist, err := getAllowlist()
@@ -406,6 +411,15 @@ func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 		return nil, fmt.Errorf("Allowlist does not allow %s", address)
 	}
 
+	target := hc
+	if target == nil {
+		target = cfg.HttpClient
+	}
+
+	hc, err = configureCRL(address, target)
+	if err != nil {
+		return nil, err
+	}
 	if hc != nil {
 		cfg.HttpClient = hc
 	}

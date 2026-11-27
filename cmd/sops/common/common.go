@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	. "github.com/getsops/sops/v3/cmd/sops/formats"
 	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/kms"
@@ -85,6 +87,11 @@ type DecryptTreeOpts struct {
 func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
 	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
+		// Classify CRL verification failures against the Vault server's
+		// certificate chain
+		if code, ok := crlExitCode(err); ok {
+			return nil, NewExitError(err, code)
+		}
 		return nil, NewExitError(err, codes.CouldNotRetrieveKey)
 	}
 	computedMac, err := opts.Tree.Decrypt(dataKey, opts.Cipher)
@@ -105,6 +112,28 @@ func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
 		}
 	}
 	return dataKey, nil
+}
+
+// crlExitCode maps a CRL verification failure to its dedicated exit code. It
+// returns (code, true) if err unwraps to an *hcvault.CRLError, selecting the
+// code from the failure kind, and (0, false) otherwise.
+func crlExitCode(err error) (int, bool) {
+	var crlErr *hcvault.CRLError
+	if !errors.As(err, &crlErr) {
+		return 0, false
+	}
+	switch crlErr.Kind {
+	case hcvault.CRLKindRevoked:
+		return codes.CertificateRevoked, true
+	case hcvault.CRLKindNoValidCRL:
+		return codes.ErrorCRLNoValidCRL, true
+	case hcvault.CRLKindConfig:
+		return codes.ErrorCRLConfig, true
+	default:
+		// Unknown kind: still a CRL error, fall back to the config code rather
+		// than misclassifying it as a generic retrieval failure.
+		return codes.ErrorCRLConfig, true
+	}
 }
 
 // EncryptTreeOpts are the options needed to encrypt a tree
