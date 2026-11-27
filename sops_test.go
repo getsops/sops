@@ -1450,6 +1450,19 @@ func TestUnsetKeyNotFound(t *testing.T) {
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
 }
 
+func TestUnsetStringKeyInArray(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: []interface{}{"a", "b"},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	assert.ErrorContains(t, err, "expected an integer index")
+	assert.ErrorContains(t, err, "bar")
+	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
+}
+
 func TestUnsetKeyInArrayNotFound(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{

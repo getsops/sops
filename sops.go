@@ -269,7 +269,10 @@ func unset(branch interface{}, path []interface{}) (interface{}, error) {
 		}
 		return nil, &SopsKeyNotFound{Msg: "Key not found: %s", Key: path[0]}
 	case []interface{}:
-		position := path[0].(int)
+		position, ok := path[0].(int)
+		if !ok {
+			return nil, fmt.Errorf("Unsupported index type: %T for list, expected an integer index, got '%v'", path[0], path[0])
+		}
 		if position >= len(branch) {
 			return nil, &SopsKeyNotFound{Msg: "Index %d out of bounds", Key: path[0]}
 		}
