@@ -112,14 +112,8 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
-	outputFile, err := os.Create(opts.InputPath)
-	if err != nil {
-		return fmt.Errorf("could not open file for writing: %s", err)
-	}
-	defer outputFile.Close()
-	_, err = outputFile.Write(output)
-	if err != nil {
-		return fmt.Errorf("error writing to file: %s", err)
+	if err := common.WriteFileAtomic(opts.InputPath, output); err != nil {
+		return fmt.Errorf("could not save updated keys: %w", err)
 	}
 	log.Printf("File %s synced with new keys", opts.InputPath)
 	return nil

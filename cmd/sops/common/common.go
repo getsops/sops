@@ -25,6 +25,53 @@ import (
 	"golang.org/x/term"
 )
 
+// WriteFileAtomic replaces the contents of path without truncating the
+// existing file before the new contents have been written. It writes to a
+// temporary file in the same directory and renames it over the destination, so
+// a failure leaves the original file untouched. The permissions of an existing
+// file are preserved, and symlinks are followed so the link itself is kept.
+func WriteFileAtomic(path string, data []byte) (err error) {
+	dest := path
+	if info, lerr := os.Lstat(path); lerr == nil && info.Mode()&os.ModeSymlink != 0 {
+		dest, err = filepath.EvalSymlinks(path)
+		if err != nil {
+			return fmt.Errorf("could not resolve symlink %s: %w", path, err)
+		}
+	}
+
+	tmp, err := os.CreateTemp(filepath.Dir(dest), "."+filepath.Base(dest)+".tmp-*")
+	if err != nil {
+		return fmt.Errorf("could not create temporary file: %w", err)
+	}
+	tmpName := tmp.Name()
+	defer func() {
+		if err != nil {
+			tmp.Close()
+			os.Remove(tmpName)
+		}
+	}()
+
+	if info, statErr := os.Stat(dest); statErr == nil {
+		if err = tmp.Chmod(info.Mode().Perm()); err != nil {
+			return fmt.Errorf("could not copy file permissions: %w", err)
+		}
+	}
+
+	if _, err = tmp.Write(data); err != nil {
+		return fmt.Errorf("error writing to file: %w", err)
+	}
+	if err = tmp.Sync(); err != nil {
+		return fmt.Errorf("error syncing file: %w", err)
+	}
+	if err = tmp.Close(); err != nil {
+		return fmt.Errorf("error closing file: %w", err)
+	}
+	if err = os.Rename(tmpName, dest); err != nil {
+		return fmt.Errorf("could not replace file: %w", err)
+	}
+	return nil
+}
+
 // ExampleFileEmitter emits example files. This is used by the `sops` binary
 // whenever a new file is created, in order to present the user with a non-empty file
 type ExampleFileEmitter interface {

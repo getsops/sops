@@ -2086,14 +2086,8 @@ func main() {
 		// We open the file *after* the operations on the tree have been
 		// executed to avoid truncating it when there's errors
 		if c.Bool("in-place") || isEditMode || isSetMode {
-			file, err := os.Create(fileName)
-			if err != nil {
-				return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
-			}
-			defer file.Close()
-			_, err = file.Write(output)
-			if err != nil {
-				return toExitError(err)
+			if err := common.WriteFileAtomic(fileName, output); err != nil {
+				return common.NewExitError(fmt.Sprintf("Could not write file: %s", err), codes.CouldNotWriteOutputFile)
 			}
 			log.Info("File written successfully")
 			return nil
